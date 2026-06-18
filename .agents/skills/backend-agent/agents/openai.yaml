@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Agent"
+  short_description: "Production backend architecture and APIs"
+  default_prompt: "Use $backend-agent to design, critique, or build a production-quality backend."

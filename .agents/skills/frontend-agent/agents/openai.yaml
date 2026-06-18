@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Agent"
+  short_description: "Deliberate frontend design and implementation"
+  default_prompt: "Use $frontend-agent to design, critique, or build a polished frontend experience."
