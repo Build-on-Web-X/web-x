@@ -36,9 +36,6 @@ function ArrowIcon() {
 export function FooterSection() {
   return (
     <footer className="relative overflow-hidden bg-[#07062C] px-4 pb-8 pt-24 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]">
-      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(243_243_243/0.32),transparent)]" />
-      <div className="absolute left-1/2 top-0 h-72 w-[60rem] -translate-x-1/2 rounded-full bg-[var(--accent-violet)]/12 blur-3xl" />
-
       <div className="relative z-10 mx-auto max-w-[1480px]">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div>
