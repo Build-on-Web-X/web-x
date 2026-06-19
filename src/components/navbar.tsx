@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { BookCallTrigger } from "@/components/book-call-modal";
 
 function ArrowUpRightIcon({ className = "" }: { className?: string }) {
   return (
@@ -24,11 +24,11 @@ function ArrowUpRightIcon({ className = "" }: { className?: string }) {
 }
 
 const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Works", href: "#works" },
-  { label: "Process", href: "#process" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "About", href: "/#about" },
+  { label: "Services", href: "/#services" },
+  { label: "Works", href: "/works" },
+  { label: "Process", href: "/#process" },
+  { label: "Testimonials", href: "/#testimonials" },
 ];
 
 export function Navbar() {
@@ -49,21 +49,21 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      className={`webx-navbar fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         hasScrolled
-          ? "bg-[#07062C] shadow-[0_12px_40px_rgba(0,0,0,0.26)]"
-          : "bg-transparent"
+          ? "webx-navbar-scrolled bg-[#07062C] shadow-[0_12px_40px_rgba(0,0,0,0.26)]"
+          : "webx-navbar-top bg-transparent"
       }`}
     >
       <div className="mx-auto flex w-full max-w-[1480px] items-center justify-between px-4 py-5 sm:px-[1.5%] lg:px-[1%]">
         <a
-          href="#"
+          href="/"
           className="group flex items-center"
           aria-label="Web X home"
         >
           <img
             alt="Web X"
-            className="h-10 w-auto object-contain"
+            className="webx-logo h-10 w-auto object-contain"
             src="/webx%20logo/webx.svg"
           />
         </a>
@@ -80,20 +80,15 @@ export function Navbar() {
           ))}
         </nav>
 
-        <Button
-          asChild
-          className="h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] shadow-none hover:bg-white focus-visible:outline-[#8f86dc]"
-        >
-          <a href="#contact">
-            Book a Call
-            <span
-              aria-hidden="true"
-              className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
-            >
-              <ArrowUpRightIcon className="size-4" />
-            </span>
-          </a>
-        </Button>
+        <BookCallTrigger className="webx-primary-button inline-flex h-11 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]">
+          Book a Call
+          <span
+            aria-hidden="true"
+            className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+          >
+            <ArrowUpRightIcon className="size-4" />
+          </span>
+        </BookCallTrigger>
       </div>
     </header>
   );

@@ -77,7 +77,7 @@ export function FeaturedWorksSection() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {featuredWorks.map((work, index) => (
             <a
-              className="group relative flex aspect-square overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 outline-none transition hover:border-[#F3F3F3]/34 focus-visible:border-[#F3F3F3]/50 focus-visible:ring-2 focus-visible:ring-[#F3F3F3]/70"
+              className="featured-work-card webx-media-clean group relative flex aspect-square overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 outline-none transition hover:border-[#F3F3F3]/34 focus-visible:border-[#F3F3F3]/50 focus-visible:ring-2 focus-visible:ring-[#F3F3F3]/70"
               href="#contact"
               key={work.title}
             >
@@ -88,20 +88,20 @@ export function FeaturedWorksSection() {
               />
               <span
                 aria-hidden="true"
-                className="absolute inset-0 bg-[linear-gradient(180deg,rgb(7_6_44/0.18)_0%,rgb(7_6_44/0.36)_42%,rgb(7_6_44/0.92)_100%)]"
+                className="media-overlay absolute inset-0 bg-[linear-gradient(180deg,rgb(7_6_44/0.18)_0%,rgb(7_6_44/0.36)_42%,rgb(7_6_44/0.92)_100%)]"
               />
               <span
                 aria-hidden="true"
-                className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgb(143_134_220/0.24),transparent_36%)]"
+                className="media-overlay absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgb(143_134_220/0.24),transparent_36%)]"
               />
 
               <span className="relative z-10 flex w-full flex-col justify-between p-5">
-                <span className="liquid-glass inline-flex w-fit rounded-full px-4 py-2 text-xs font-normal tracking-tight text-[#F3F3F3] shadow-[inset_0_1px_0_rgba(255,255,255,0.34)] xl:text-sm">
+                <span className="featured-work-pill liquid-glass inline-flex w-fit rounded-full px-4 py-2 text-xs font-normal tracking-tight text-[#F3F3F3] shadow-[inset_0_1px_0_rgba(255,255,255,0.34)] xl:text-sm">
                   {work.category}
                 </span>
 
                 <span className="flex items-end justify-between gap-6">
-                  <span className="text-xl font-normal leading-tight tracking-tight text-[#F3F3F3] xl:text-2xl">
+                  <span className="featured-work-copy text-xl font-normal leading-tight tracking-tight text-[#F3F3F3] xl:text-2xl">
                     {work.title}
                   </span>
 
@@ -117,9 +117,9 @@ export function FeaturedWorksSection() {
         <div className="mt-12 flex justify-center">
           <Button
             asChild
-            className="h-12 gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] shadow-[0_18px_60px_rgba(243,243,243,0.18)] hover:bg-white focus-visible:outline-[#F3F3F3]"
+            className="webx-primary-button h-12 gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] shadow-[0_18px_60px_rgba(243,243,243,0.18)] hover:bg-white focus-visible:outline-[#F3F3F3]"
           >
-            <a href="#work">
+            <a href="/works">
               View More
               <span
                 aria-hidden="true"

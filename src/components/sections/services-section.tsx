@@ -91,7 +91,7 @@ export function ServicesSection() {
         <div className="relative mt-16">
           {services.map((service, index) => (
             <article
-              className="group border-t border-[#F3F3F3]/16 outline-none last:border-b focus-within:bg-[#F3F3F3]/7 hover:bg-[#F3F3F3]/7"
+              className="webx-service-row group border-t border-[#F3F3F3]/16 outline-none last:border-b"
               key={service.title}
             >
               <a
@@ -111,7 +111,7 @@ export function ServicesSection() {
                   className="relative z-10 hidden h-full min-h-24 lg:block"
                 >
                   <span
-                    className="sample-main-card absolute left-1/2 top-1/2 block aspect-[1.32] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-[1.15rem] bg-cover bg-center opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 xl:w-[300px]"
+                    className="sample-main-card webx-media-clean absolute left-1/2 top-1/2 block aspect-[1.32] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-[1.15rem] bg-cover bg-center opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 xl:w-[300px]"
                     style={{ backgroundImage: `url(${service.image})` }}
                   />
                 </span>
@@ -126,7 +126,7 @@ export function ServicesSection() {
 
                 <span
                   aria-hidden="true"
-                  className="sample-main-card mt-2 block aspect-[1.35] w-full max-w-sm rounded-[1.15rem] bg-cover bg-center lg:hidden"
+                  className="sample-main-card webx-media-clean mt-2 block aspect-[1.35] w-full max-w-sm rounded-[1.15rem] bg-cover bg-center lg:hidden"
                   style={{ backgroundImage: `url(${service.image})` }}
                 />
               </a>

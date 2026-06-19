@@ -1,5 +1,5 @@
+import { BookCallTrigger } from "@/components/book-call-modal";
 import { ArrowUpRightIcon } from "@/components/navbar";
-import { Button } from "@/components/ui/button";
 
 const portalFeatures = [
   "Project status in one place",
@@ -11,10 +11,10 @@ export function CtaSection() {
   return (
     <section
       id="contact"
-      className="relative flex min-h-screen overflow-hidden bg-[#07062C] px-4 py-20 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
+      className="webx-cta relative flex min-h-screen overflow-hidden bg-[#07062C] px-4 py-20 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
     >
       <div className="absolute inset-0 z-0 bg-[#07062C]" />
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(70%_52%_at_78%_54%,rgb(45_91_255/0.62),transparent_60%),radial-gradient(68%_46%_at_76%_76%,rgb(143_134_220/0.34),transparent_64%)]" />
+      <div className="cta-gradient absolute inset-0 z-0 bg-[radial-gradient(70%_52%_at_78%_54%,rgb(45_91_255/0.62),transparent_60%),radial-gradient(68%_46%_at_76%_76%,rgb(143_134_220/0.34),transparent_64%)]" />
       <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,rgb(7_6_44/0.94)_0%,rgb(7_6_44/0.68)_45%,rgb(7_6_44/0.18)_100%)]" />
       <div className="absolute inset-x-0 top-0 z-0 h-40 bg-[linear-gradient(180deg,rgb(7_6_44),rgb(7_6_44/0.88)_42%,transparent)]" />
       <div className="absolute inset-x-0 bottom-0 z-0 h-40 bg-[linear-gradient(180deg,transparent,rgb(7_6_44))]" />
@@ -37,20 +37,15 @@ export function CtaSection() {
             organized from kickoff to launch.
           </p>
 
-          <Button
-            asChild
-            className="mt-10 h-12 gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] shadow-[0_18px_60px_rgba(243,243,243,0.18)] hover:bg-white focus-visible:outline-[#F3F3F3]"
-          >
-            <a href="mailto:hello@webx.studio">
-              Book a Call
-              <span
-                aria-hidden="true"
-                className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
-              >
-                <ArrowUpRightIcon className="size-4" />
-              </span>
-            </a>
-          </Button>
+          <BookCallTrigger className="webx-primary-button mt-10 inline-flex h-12 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] shadow-[0_18px_60px_rgba(243,243,243,0.18)] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F3F3F3]">
+            Book a Call
+            <span
+              aria-hidden="true"
+              className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+            >
+              <ArrowUpRightIcon className="size-4" />
+            </span>
+          </BookCallTrigger>
         </div>
 
         <div className="liquid-glass rounded-lg p-5 lg:mb-16">

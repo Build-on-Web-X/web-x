@@ -29,7 +29,7 @@ const technologies = [
 
 export function TechnologiesSection() {
   return (
-    <section className="bg-[#07062C] px-4 py-16 sm:px-[1.5%] lg:px-[1%]">
+    <section id="technologies" className="bg-[#07062C] px-4 py-16 sm:px-[1.5%] lg:px-[1%]">
       <div className="mx-auto flex max-w-[1480px] flex-col items-center gap-10 text-center">
         <h2 className="text-balance text-xl font-normal tracking-tight text-[#F3F3F3] sm:text-3xl">
           Built with industry-leading technologies
@@ -43,7 +43,7 @@ export function TechnologiesSection() {
             >
               <img
                 alt={technology.name}
-                className={`${technology.className} object-contain brightness-0 invert opacity-78`}
+                className={`${technology.className} technology-logo-muted object-contain brightness-0 invert opacity-78`}
                 src={technology.logo}
               />
               {technology.wordmark ? (

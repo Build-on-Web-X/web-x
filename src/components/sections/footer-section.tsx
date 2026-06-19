@@ -1,7 +1,9 @@
+import { BookCallTrigger } from "@/components/book-call-modal";
+
 const footerLinks = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "Works", href: "#work" },
+  { label: "Works", href: "/works" },
   { label: "Process", href: "#process" },
   { label: "Testimonials", href: "#testimonials" },
 ];
@@ -35,14 +37,14 @@ function ArrowIcon() {
 
 export function FooterSection() {
   return (
-    <footer className="relative overflow-hidden bg-[#07062C] px-4 pb-8 pt-24 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]">
+    <footer className="webx-footer relative overflow-hidden bg-[#07062C] px-4 pb-8 pt-24 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]">
       <div className="relative z-10 mx-auto max-w-[1480px]">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div>
             <a href="#" aria-label="Web X home" className="inline-flex">
               <img
                 alt="Web X"
-                className="h-12 w-auto object-contain"
+                className="webx-logo h-12 w-auto object-contain"
                 src="/webx%20logo/webx.svg"
               />
             </a>
@@ -51,15 +53,14 @@ export function FooterSection() {
               Ideas stay clearer when the whole build has one place to live.
             </p>
 
-            <a
-              className="mt-9 inline-flex h-12 items-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F3F3F3]"
-              href="mailto:hello@webx.studio"
+            <BookCallTrigger
+              className="webx-primary-button mt-9 inline-flex h-12 items-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F3F3F3]"
             >
               Start a Project
               <span className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]">
                 <ArrowIcon />
               </span>
-            </a>
+            </BookCallTrigger>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-3">
@@ -105,7 +106,7 @@ export function FooterSection() {
                   className="text-base font-normal tracking-tight text-[#F3F3F3]/72 transition hover:text-[#F3F3F3]"
                   href="mailto:hello@webx.studio"
                 >
-                  hello@webx.studio
+                  buildonwebx@gmail.com
                 </a>
                 <span className="text-base font-normal tracking-tight text-[#F3F3F3]/72">
                   Client portal included

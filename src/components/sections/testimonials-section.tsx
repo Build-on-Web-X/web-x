@@ -163,7 +163,7 @@ export function TestimonialsSection() {
             >
               {visibleTestimonials.map((testimonial) => (
                 <article
-                  className="grid gap-6 rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.24)] sm:grid-cols-[0.88fr_1fr]"
+                  className="testimonial-card grid gap-6 rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.24)] sm:grid-cols-[0.88fr_1fr]"
                   key={testimonial.name}
                 >
                   <div
@@ -200,7 +200,9 @@ export function TestimonialsSection() {
                 aria-label={`Show testimonial page ${index + 1}`}
                 aria-pressed={page === index}
                 className={`h-2.5 rounded-full transition ${
-                  page === index ? "w-8 bg-[#F3F3F3]" : "w-2.5 bg-[#F3F3F3]/28"
+                  page === index
+                    ? "testimonial-dot-active w-8 bg-[#F3F3F3]"
+                    : "testimonial-dot w-2.5 bg-[#F3F3F3]/28"
                 }`}
                 key={index}
                 onClick={() => goToPage(index)}
@@ -220,7 +222,7 @@ export function TestimonialsSection() {
             </button>
             <button
               aria-label="Show next testimonials"
-              className="grid size-11 place-items-center rounded-full bg-[#F3F3F3] text-[#07062C] transition hover:bg-white"
+              className="testimonial-arrow-primary grid size-11 place-items-center rounded-full bg-[#F3F3F3] text-[#07062C] transition hover:bg-white"
               onClick={goToNextPage}
               type="button"
             >

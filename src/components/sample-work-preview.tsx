@@ -2,7 +2,7 @@ export function SampleWorkPreview() {
   return (
     <div
       aria-label="Sample website work preview"
-      className="sample-preview relative mt-11 h-[210px] w-full max-w-5xl sm:h-[250px] lg:h-[286px]"
+      className="sample-preview relative mt-11 h-[280px] w-full max-w-5xl sm:h-[330px] lg:h-[380px]"
     >
       <div className="sample-side-card absolute left-[1%] top-16 z-0 hidden h-40 w-[24%] overflow-hidden rounded-2xl bg-white sm:block">
         <div className="sample-side-card-inner sample-plain-white h-full" />

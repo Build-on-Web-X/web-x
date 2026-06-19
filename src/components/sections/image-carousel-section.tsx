@@ -41,7 +41,7 @@ export function ImageCarouselSection() {
         {[...carouselImages, ...carouselImages].map((item, index) => (
           <div
             aria-label={item.alt}
-            className={`${item.size} shrink-0 overflow-hidden border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 bg-cover bg-center shadow-[0_28px_80px_rgba(0,0,0,0.3)]`}
+            className={`carousel-image ${item.size} shrink-0 overflow-hidden border border-[#F3F3F3]/14 bg-cover bg-center shadow-[0_28px_80px_rgba(0,0,0,0.3)]`}
             key={`${item.alt}-${index}`}
             role="img"
             style={{ backgroundImage: `url(${item.image})` }}
