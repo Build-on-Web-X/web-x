@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 function ArrowUpRightIcon({ className = "" }: { className?: string }) {
@@ -26,49 +29,72 @@ const navItems = [
   { label: "Works", href: "#works" },
   { label: "Process", href: "#process" },
   { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const updateNavbarSurface = () => {
+      setHasScrolled(window.scrollY > 12);
+    };
+
+    updateNavbarSurface();
+    window.addEventListener("scroll", updateNavbarSurface, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateNavbarSurface);
+    };
+  }, []);
+
   return (
-    <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
-      <a
-        href="#"
-        className="group flex items-center gap-3"
-        aria-label="Web X home"
-      >
-        <span className="grid size-10 place-items-center rounded-full bg-[#F3F3F3] text-sm font-bold text-[#07062C] shadow-[0_0_30px_rgba(143,134,220,0.28)]">
-          WX
-        </span>
-        <span className="text-lg font-semibold text-[#F3F3F3]">Web X</span>
-      </a>
-
-      <nav className="hidden items-center gap-9 text-base font-normal text-[#F3F3F3] lg:flex">
-        {navItems.map((item) => (
-          <a
-            className="transition hover:text-[#F3F3F3]/72"
-            href={item.href}
-            key={item.label}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-
-      <Button
-        asChild
-        className="h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-semibold text-[#07062C] shadow-none hover:bg-white focus-visible:outline-[#8f86dc]"
-      >
-        <a href="#contact">
-          Book a Call
-          <span
-            aria-hidden="true"
-            className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
-          >
-            <ArrowUpRightIcon className="size-4" />
-          </span>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        hasScrolled
+          ? "bg-[#07062C] shadow-[0_12px_40px_rgba(0,0,0,0.26)]"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex w-full max-w-[1480px] items-center justify-between px-4 py-5 sm:px-[1.5%] lg:px-[1%]">
+        <a
+          href="#"
+          className="group flex items-center"
+          aria-label="Web X home"
+        >
+          <img
+            alt="Web X"
+            className="h-10 w-auto object-contain"
+            src="/webx%20logo/webx.svg"
+          />
         </a>
-      </Button>
+
+        <nav className="hidden items-center gap-9 text-base font-normal tracking-tight text-[#F3F3F3] lg:flex">
+          {navItems.map((item) => (
+            <a
+              className="transition hover:text-[#F3F3F3]/72"
+              href={item.href}
+              key={item.label}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <Button
+          asChild
+          className="h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] shadow-none hover:bg-white focus-visible:outline-[#8f86dc]"
+        >
+          <a href="#contact">
+            Book a Call
+            <span
+              aria-hidden="true"
+              className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+            >
+              <ArrowUpRightIcon className="size-4" />
+            </span>
+          </a>
+        </Button>
+      </div>
     </header>
   );
 }
