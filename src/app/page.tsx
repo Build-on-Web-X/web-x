@@ -8,12 +8,17 @@ import { ImageCarouselSection } from "@/components/sections/image-carousel-secti
 import { ProcessSection } from "@/components/sections/process-section";
 import { ServicesSection } from "@/components/sections/services-section";
 import { TechnologiesSection } from "@/components/sections/technologies-section";
-import { getFeaturedWorks, getServiceImages } from "@/lib/supabase-data";
+import {
+  getFeaturedWorks,
+  getServiceImages,
+  getWorks,
+} from "@/lib/supabase-data";
 
 export default async function Home() {
-  const [featuredWorks, serviceImages] = await Promise.all([
+  const [featuredWorks, serviceImages, works] = await Promise.all([
     getFeaturedWorks(),
     getServiceImages(),
+    getWorks(),
   ]);
 
   return (
@@ -21,7 +26,7 @@ export default async function Home() {
       <HeroSection />
       <TechnologiesSection />
       <AboutSection />
-      <ImageCarouselSection />
+      <ImageCarouselSection works={works} />
       <ServicesSection services={serviceImages} />
       <FeaturedWorksSection featuredWorks={featuredWorks} />
       <ProcessSection />
