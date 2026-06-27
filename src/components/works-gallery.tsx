@@ -10,17 +10,17 @@ function ArrowIcon() {
   return (
     <svg
       aria-hidden="true"
-      className="size-5"
+      className="size-4"
       fill="none"
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M5 12H19M13 6L19 12L13 18"
+        d="M4 10H15M11 6L15 10L11 14"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.6"
+        strokeWidth="1.8"
       />
     </svg>
   );
@@ -32,11 +32,11 @@ function ChevronDownIcon() {
       aria-hidden="true"
       className="size-4"
       fill="none"
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M6 9L12 15L18 9"
+        d="M5 7.5L10 12.5L15 7.5"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -46,21 +46,21 @@ function ChevronDownIcon() {
   );
 }
 
-function CheckIcon() {
+function ResetIcon() {
   return (
     <svg
       aria-hidden="true"
       className="size-4"
       fill="none"
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M5 12.5L9.5 17L19 7"
+        d="M4 10A6 6 0 0 1 14.7 6.3M15 3.5V6.8H11.7M16 10A6 6 0 0 1 5.3 13.7M5 16.5V13.2H8.3"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
       />
     </svg>
   );
@@ -70,8 +70,24 @@ export function WorksGallery({ works }: { works: Work[] }) {
   const searchParams = useSearchParams();
   const filterRef = useRef<HTMLDivElement>(null);
   const [activeService, setActiveService] = useState(allServicesLabel);
-  const [activeTitle, setActiveTitle] = useState(works[0].title);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(false);
+
+  const services = useMemo(
+    () => [
+      allServicesLabel,
+      ...Array.from(new Set(works.map((work) => work.service))),
+    ],
+    [works],
+  );
+
+  const filteredWorks = useMemo(() => {
+    if (activeService === allServicesLabel) {
+      return works;
+    }
+
+    return works.filter((work) => work.service === activeService);
+  }, [activeService, works]);
 
   useEffect(() => {
     const requestedWork = searchParams.get("work");
@@ -86,17 +102,30 @@ export function WorksGallery({ works }: { works: Work[] }) {
       return;
     }
 
-    setActiveService(allServicesLabel);
-    setActiveTitle(matchingWork.title);
-  }, [searchParams]);
+    setActiveService(matchingWork.service);
 
-  const services = useMemo(
-    () => [
-      allServicesLabel,
-      ...Array.from(new Set(works.map((work) => work.service))),
-    ],
-    [works],
-  );
+    window.requestAnimationFrame(() => {
+      document
+        .getElementById(`work-${matchingWork.slug}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [searchParams, works]);
+
+  useEffect(() => {
+    function syncTheme() {
+      setIsLightTheme(document.documentElement.dataset.theme === "light");
+    }
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, {
+      attributeFilter: ["data-theme", "class"],
+      attributes: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     function closeFilter(event: MouseEvent) {
@@ -120,54 +149,59 @@ export function WorksGallery({ works }: { works: Work[] }) {
     };
   }, []);
 
-  const filteredWorks = useMemo(() => {
-    if (activeService === allServicesLabel) {
-      return works;
-    }
-
-    return works.filter((work) => work.service === activeService);
-  }, [activeService]);
-
-  const activeWork =
-    filteredWorks.find((work) => work.title === activeTitle) ?? filteredWorks[0];
-
   function selectService(service: string) {
-    const nextWorks =
-      service === allServicesLabel
-        ? works
-        : works.filter((work) => work.service === service);
-
     setActiveService(service);
-    setActiveTitle(nextWorks[0].title);
     setIsFilterOpen(false);
   }
 
   return (
-    <main className="h-screen overflow-hidden bg-[#07062C] pt-20 text-[#F3F3F3]">
-      <section className="mx-auto flex h-full w-full max-w-[1480px] flex-col overflow-hidden px-4 pb-5 sm:px-8 lg:px-10">
-        <div className="shrink-0 py-4">
-          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <h1 className="max-w-3xl text-balance text-4xl font-normal leading-[1.04] tracking-tighter sm:text-5xl lg:text-6xl">
-                Project selection
-              </h1>
-            </div>
+    <main
+      className="webx-works-page min-h-screen pt-24"
+      style={{
+        backgroundColor: isLightTheme ? "#f3f3f3" : "#07062c",
+        backgroundImage: isLightTheme
+          ? "linear-gradient(180deg, #f3f3f3 0%, #f7f7fb 42%, #f3f3f3 100%)"
+          : "none",
+        color: isLightTheme ? "#07062c" : "#f3f3f3",
+      }}
+    >
+      <section className="mx-auto w-full max-w-[1480px] px-4 pb-14 sm:px-[1.5%] lg:px-[1%]">
+        <div className="works-page-hero mb-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight text-[#F3F3F3]/58">
+              <span>[</span>
+              <span>Works</span>
+              <span>]</span>
+            </p>
+            <h1 className="mt-4 max-w-4xl text-balance text-5xl font-normal leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl">
+              Project index
+            </h1>
+          </div>
 
-            <div
-              className="works-filter relative grid gap-2 text-sm font-normal tracking-tight text-[#F3F3F3]/58 lg:w-[320px]"
-              ref={filterRef}
-            >
-              <span>Filter by service</span>
+          <p className="max-w-md text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/62">
+            A visual pass through recent Web X builds, grouped by the type of
+            digital experience each business needed.
+          </p>
+        </div>
+
+        <div className="works-filter-panel mb-7 flex flex-col gap-3 border-y border-[#F3F3F3]/10 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative" ref={filterRef}>
               <button
                 aria-expanded={isFilterOpen}
                 aria-haspopup="listbox"
-                className="works-filter-trigger flex h-11 w-full items-center justify-between gap-4 rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 px-5 text-left text-sm font-normal tracking-tight text-[#F3F3F3] outline-none transition hover:border-[#F3F3F3]/28 focus-visible:border-[#8f86dc] focus-visible:ring-2 focus-visible:ring-[#8f86dc]/30"
+                className="works-filter-trigger inline-flex h-11 min-w-[220px] items-center justify-between gap-5 rounded-full border px-4 text-sm font-normal tracking-tight outline-none transition hover:border-[#8f86dc]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
                 onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
+                style={{
+                  backgroundColor: isLightTheme ? "#07062c" : "#f3f3f314",
+                  borderColor: isLightTheme ? "#07062c" : "#f3f3f324",
+                  color: "#f3f3f3",
+                }}
                 type="button"
               >
                 <span>{activeService}</span>
                 <span
-                  className={`works-filter-chevron text-[#F3F3F3]/58 transition ${
+                  className={`works-filter-chevron transition ${
                     isFilterOpen ? "rotate-180" : ""
                   }`}
                 >
@@ -177,9 +211,10 @@ export function WorksGallery({ works }: { works: Work[] }) {
 
               {isFilterOpen ? (
                 <div
-                  aria-label="Filter works by service"
-                  className="works-filter-menu absolute right-0 top-[calc(100%+0.5rem)] z-30 w-full overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#0d0b32] p-1.5 text-[#F3F3F3] shadow-[0_18px_60px_rgba(0,0,0,0.28)]"
+                  aria-label="Filter projects by service"
+                  className="works-filter-menu absolute left-0 top-[calc(100%+0.5rem)] z-30 w-[min(320px,calc(100vw-2rem))] overflow-hidden rounded-lg border border-[#F3F3F3]/12 bg-[#121037] p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
                   role="listbox"
+                  style={{ zIndex: 80 }}
                 >
                   {services.map((service) => {
                     const isSelected = activeService === service;
@@ -190,7 +225,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
                         className={`works-filter-option flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight transition ${
                           isSelected
                             ? "works-filter-option-active bg-[#8f86dc] text-[#07062C]"
-                            : "text-[#F3F3F3]/72 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
+                            : "text-[#F3F3F3]/78 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
                         }`}
                         key={service}
                         onClick={() => selectService(service)}
@@ -198,92 +233,76 @@ export function WorksGallery({ works }: { works: Work[] }) {
                         type="button"
                       >
                         <span>{service}</span>
-                        {isSelected ? <CheckIcon /> : null}
+                        <span className="text-xs text-current/56">
+                          {
+                            works.filter((work) =>
+                              service === allServicesLabel
+                                ? true
+                                : work.service === service,
+                            ).length
+                          }
+                        </span>
                       </button>
                     );
                   })}
                 </div>
               ) : null}
             </div>
+
+            <span className="inline-flex h-11 items-center rounded-full bg-[#8f86dc] px-4 text-xs font-normal tracking-tight text-[#07062C]">
+              {filteredWorks.length}
+            </span>
           </div>
+
+          <button
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[#F3F3F3]/12 px-4 text-sm font-normal tracking-tight text-[#F3F3F3]/78 transition hover:border-[#F3F3F3]/28 hover:text-[#F3F3F3] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={activeService === allServicesLabel}
+            onClick={() => selectService(allServicesLabel)}
+            type="button"
+          >
+            Reset filters
+            <ResetIcon />
+          </button>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-6 overflow-hidden lg:grid-cols-[0.34fr_0.66fr]">
-          <aside className="relative min-h-0 overflow-hidden">
-            <div className="flex h-full min-h-0">
-              <div className="flex min-h-0 flex-1 flex-col">
-                <div
-                  className="min-h-0 flex-1 overflow-y-auto pr-2"
-                  data-lenis-prevent
-                >
-                  {filteredWorks.map((work, index) => {
-                    const isActive = activeWork.title === work.title;
-
-                    return (
-                      <button
-                        className={`group flex w-full items-center justify-between gap-5 rounded-lg px-3 py-4 text-left transition ${
-                          isActive
-                            ? "bg-[#F3F3F3]/7 text-[#F3F3F3]"
-                            : "text-[#F3F3F3]/34 hover:bg-[#F3F3F3]/4 hover:text-[#F3F3F3]/78"
-                        }`}
-                        key={work.title}
-                        onClick={() => setActiveTitle(work.title)}
-                        type="button"
-                      >
-                        <span className="text-xs font-normal tabular-nums tracking-tight text-[#F3F3F3]/38">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="flex-1 text-xl font-normal leading-tight tracking-tighter sm:text-2xl lg:text-3xl">
+        <div className="works-project-grid grid gap-x-5 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
+          {filteredWorks.map((work, index) => (
+            <article
+              className="works-project-card group"
+              id={`work-${work.slug}`}
+              key={work.slug}
+              style={{ animationDelay: `${Math.min(index * 70, 560)}ms` }}
+            >
+              <a
+                aria-label={`View ${work.title}`}
+                className="block"
+                href={`/works?work=${work.slug}`}
+              >
+                <div className="works-project-thumb relative overflow-hidden rounded-[4px] bg-[#121037]">
+                  <div
+                    className="aspect-[4/3] bg-cover bg-center transition duration-700 group-hover:scale-[1.04]"
+                    style={{ backgroundImage: `url(${work.image})` }}
+                  />
+                  <div className="works-project-scrim absolute inset-0 bg-[linear-gradient(180deg,rgba(7,6,44,0)_42%,rgba(7,6,44,0.88)_100%)]" />
+                  <div className="works-project-meta absolute inset-x-0 bottom-0 p-4">
+                    <div className="flex items-end justify-between gap-4">
+                      <div className="min-w-0">
+                        <h2 className="works-project-title truncate text-xl font-normal leading-tight tracking-tighter">
                           {work.title}
-                        </span>
-                        <span
-                          className={`grid size-8 shrink-0 place-items-center rounded-full border transition ${
-                            isActive
-                              ? "border-[#8f86dc] bg-[#8f86dc] text-[#F3F3F3]"
-                              : "border-[#F3F3F3]/12 text-[#F3F3F3]/34 group-hover:border-[#F3F3F3]/28"
-                          }`}
-                        >
-                          <ArrowIcon />
-                        </span>
-                      </button>
-                    );
-                  })}
+                        </h2>
+                        <p className="works-project-service mt-1 truncate text-xs font-normal uppercase tracking-tight">
+                          {work.service}
+                        </p>
+                      </div>
+                      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#F3F3F3] text-[#07062C] transition group-hover:bg-[#8f86dc]">
+                        <ArrowIcon />
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </aside>
-
-          <section className="relative flex min-h-0 flex-col overflow-hidden">
-            <article className="grid min-h-0 flex-1 gap-6 lg:grid-cols-[0.54fr_0.46fr] lg:items-center">
-              <div className="works-gallery-media webx-media-clean overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6">
-                <div
-                  aria-label={activeWork.title}
-                  className="aspect-[1.1] max-h-[560px] bg-cover bg-center"
-                  style={{ backgroundImage: `url(${activeWork.image})` }}
-                />
-              </div>
-
-              <div>
-                <div>
-                  <p className="liquid-glass inline-flex rounded-full px-4 py-2 text-xs font-normal tracking-tight">
-                    {activeWork.service}
-                  </p>
-                  <h2 className="mt-4 text-4xl font-normal leading-[1.04] tracking-tighter sm:text-5xl lg:text-[3.4rem]">
-                    {activeWork.title}
-                  </h2>
-                </div>
-
-                <div className="mt-5">
-                  <p className="text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/70">
-                    {activeWork.description}
-                  </p>
-                  <p className="mt-4 text-sm font-normal tracking-tight text-[#8f86dc]">
-                    {activeWork.outcome}
-                  </p>
-                </div>
-              </div>
+              </a>
             </article>
-          </section>
+          ))}
         </div>
       </section>
     </main>

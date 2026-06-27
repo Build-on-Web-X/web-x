@@ -122,18 +122,18 @@ export function ProcessSection() {
           whileInView={undefined}
         >
           <div>
-            <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight">
+            <p className="process-eyebrow inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight">
               <span className="text-[#F3F3F3]/50">[</span>
               <span>Process</span>
               <span className="text-[#F3F3F3]/50">]</span>
             </p>
 
-            <h2 className="mt-7 max-w-4xl text-balance text-5xl font-normal leading-[1.06] tracking-tighter sm:text-6xl lg:text-7xl">
+            <h2 className="process-heading mt-7 max-w-4xl text-balance text-5xl font-normal leading-[1.06] tracking-tighter sm:text-6xl lg:text-7xl">
               A clear path from idea to launch
             </h2>
           </div>
 
-          <p className="max-w-md text-lg leading-8 tracking-tight text-[#F3F3F3]/62">
+          <p className="process-intro max-w-md text-lg leading-8 tracking-tight text-[#F3F3F3]/62">
             Every project moves through a focused process built to reduce guesswork,
             keep momentum high, and turn your vision into a polished website.
           </p>

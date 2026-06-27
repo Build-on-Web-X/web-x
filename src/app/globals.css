@@ -48,6 +48,10 @@ body.project-modal-open .fixed.bottom-5.left-5 {
   transform: translateY(-100%);
 }
 
+.webx-faq summary::-webkit-details-marker {
+  display: none;
+}
+
 .webx-project-modal,
 .webx-project-modal .project-modal-intro,
 .webx-project-modal .project-modal-form {
@@ -73,6 +77,11 @@ body.project-modal-open .fixed.bottom-5.left-5 {
 .webx-start-project {
   background-color: #07062c !important;
   color: #f3f3f3 !important;
+  --start-field-bg: rgb(243 243 243 / 0.08);
+  --start-field-text: #f3f3f3;
+  --start-field-placeholder: rgb(243 243 243 / 0.42);
+  --start-primary-bg: #f3f3f3;
+  --start-primary-text: #07062c;
 }
 
 .webx-start-project input,
@@ -411,6 +420,73 @@ html.theme-light .works-gallery-media {
 html[data-theme="light"] .works-filter,
 html.theme-light .works-filter {
   color: rgb(7 6 44 / 0.62) !important;
+}
+
+html[data-theme="light"] .webx-works-page,
+html.theme-light .webx-works-page,
+main.webx-works-page,
+html[data-theme="light"] .webx-works-page.bg-\[\#07062C\],
+html.theme-light .webx-works-page.bg-\[\#07062C\] {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+main.webx-works-page .works-project-title,
+html[data-theme="light"] main.webx-works-page .works-project-title,
+html.theme-light main.webx-works-page .works-project-title {
+  color: #f3f3f3 !important;
+}
+
+main.webx-works-page .works-project-service,
+html[data-theme="light"] main.webx-works-page .works-project-service,
+html.theme-light main.webx-works-page .works-project-service {
+  color: rgb(243 243 243 / 0.58) !important;
+}
+
+html[data-theme="light"] .webx-works-page .text-\[\#F3F3F3\],
+html.theme-light .webx-works-page .text-\[\#F3F3F3\] {
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-works-page [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-works-page [class*="text-[#F3F3F3]/"] {
+  color: rgb(243 243 243 / 0.68) !important;
+}
+
+html[data-theme="light"] .webx-works-page [class*="border-[#F3F3F3]"],
+html.theme-light .webx-works-page [class*="border-[#F3F3F3]"] {
+  border-color: rgb(243 243 243 / 0.12) !important;
+}
+
+html[data-theme="light"] .webx-works-page .bg-\[\#F3F3F3\].text-\[\#07062C\],
+html.theme-light .webx-works-page .bg-\[\#F3F3F3\].text-\[\#07062C\],
+html[data-theme="light"] .webx-works-page .works-filter-trigger,
+html.theme-light .webx-works-page .works-filter-trigger {
+  background-color: #f3f3f3 !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-panel,
+html.theme-light .webx-works-page .works-filter-panel {
+  background-color: rgb(243 243 243 / 0.07) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-menu,
+html.theme-light .webx-works-page .works-filter-menu {
+  background: #121037 !important;
+  border-color: rgb(243 243 243 / 0.12) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-option,
+html.theme-light .webx-works-page .works-filter-option {
+  color: rgb(243 243 243 / 0.78) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-option-active,
+html.theme-light .webx-works-page .works-filter-option-active {
+  background: #8f86dc !important;
+  color: #07062c !important;
 }
 
 html[data-theme="light"] .works-filter-trigger,
@@ -817,6 +893,27 @@ html.theme-light .process-glow-card-active {
   animation: webx-loader-mark 980ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+html[data-theme="dark"] .webx-site-loader,
+html.theme-dark .webx-site-loader {
+  background: #07062c !important;
+}
+
+html[data-theme="dark"] .webx-site-loader-logo,
+html.theme-dark .webx-site-loader-logo {
+  filter: brightness(0) invert(1) !important;
+}
+
+html[data-theme="light"] .webx-site-loader,
+html.theme-light .webx-site-loader {
+  background: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-site-loader-logo,
+html.theme-light .webx-site-loader-logo {
+  filter: brightness(0) saturate(100%) invert(7%) sepia(59%) saturate(1677%)
+    hue-rotate(231deg) brightness(78%) contrast(112%) !important;
+}
+
 .webx-site-loader-leave {
   opacity: 0;
   visibility: hidden;
@@ -875,8 +972,8 @@ html.theme-light .process-glow-card-active {
 
 html[data-theme="light"] .webx-process,
 html.theme-light .webx-process {
-  background: #07062c !important;
-  color: #f3f3f3 !important;
+  background: #f3f3f3 !important;
+  color: #07062c !important;
 }
 
 html[data-theme="light"] .webx-process .text-\[\#F3F3F3\],
@@ -887,14 +984,14 @@ html[data-theme="light"] .webx-process svg,
 html.theme-light .webx-process h2,
 html.theme-light .webx-process h3,
 html.theme-light .webx-process svg {
-  color: #f3f3f3 !important;
+  color: #07062c !important;
 }
 
 html[data-theme="light"] .webx-process [class*="text-[#F3F3F3]/"],
 html.theme-light .webx-process [class*="text-[#F3F3F3]/"],
 html[data-theme="light"] .webx-process p,
 html.theme-light .webx-process p {
-  color: rgb(243 243 243 / 0.66) !important;
+  color: rgb(7 6 44 / 0.72) !important;
 }
 
 html[data-theme="light"] .webx-process .process-glow-card,
@@ -1044,6 +1141,28 @@ html.theme-light .webx-start-project .bg-\[\#F3F3F3\] {
   background-color: #f3f3f3 !important;
 }
 
+html[data-theme="light"] .webx-start-project .text-\[\#07062C\],
+html.theme-light .webx-start-project .text-\[\#07062C\],
+html[data-theme="light"] .webx-start-project .bg-\[\#F3F3F3\].text-\[\#07062C\],
+html.theme-light .webx-start-project .bg-\[\#F3F3F3\].text-\[\#07062C\] {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project [class*="text-[#07062C]/"],
+html.theme-light .webx-start-project [class*="text-[#07062C]/"] {
+  color: rgb(7 6 44 / 0.58) !important;
+}
+
+html[data-theme="light"] .webx-start-project .text-\[\#ffd7ad\],
+html.theme-light .webx-start-project .text-\[\#ffd7ad\] {
+  color: #ffd7ad !important;
+}
+
+html[data-theme="light"] .webx-start-project .text-\[\#ff9a2f\],
+html.theme-light .webx-start-project .text-\[\#ff9a2f\] {
+  color: #ff9a2f !important;
+}
+
 html[data-theme="light"] .webx-start-project input,
 html[data-theme="light"] .webx-start-project textarea,
 html.theme-light .webx-start-project input,
@@ -1057,4 +1176,650 @@ html[data-theme="light"] .webx-start-project img[src*="webx logo"],
 html.theme-light .webx-start-project img[src*="webx%20logo"],
 html.theme-light .webx-start-project img[src*="webx logo"] {
   filter: brightness(0) invert(1) !important;
+}
+
+html[data-theme="light"] section.webx-faq,
+html.theme-light section.webx-faq,
+html[data-theme="light"] .webx-faq.bg-\[\#07062C\],
+html.theme-light .webx-faq.bg-\[\#07062C\] {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-faq .text-\[\#F3F3F3\],
+html.theme-light .webx-faq .text-\[\#F3F3F3\] {
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-faq [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-faq [class*="text-[#F3F3F3]/"] {
+  color: rgb(243 243 243 / 0.68) !important;
+}
+
+html[data-theme="light"] .webx-faq [class*="border-[#F3F3F3]"],
+html.theme-light .webx-faq [class*="border-[#F3F3F3]"] {
+  border-color: rgb(243 243 243 / 0.12) !important;
+}
+
+main.webx-works-page {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+  --works-filter-bg: rgb(243 243 243 / 0.08);
+  --works-filter-border: rgb(243 243 243 / 0.14);
+  --works-filter-text: #f3f3f3;
+}
+
+main.webx-works-page .works-filter-menu {
+  background: #121037 !important;
+  border-color: rgb(243 243 243 / 0.12) !important;
+  color: #f3f3f3 !important;
+}
+
+main.webx-works-page .works-filter-option {
+  color: rgb(243 243 243 / 0.78) !important;
+}
+
+main.webx-works-page .works-filter-option-active {
+  background: #8f86dc !important;
+  color: #07062c !important;
+}
+
+main.webx-works-page .works-project-title {
+  color: #f3f3f3 !important;
+}
+
+main.webx-works-page .works-project-service {
+  color: rgb(243 243 243 / 0.58) !important;
+}
+
+.webx-faq {
+  background: #07062c;
+  color: #f3f3f3;
+  transition:
+    background-color 320ms ease,
+    color 320ms ease;
+}
+
+.webx-faq-answer {
+  overflow: hidden;
+  will-change: height, opacity, transform;
+}
+
+.webx-faq-list {
+  border-top-color: rgb(243 243 243 / 0.18) !important;
+  border-bottom-color: rgb(243 243 243 / 0.18) !important;
+}
+
+.webx-faq-row {
+  border-bottom: 1px solid rgb(243 243 243 / 0.18) !important;
+}
+
+.webx-faq-row:last-child {
+  border-bottom: 0 !important;
+}
+
+html[data-theme="light"] section.webx-faq,
+html.theme-light section.webx-faq {
+  background:
+    linear-gradient(180deg, #f3f3f3 0%, #eeedf8 48%, #f3f3f3 100%) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-faq .text-\[\#F3F3F3\],
+html.theme-light .webx-faq .text-\[\#F3F3F3\],
+html[data-theme="light"] .webx-faq h2,
+html.theme-light .webx-faq h2,
+html[data-theme="light"] .webx-faq-question,
+html.theme-light .webx-faq-question {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-faq [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-faq [class*="text-[#F3F3F3]/"],
+html[data-theme="light"] .webx-faq-copy,
+html.theme-light .webx-faq-copy,
+html[data-theme="light"] .webx-faq-answer p,
+html.theme-light .webx-faq-answer p {
+  color: rgb(7 6 44 / 0.66) !important;
+}
+
+html[data-theme="light"] .webx-faq [class*="border-[#F3F3F3]"],
+html.theme-light .webx-faq [class*="border-[#F3F3F3]"],
+html[data-theme="light"] .webx-faq-row,
+html.theme-light .webx-faq-row {
+  border-color: rgb(7 6 44 / 0.14) !important;
+}
+
+html[data-theme="light"] .webx-faq-list,
+html.theme-light .webx-faq-list {
+  border-top-color: rgb(7 6 44 / 0.18) !important;
+  border-bottom-color: rgb(7 6 44 / 0.18) !important;
+}
+
+html[data-theme="light"] .webx-faq-row,
+html.theme-light .webx-faq-row {
+  border-bottom-color: rgb(7 6 44 / 0.18) !important;
+}
+
+html[data-theme="light"] .webx-faq-icon,
+html.theme-light .webx-faq-icon {
+  border-color: rgb(7 6 44 / 0.16) !important;
+  color: rgb(7 6 44 / 0.72) !important;
+  background: rgb(255 255 255 / 0.5);
+}
+
+html[data-theme="light"] main.webx-start-project,
+html.theme-light main.webx-start-project {
+  background: #f3f3f3 !important;
+  background-color: #f3f3f3 !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project img[src*="webx%20logo"],
+html[data-theme="light"] .webx-start-project img[src*="webx logo"],
+html.theme-light .webx-start-project img[src*="webx%20logo"],
+html.theme-light .webx-start-project img[src*="webx logo"] {
+  filter: none !important;
+}
+
+html[data-theme="light"] .webx-start-project .text-\[\#F3F3F3\],
+html.theme-light .webx-start-project .text-\[\#F3F3F3\],
+html[data-theme="light"] .webx-start-project h1,
+html[data-theme="light"] .webx-start-project h2,
+html.theme-light .webx-start-project h1,
+html.theme-light .webx-start-project h2,
+html[data-theme="light"] .webx-start-project .start-project-home,
+html.theme-light .webx-start-project .start-project-home,
+html[data-theme="light"] .webx-start-project .start-project-back,
+html.theme-light .webx-start-project .start-project-back {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-start-project [class*="text-[#F3F3F3]/"],
+html[data-theme="light"] .webx-start-project p,
+html.theme-light .webx-start-project p,
+html[data-theme="light"] .webx-start-project label > span,
+html.theme-light .webx-start-project label > span,
+html[data-theme="light"] .webx-start-project .start-project-steps,
+html.theme-light .webx-start-project .start-project-steps {
+  color: rgb(7 6 44 / 0.66) !important;
+}
+
+html[data-theme="light"] .webx-start-project input,
+html[data-theme="light"] .webx-start-project textarea,
+html[data-theme="light"] .webx-start-project button[aria-haspopup="listbox"],
+html.theme-light .webx-start-project input,
+html.theme-light .webx-start-project textarea,
+html.theme-light .webx-start-project button[aria-haspopup="listbox"] {
+  background-color: rgb(255 255 255 / 0.78) !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  color: #07062c !important;
+  caret-color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project input::placeholder,
+html[data-theme="light"] .webx-start-project textarea::placeholder,
+html.theme-light .webx-start-project input::placeholder,
+html.theme-light .webx-start-project textarea::placeholder {
+  color: rgb(7 6 44 / 0.36) !important;
+}
+
+html[data-theme="light"] .webx-start-project [role="listbox"],
+html.theme-light .webx-start-project [role="listbox"] {
+  background: #ffffff !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  box-shadow: 0 22px 70px rgb(7 6 44 / 0.14) !important;
+}
+
+html[data-theme="light"] .webx-start-project [role="listbox"] button,
+html.theme-light .webx-start-project [role="listbox"] button {
+  color: rgb(7 6 44 / 0.72) !important;
+}
+
+html[data-theme="light"] .webx-start-project [role="listbox"] button[aria-selected="true"],
+html.theme-light .webx-start-project [role="listbox"] button[aria-selected="true"],
+html[data-theme="light"] .webx-start-project .start-project-step-dot-active,
+html.theme-light .webx-start-project .start-project-step-dot-active {
+  background: #8f86dc !important;
+  border-color: #8f86dc !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project .start-project-step-dot-done,
+html.theme-light .webx-start-project .start-project-step-dot-done {
+  background: rgb(143 134 220 / 0.18) !important;
+  border-color: rgb(143 134 220 / 0.55) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-start-project .start-project-step-dot-idle,
+html.theme-light .webx-start-project .start-project-step-dot-idle {
+  background: #ffffff !important;
+  border-color: rgb(7 6 44 / 0.12) !important;
+  color: rgb(7 6 44 / 0.58) !important;
+}
+
+html[data-theme="light"] .webx-start-project .start-project-home,
+html[data-theme="light"] .webx-start-project .start-project-back,
+html.theme-light .webx-start-project .start-project-home,
+html.theme-light .webx-start-project .start-project-back {
+  background: rgb(255 255 255 / 0.64) !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+}
+
+html[data-theme="light"] .webx-start-project .start-project-next,
+html.theme-light .webx-start-project .start-project-next {
+  background: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+main.webx-works-page {
+  animation: works-page-enter 820ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.works-page-hero,
+.works-filter-panel,
+.works-project-card {
+  animation: works-rise-in 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.works-filter-panel {
+  animation-delay: 100ms;
+}
+
+html[data-theme="dark"] main.webx-works-page,
+html.theme-dark main.webx-works-page {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] main.webx-works-page,
+html.theme-light main.webx-works-page {
+  background:
+    linear-gradient(180deg, #f3f3f3 0%, #f7f7fb 42%, #f3f3f3 100%) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-works-page .text-\[\#F3F3F3\],
+html.theme-light .webx-works-page .text-\[\#F3F3F3\],
+html[data-theme="light"] .webx-works-page h1,
+html.theme-light .webx-works-page h1 {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-works-page [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-works-page [class*="text-[#F3F3F3]/"] {
+  color: rgb(7 6 44 / 0.66) !important;
+}
+
+html[data-theme="light"] .webx-works-page [class*="border-[#F3F3F3]"],
+html.theme-light .webx-works-page [class*="border-[#F3F3F3]"] {
+  border-color: rgb(7 6 44 / 0.14) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-trigger,
+html.theme-light .webx-works-page .works-filter-trigger {
+  background: #07062c !important;
+  border-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-menu,
+html.theme-light .webx-works-page .works-filter-menu {
+  background: #ffffff !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  box-shadow: 0 22px 70px rgb(7 6 44 / 0.14) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-option,
+html.theme-light .webx-works-page .works-filter-option {
+  color: rgb(7 6 44 / 0.72) !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-option:hover,
+html.theme-light .webx-works-page .works-filter-option:hover {
+  background: rgb(7 6 44 / 0.06) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-filter-option-active,
+html.theme-light .webx-works-page .works-filter-option-active {
+  background: #8f86dc !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-works-page .works-project-title,
+html.theme-light .webx-works-page .works-project-title,
+html[data-theme="light"] .webx-works-page .works-project-service,
+html.theme-light .webx-works-page .works-project-service {
+  color: #f3f3f3 !important;
+}
+
+@keyframes works-page-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes works-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.webx-works-page,
+  .works-page-hero,
+  .works-filter-panel,
+  .works-project-card {
+    animation: none !important;
+  }
+
+  .webx-faq-answer {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+html.theme-light main.webx-works-page,
+html[data-theme="light"] main.webx-works-page {
+  background-image: linear-gradient(
+    180deg,
+    #f3f3f3 0%,
+    #f7f7fb 42%,
+    #f3f3f3 100%
+  ) !important;
+  background-color: #f3f3f3 !important;
+  color: #07062c !important;
+  --works-filter-bg: #07062c;
+  --works-filter-border: #07062c;
+  --works-filter-text: #f3f3f3;
+}
+
+html.theme-light main.webx-works-page button.works-filter-trigger,
+html[data-theme="light"] main.webx-works-page button.works-filter-trigger {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  border-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html.theme-light main.webx-works-page button.works-filter-trigger .works-filter-chevron,
+html[data-theme="light"] main.webx-works-page button.works-filter-trigger .works-filter-chevron {
+  color: #f3f3f3 !important;
+}
+
+html.theme-light main.webx-start-project button.start-project-next,
+html.theme-light main.webx-start-project a.start-project-next,
+html[data-theme="light"] main.webx-start-project button.start-project-next,
+html[data-theme="light"] main.webx-start-project a.start-project-next {
+  background: #07062c !important;
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html.theme-light main.webx-start-project,
+html[data-theme="light"] main.webx-start-project {
+  --start-field-bg: rgb(255 255 255 / 0.78);
+  --start-field-text: #07062c;
+  --start-field-placeholder: rgb(7 6 44 / 0.42);
+  --start-primary-bg: #07062c;
+  --start-primary-text: #f3f3f3;
+}
+
+html.theme-light main.webx-start-project button.start-project-next *,
+html.theme-light main.webx-start-project a.start-project-next *,
+html[data-theme="light"] main.webx-start-project button.start-project-next *,
+html[data-theme="light"] main.webx-start-project a.start-project-next * {
+  color: #f3f3f3 !important;
+}
+
+html.theme-light main.webx-start-project input,
+html.theme-light main.webx-start-project textarea,
+html[data-theme="light"] main.webx-start-project input,
+html[data-theme="light"] main.webx-start-project textarea {
+  background: rgb(255 255 255 / 0.78) !important;
+  background-color: rgb(255 255 255 / 0.78) !important;
+  color: #07062c !important;
+}
+
+.works-project-meta {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.works-project-card:hover .works-project-meta,
+.works-project-card:focus-within .works-project-meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.works-project-scrim {
+  opacity: 0;
+}
+
+.works-project-card:hover .works-project-scrim,
+.works-project-card:focus-within .works-project-scrim {
+  opacity: 1;
+}
+
+main.webx-works-page .works-filter-menu {
+  z-index: 80 !important;
+}
+
+main.webx-start-project .start-project-error {
+  background: #2b1607 !important;
+  border-color: rgb(255 154 47 / 0.42) !important;
+  color: #ffd7ad !important;
+}
+
+main.webx-start-project .start-project-error-icon {
+  color: #ff9a2f !important;
+}
+
+html.theme-light main.webx-start-project .start-project-error,
+html[data-theme="light"] main.webx-start-project .start-project-error {
+  background: #fff4e8 !important;
+  border-color: rgb(255 154 47 / 0.46) !important;
+  color: #7a3b00 !important;
+}
+
+html.theme-light main.webx-start-project .start-project-error-icon,
+html[data-theme="light"] main.webx-start-project .start-project-error-icon {
+  color: #ff8a00 !important;
+}
+
+html.theme-light main.webx-start-project img[src*="webx%20logo"],
+html.theme-light main.webx-start-project img[src*="webx logo"],
+html[data-theme="light"] main.webx-start-project img[src*="webx%20logo"],
+html[data-theme="light"] main.webx-start-project img[src*="webx logo"] {
+  filter: brightness(0) saturate(100%) invert(7%) sepia(59%) saturate(1677%)
+    hue-rotate(231deg) brightness(78%) contrast(112%) !important;
+}
+
+html.theme-light main.webx-start-project .start-project-step-line,
+html[data-theme="light"] main.webx-start-project .start-project-step-line {
+  background-color: rgb(7 6 44 / 0.16) !important;
+}
+
+html.theme-light section.webx-process .process-card-inner,
+html[data-theme="light"] section.webx-process .process-card-inner,
+section.webx-process .process-card-inner {
+  background: #121037 !important;
+  color: #ffffff !important;
+}
+
+html.theme-light section.webx-process .process-glow-card-active .process-card-inner,
+html[data-theme="light"] section.webx-process .process-glow-card-active .process-card-inner,
+section.webx-process .process-glow-card-active .process-card-inner {
+  background: #8f86dc !important;
+  color: #ffffff !important;
+}
+
+html.theme-light section.webx-process .process-card-inner h3,
+html.theme-light section.webx-process .process-card-inner svg,
+html[data-theme="light"] section.webx-process .process-card-inner h3,
+html[data-theme="light"] section.webx-process .process-card-inner svg,
+section.webx-process .process-card-inner h3,
+section.webx-process .process-card-inner svg {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+html.theme-light section.webx-process .process-card-inner p,
+html[data-theme="light"] section.webx-process .process-card-inner p,
+section.webx-process .process-card-inner p {
+  color: #e8e6ff !important;
+  opacity: 1 !important;
+}
+
+html.theme-light section.webx-process .process-glow-card-active .process-card-inner p,
+html[data-theme="light"] section.webx-process .process-glow-card-active .process-card-inner p,
+section.webx-process .process-glow-card-active .process-card-inner p {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+html.theme-light section.webx-process .process-step-pill,
+html[data-theme="light"] section.webx-process .process-step-pill,
+section.webx-process .process-step-pill {
+  background: rgb(7 6 44 / 0.92) !important;
+  border-color: rgb(255 255 255 / 0.3) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+html.theme-light section.webx-process .process-glow-card-active .process-step-pill,
+html[data-theme="light"] section.webx-process .process-glow-card-active .process-step-pill,
+section.webx-process .process-glow-card-active .process-step-pill {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #07062c !important;
+}
+
+html.theme-light main.webx-start-project img[src*="webx%20logo"],
+html.theme-light main.webx-start-project img[src*="webx logo"],
+html[data-theme="light"] main.webx-start-project img[src*="webx%20logo"],
+html[data-theme="light"] main.webx-start-project img[src*="webx logo"] {
+  filter: brightness(0) saturate(100%) invert(7%) sepia(59%) saturate(1677%)
+    hue-rotate(231deg) brightness(78%) contrast(112%) !important;
+}
+
+html.theme-light main.webx-start-project .start-project-step-line,
+html[data-theme="light"] main.webx-start-project .start-project-step-line {
+  background-color: rgb(7 6 44 / 0.14) !important;
+}
+
+html.theme-light main.webx-start-project .start-project-error,
+html[data-theme="light"] main.webx-start-project .start-project-error {
+  background: #fff4e8 !important;
+  border-color: rgb(255 154 47 / 0.46) !important;
+  color: #7a3b00 !important;
+}
+
+html.theme-light main.webx-start-project .start-project-error .text-\[\#ff9a2f\],
+html[data-theme="light"] main.webx-start-project .start-project-error .text-\[\#ff9a2f\] {
+  color: #ff8a00 !important;
+}
+
+main.webx-works-page .works-project-thumb {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+main.webx-works-page .works-filter-menu {
+  z-index: 80 !important;
+}
+
+html.theme-light main.webx-works-page .works-filter-menu,
+html[data-theme="light"] main.webx-works-page .works-filter-menu {
+  background: #ffffff !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  color: #07062c !important;
+}
+
+html.theme-light section.webx-faq,
+html[data-theme="light"] section.webx-faq,
+html.theme-light section.webx-faq.bg-\[\#07062C\],
+html[data-theme="light"] section.webx-faq.bg-\[\#07062C\] {
+  background-image: linear-gradient(
+    180deg,
+    #f3f3f3 0%,
+    #eeedf8 48%,
+    #f3f3f3 100%
+  ) !important;
+  background: linear-gradient(
+    180deg,
+    #f3f3f3 0%,
+    #eeedf8 48%,
+    #f3f3f3 100%
+  ) !important;
+  background-color: #f3f3f3 !important;
+}
+
+html.theme-light section.webx-process,
+html[data-theme="light"] section.webx-process {
+  background: #f3f3f3 !important;
+  background-color: #f3f3f3 !important;
+  color: #07062c !important;
+}
+
+html.theme-light section.webx-process .process-eyebrow,
+html.theme-light section.webx-process .process-eyebrow span,
+html.theme-light section.webx-process .process-heading,
+html[data-theme="light"] section.webx-process .process-eyebrow,
+html[data-theme="light"] section.webx-process .process-eyebrow span,
+html[data-theme="light"] section.webx-process .process-heading {
+  color: #07062c !important;
+  opacity: 1 !important;
+}
+
+html.theme-light section.webx-process .process-intro,
+html[data-theme="light"] section.webx-process .process-intro {
+  color: rgb(7 6 44 / 0.74) !important;
+  opacity: 1 !important;
+}
+
+.webx-navbar .webx-logo {
+  height: 1.25rem !important;
+}
+
+main.webx-works-page .works-project-scrim {
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+main.webx-works-page .works-project-meta {
+  opacity: 0 !important;
+  transform: translateY(28px) !important;
+  pointer-events: none;
+}
+
+main.webx-works-page .works-project-card:hover .works-project-scrim,
+main.webx-works-page .works-project-card:focus-within .works-project-scrim {
+  opacity: 1 !important;
+}
+
+main.webx-works-page .works-project-card:hover .works-project-meta,
+main.webx-works-page .works-project-card:focus-within .works-project-meta {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }

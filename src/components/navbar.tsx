@@ -65,29 +65,31 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex w-full max-w-[1480px] items-center justify-between px-4 py-5 sm:px-[1.5%] lg:px-[1%]">
-        <a
-          href="/"
-          className="group flex items-center"
-          aria-label="Web X home"
-        >
-          <img
-            alt="Web X"
-            className="webx-logo h-10 w-auto object-contain"
-            src="/webx%20logo/webx.svg"
-          />
-        </a>
+        <div className="flex items-center gap-8 lg:gap-10">
+          <a
+            href="/"
+            className="group flex items-center"
+            aria-label="Web X home"
+          >
+            <img
+              alt="Web X"
+              className="webx-logo h-5 w-auto object-contain"
+              src="/webx%20logo/webx.svg"
+            />
+          </a>
 
-        <nav className="hidden items-center gap-9 text-base font-normal tracking-tight text-[#F3F3F3] lg:flex">
-          {navItems.map((item) => (
-            <a
-              className="transition hover:text-[#F3F3F3]/72"
-              href={item.href}
-              key={item.label}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+          <nav className="hidden items-center gap-8 text-base font-normal tracking-tight text-[#F3F3F3] lg:flex">
+            {navItems.map((item) => (
+              <a
+                className="transition hover:text-[#F3F3F3]/72"
+                href={item.href}
+                key={item.label}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
 
         <BookCallTrigger className="webx-primary-button inline-flex h-11 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]">
           Start a Project

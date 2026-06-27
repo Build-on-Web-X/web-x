@@ -41,7 +41,7 @@ export function StoryReveal({
           ? false
           : { opacity: 0, x: offset.x, y: offset.y }
       }
-      transition={{ delay, duration: 0.82, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ delay, duration: 1.14, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ amount: 0.28, once: true }}
       whileInView={
         reduceMotion
@@ -72,7 +72,7 @@ export function StoryStagger({
         show: {
           transition: {
             delayChildren: delay,
-            staggerChildren: 0.08,
+            staggerChildren: 0.12,
           },
         },
       }}
@@ -99,7 +99,7 @@ export function StoryItem({
         hidden: { opacity: 0, y: reduceMotion ? 0 : 28 },
         show: {
           opacity: 1,
-          transition: { duration: 0.68, ease: [0.16, 1, 0.3, 1] },
+          transition: { duration: 0.94, ease: [0.16, 1, 0.3, 1] },
           y: 0,
         },
       }}

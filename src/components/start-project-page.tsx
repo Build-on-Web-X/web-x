@@ -1,6 +1,12 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import {
+  type CSSProperties,
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const projectTypes = [
   "Business Website",
@@ -102,8 +108,8 @@ function FieldError({ message }: { message?: string }) {
   }
 
   return (
-    <span className="flex items-start gap-2 rounded-lg border border-[#ff9a2f]/32 bg-[#ff8a00]/12 px-3 py-2 text-xs leading-5 tracking-tight text-[#ffd7ad]">
-      <span className="mt-0.5 shrink-0 text-[#ff9a2f]">
+    <span className="start-project-error absolute left-0 top-[calc(100%+6px)] z-30 flex w-full items-start gap-2 rounded-lg border px-3 py-2 text-xs leading-5 tracking-tight shadow-[0_14px_34px_rgba(0,0,0,0.18)]">
+      <span className="start-project-error-icon mt-0.5 shrink-0">
         <AlertIcon />
       </span>
       <span>{message}</span>
@@ -131,14 +137,14 @@ function Field({
   value: string;
 }) {
   return (
-    <label className="grid gap-1.5">
+    <label className="relative grid gap-1.5">
       <span className="text-xs font-normal tracking-tight text-[#F3F3F3]/64">
         {label}
         {required ? <span className="text-[#8f86dc]"> *</span> : null}
       </span>
       <input
         aria-invalid={error ? true : undefined}
-        className={`h-11 rounded-lg border bg-[#F3F3F3]/8 px-4 text-sm font-normal tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/34 focus:bg-[#F3F3F3]/12 focus:ring-4 ${
+        className={`h-11 rounded-lg border px-4 text-sm font-normal tracking-tight outline-none transition placeholder:text-[#F3F3F3]/34 focus:ring-4 ${
           error
             ? "border-[#ff9a2f]/74 focus:border-[#ff9a2f] focus:ring-[#ff9a2f]/16"
             : "border-[#F3F3F3]/14 focus:border-[#8f86dc] focus:ring-[#8f86dc]/18"
@@ -147,6 +153,10 @@ function Field({
         onChange={(event) => onChange(name, event.target.value)}
         placeholder={placeholder}
         required={false}
+        style={{
+          backgroundColor: "var(--start-field-bg)",
+          color: "var(--start-field-text)",
+        }}
         type={type}
         value={value}
       />
@@ -174,10 +184,14 @@ function TextAreaField({
         {label}
       </span>
       <textarea
-        className="h-24 resize-none rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 py-3 text-sm font-normal leading-6 tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/34 focus:border-[#8f86dc] focus:bg-[#F3F3F3]/12 focus:ring-4 focus:ring-[#8f86dc]/18"
+        className="h-24 resize-none rounded-lg border border-[#F3F3F3]/14 px-4 py-3 text-sm font-normal leading-6 tracking-tight outline-none transition placeholder:text-[#F3F3F3]/34 focus:border-[#8f86dc] focus:ring-4 focus:ring-[#8f86dc]/18"
         name={name}
         onChange={(event) => onChange(name, event.target.value)}
         placeholder={placeholder}
+        style={{
+          backgroundColor: "var(--start-field-bg)",
+          color: "var(--start-field-text)",
+        }}
         value={value}
       />
     </label>
@@ -213,10 +227,14 @@ function SelectField({
       <button
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        className={`flex h-11 w-full items-center justify-between rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 text-left text-sm font-normal tracking-tight outline-none focus:border-[#8f86dc] focus:bg-[#F3F3F3]/12 focus:ring-4 focus:ring-[#8f86dc]/18 ${
-          value ? "text-[#F3F3F3]" : "text-[#F3F3F3]/42"
-        }`}
+        className="flex h-11 w-full items-center justify-between rounded-lg border border-[#F3F3F3]/14 px-4 text-left text-sm font-normal tracking-tight outline-none focus:border-[#8f86dc] focus:ring-4 focus:ring-[#8f86dc]/18"
         onClick={() => onToggle(name)}
+        style={{
+          backgroundColor: "var(--start-field-bg)",
+          color: value
+            ? "var(--start-field-text)"
+            : "var(--start-field-placeholder)",
+        }}
         type="button"
       >
         <span>{value || placeholder}</span>
@@ -278,6 +296,42 @@ export function StartProjectPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [openSelect, setOpenSelect] = useState<SelectName | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isLightTheme, setIsLightTheme] = useState(false);
+  const validationTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    function syncTheme() {
+      setIsLightTheme(document.documentElement.dataset.theme === "light");
+    }
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, {
+      attributeFilter: ["data-theme", "class"],
+      attributes: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  function getFieldError(name: keyof LeadForm, value: string) {
+    if (name === "fullName" && !value.trim()) {
+      return "Please enter your name.";
+    }
+
+    if (name === "email") {
+      if (!value.trim()) {
+        return "Please enter your email address.";
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+        return "Use a valid email address, like hello@company.com.";
+      }
+    }
+
+    return null;
+  }
 
   function updateForm(name: keyof LeadForm, value: string) {
     setForm((current) => ({ ...current, [name]: value }));
@@ -290,6 +344,26 @@ export function StartProjectPage() {
       delete nextErrors[name];
       return nextErrors;
     });
+
+    if (validationTimerRef.current) {
+      window.clearTimeout(validationTimerRef.current);
+    }
+
+    validationTimerRef.current = window.setTimeout(() => {
+      const nextError = getFieldError(name, value);
+
+      setErrors((current) => {
+        const nextErrors = { ...current };
+
+        if (nextError) {
+          nextErrors[name] = nextError;
+        } else {
+          delete nextErrors[name];
+        }
+
+        return nextErrors;
+      });
+    }, 520);
   }
 
   function toggleSelect(name: SelectName) {
@@ -297,11 +371,6 @@ export function StartProjectPage() {
   }
 
   function goBack() {
-    if (activeStep === 0) {
-      window.location.href = "/";
-      return;
-    }
-
     setOpenSelect(null);
     setActiveStep((current) => Math.max(0, current - 1));
   }
@@ -380,7 +449,31 @@ export function StartProjectPage() {
   }
 
   return (
-    <main className="webx-start-project flex h-dvh overflow-hidden px-4 py-6 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]">
+    <main
+      className="webx-start-project relative flex h-dvh overflow-hidden px-4 py-6 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
+      style={{
+        backgroundColor: isLightTheme ? "#f3f3f3" : "#07062c",
+        color: isLightTheme ? "#07062c" : "#f3f3f3",
+        "--start-field-bg": isLightTheme
+          ? "rgb(255 255 255 / 0.78)"
+          : "rgb(243 243 243 / 0.08)",
+        "--start-field-text": isLightTheme ? "#07062c" : "#f3f3f3",
+        "--start-field-placeholder": isLightTheme
+          ? "rgb(7 6 44 / 0.42)"
+          : "rgb(243 243 243 / 0.42)",
+        "--start-primary-bg": isLightTheme ? "#07062c" : "#f3f3f3",
+        "--start-primary-text": isLightTheme ? "#f3f3f3" : "#07062c",
+      } as CSSProperties}
+    >
+      <a
+        className="start-project-home absolute left-4 top-4 z-20 inline-flex h-10 items-center gap-2 rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 px-4 text-xs font-normal tracking-tight text-[#F3F3F3] transition hover:border-[#F3F3F3]/34 hover:bg-[#F3F3F3]/12 sm:left-[1.5%] lg:left-[1%]"
+        href="/"
+      >
+        <span className="rotate-180">
+          <ArrowIcon />
+        </span>
+        Landing page
+      </a>
       <div className="mx-auto grid w-full max-w-[1260px] items-center gap-8 lg:grid-cols-[0.42fr_0.58fr]">
         <aside className="hidden max-w-md lg:block">
           <a aria-label="Web X home" className="inline-flex" href="/">
@@ -415,19 +508,26 @@ export function StartProjectPage() {
         </aside>
 
         <section className="mx-auto w-full max-w-[640px]">
-          <div className="mb-8 grid grid-cols-6 gap-0 text-center text-[11px] font-normal tracking-tight text-[#F3F3F3]/48">
+          <div className="start-project-steps mb-8 grid grid-cols-6 gap-0 text-center text-[11px] font-normal tracking-tight text-[#F3F3F3]/48">
             {steps.map((step, index) => (
               <div className="relative grid justify-items-center gap-2" key={step}>
                 {index > 0 ? (
-                  <span className="absolute right-1/2 top-4 h-px w-full bg-[#F3F3F3]/14" />
+                  <span
+                    className="start-project-step-line absolute right-1/2 top-4 h-px w-full"
+                    style={{
+                      backgroundColor: isLightTheme
+                        ? "rgb(7 6 44 / 0.16)"
+                        : "rgb(243 243 243 / 0.14)",
+                    }}
+                  />
                 ) : null}
                 <span
-                  className={`relative z-10 grid size-8 place-items-center rounded-full border text-xs ${
+                  className={`start-project-step-dot relative z-10 grid size-8 place-items-center rounded-full border text-xs ${
                     index === activeStep
-                      ? "border-[#8f86dc] bg-[#8f86dc] text-[#07062C]"
+                      ? "start-project-step-dot-active border-[#8f86dc] bg-[#8f86dc] text-[#07062C]"
                       : index < activeStep
-                        ? "border-[#8f86dc]/70 bg-[#8f86dc]/24 text-[#F3F3F3]"
-                        : "border-[#F3F3F3]/18 bg-[#F3F3F3] text-[#07062C]/54"
+                        ? "start-project-step-dot-done border-[#8f86dc]/70 bg-[#8f86dc]/24 text-[#F3F3F3]"
+                        : "start-project-step-dot-idle border-[#F3F3F3]/18 bg-[#F3F3F3] text-[#07062C]/54"
                   }`}
                 >
                   {index + 1}
@@ -592,7 +692,8 @@ export function StartProjectPage() {
 
               <div className="mt-1 grid grid-cols-[132px_1fr] gap-3">
                 <button
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/16 px-6 text-sm font-normal tracking-tight text-[#F3F3F3] transition hover:border-[#F3F3F3]/36"
+                  className="start-project-back inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/16 px-6 text-sm font-normal tracking-tight text-[#F3F3F3] transition hover:border-[#F3F3F3]/36 disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={activeStep === 0}
                   onClick={goBack}
                   type="button"
                 >
@@ -600,7 +701,11 @@ export function StartProjectPage() {
                 </button>
                 <button
                   disabled={isSending}
-                  className="inline-flex h-12 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc] disabled:cursor-not-allowed disabled:opacity-65"
+                  className="start-project-next inline-flex h-12 items-center justify-center gap-3 rounded-full px-6 text-sm font-normal tracking-tight transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc] disabled:cursor-not-allowed disabled:opacity-65"
+                  style={{
+                    backgroundColor: "var(--start-primary-bg)",
+                    color: "var(--start-primary-text)",
+                  }}
                   type="submit"
                 >
                   {activeStep === lastStep
@@ -622,7 +727,11 @@ export function StartProjectPage() {
                 your project.
               </p>
               <a
-                className="mt-7 inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white"
+                className="start-project-next mt-7 inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white"
+                style={{
+                  backgroundColor: "var(--start-primary-bg)",
+                  color: "var(--start-primary-text)",
+                }}
                 href="/"
               >
                 Back to site
