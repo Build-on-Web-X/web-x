@@ -188,7 +188,6 @@ export function HeroSection() {
               initial={{ opacity: 0, scale: 0.96, y: 40 }}
               transition={{ delay: 0.34, duration: 1.12, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SampleWorkPreview />
             </motion.div>
           </section>
         </main>
