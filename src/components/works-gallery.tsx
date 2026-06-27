@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Work } from "@/lib/site-data";
 
-const allServicesLabel = "All services";
+const allServicesLabel = "All projects";
 
 function ArrowIcon() {
   return (
@@ -81,6 +81,18 @@ export function WorksGallery({ works }: { works: Work[] }) {
     [works],
   );
 
+  const serviceCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      [allServicesLabel]: works.length,
+    };
+
+    works.forEach((work) => {
+      counts[work.service] = (counts[work.service] ?? 0) + 1;
+    });
+
+    return counts;
+  }, [works]);
+
   const filteredWorks = useMemo(() => {
     if (activeService === allServicesLabel) {
       return works;
@@ -88,6 +100,8 @@ export function WorksGallery({ works }: { works: Work[] }) {
 
     return works.filter((work) => work.service === activeService);
   }, [activeService, works]);
+
+  const activeServiceCount = serviceCounts[activeService] ?? filteredWorks.length;
 
   useEffect(() => {
     const requestedWork = searchParams.get("work");
@@ -173,6 +187,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
               <span>Works</span>
               <span>]</span>
             </p>
+
             <h1 className="mt-4 max-w-4xl text-balance text-5xl font-normal leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl">
               Project index
             </h1>
@@ -184,13 +199,13 @@ export function WorksGallery({ works }: { works: Work[] }) {
           </p>
         </div>
 
-        <div className="works-filter-panel mb-7 flex flex-col gap-3 border-y border-[#F3F3F3]/10 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="works-filter-panel relative z-[90] mb-7 flex flex-col gap-3 border-y border-[#F3F3F3]/10 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="relative" ref={filterRef}>
               <button
                 aria-expanded={isFilterOpen}
                 aria-haspopup="listbox"
-                className="works-filter-trigger inline-flex h-11 min-w-[220px] items-center justify-between gap-5 rounded-full border px-4 text-sm font-normal tracking-tight outline-none transition hover:border-[#8f86dc]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
+                className="works-filter-trigger inline-flex h-11 min-w-[250px] items-center justify-between gap-5 rounded-full border px-4 text-sm font-normal tracking-tight outline-none transition hover:border-[#8f86dc]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
                 onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
                 style={{
                   backgroundColor: isLightTheme ? "#07062c" : "#f3f3f314",
@@ -199,9 +214,15 @@ export function WorksGallery({ works }: { works: Work[] }) {
                 }}
                 type="button"
               >
-                <span>{activeService}</span>
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="truncate">{activeService}</span>
+                  <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#8f86dc] px-2 text-xs text-[#07062C]">
+                    {activeServiceCount}
+                  </span>
+                </span>
+
                 <span
-                  className={`works-filter-chevron transition ${
+                  className={`works-filter-chevron shrink-0 transition ${
                     isFilterOpen ? "rotate-180" : ""
                   }`}
                 >
@@ -212,17 +233,17 @@ export function WorksGallery({ works }: { works: Work[] }) {
               {isFilterOpen ? (
                 <div
                   aria-label="Filter projects by service"
-                  className="works-filter-menu absolute left-0 top-[calc(100%+0.5rem)] z-30 w-[min(320px,calc(100vw-2rem))] overflow-hidden rounded-lg border border-[#F3F3F3]/12 bg-[#121037] p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
+                  className="works-filter-menu absolute left-0 top-[calc(100%+0.5rem)] z-[120] w-[min(340px,calc(100vw-2rem))] overflow-hidden rounded-lg border border-[#F3F3F3]/12 bg-[#121037] p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
                   role="listbox"
-                  style={{ zIndex: 80 }}
                 >
                   {services.map((service) => {
                     const isSelected = activeService === service;
+                    const serviceCount = serviceCounts[service] ?? 0;
 
                     return (
                       <button
                         aria-selected={isSelected}
-                        className={`works-filter-option flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight transition ${
+                        className={`works-filter-option flex w-full items-center rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight transition ${
                           isSelected
                             ? "works-filter-option-active bg-[#8f86dc] text-[#07062C]"
                             : "text-[#F3F3F3]/78 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
@@ -232,15 +253,17 @@ export function WorksGallery({ works }: { works: Work[] }) {
                         role="option"
                         type="button"
                       >
-                        <span>{service}</span>
-                        <span className="text-xs text-current/56">
-                          {
-                            works.filter((work) =>
-                              service === allServicesLabel
-                                ? true
-                                : work.service === service,
-                            ).length
-                          }
+                        <span className="flex min-w-0 items-center gap-2">
+                          <span className="truncate">{service}</span>
+                          <span
+                            className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs ${
+                              isSelected
+                                ? "bg-[#07062C]/12 text-[#07062C]/70"
+                                : "bg-[#F3F3F3]/10 text-[#F3F3F3]/58"
+                            }`}
+                          >
+                            {serviceCount}
+                          </span>
                         </span>
                       </button>
                     );
@@ -248,10 +271,6 @@ export function WorksGallery({ works }: { works: Work[] }) {
                 </div>
               ) : null}
             </div>
-
-            <span className="inline-flex h-11 items-center rounded-full bg-[#8f86dc] px-4 text-xs font-normal tracking-tight text-[#07062C]">
-              {filteredWorks.length}
-            </span>
           </div>
 
           <button
@@ -265,7 +284,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
           </button>
         </div>
 
-        <div className="works-project-grid grid gap-x-5 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="works-project-grid relative z-0 grid gap-x-5 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
           {filteredWorks.map((work, index) => (
             <article
               className="works-project-card group"
@@ -284,6 +303,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
                     style={{ backgroundImage: `url(${work.image})` }}
                   />
                   <div className="works-project-scrim absolute inset-0 bg-[linear-gradient(180deg,rgba(7,6,44,0)_42%,rgba(7,6,44,0.88)_100%)]" />
+
                   <div className="works-project-meta absolute inset-x-0 bottom-0 p-4">
                     <div className="flex items-end justify-between gap-4">
                       <div className="min-w-0">
@@ -294,6 +314,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
                           {work.service}
                         </p>
                       </div>
+
                       <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#F3F3F3] text-[#07062C] transition group-hover:bg-[#8f86dc]">
                         <ArrowIcon />
                       </span>
