@@ -57,8 +57,18 @@ export function ImageCarouselSection({ works }: { works: Work[] }) {
   return (
     <section
       aria-label="Web X project imagery"
-      className="overflow-hidden bg-[#07062C] py-4"
+      className="webx-image-marquee overflow-hidden bg-[#07062C] py-4"
     >
+      <StoryReveal>
+        <div className="mx-auto mb-6 w-full max-w-[1480px] px-4 sm:px-[1.5%] lg:px-[1%]">
+          <p className="image-marquee-eyebrow inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight text-[#F3F3F3]">
+            <span className="text-[#F3F3F3]/50">[</span>
+            <span>Made by creatives, developers, winners, and leaders</span>
+            <span className="text-[#F3F3F3]/50">]</span>
+          </p>
+        </div>
+      </StoryReveal>
+
       <StoryReveal direction="left">
         <div className="carousel-track flex w-max items-end gap-5">
           {[...carouselImages, ...carouselImages].map((item, index) => {

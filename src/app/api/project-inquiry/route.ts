@@ -22,10 +22,12 @@ const EMAILJS_SERVICE_ID =
   process.env.EMAILJS_SERVICE_ID ??
   process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ??
   "service_crjpq5p";
-const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID;
+const EMAILJS_TEMPLATE_ID =
+  process.env.EMAILJS_TEMPLATE_ID ?? process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const EMAILJS_PUBLIC_KEY =
   process.env.EMAILJS_PUBLIC_KEY ?? process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY;
+const PROJECT_INQUIRY_RECIPIENT = "buildonwebx@gmail.com";
 
 type RateBucket = {
   count: number;
@@ -152,9 +154,33 @@ export async function POST(request: Request) {
     return rateLimitError(emailLimit.retryAfterSeconds);
   }
 
-  if (!EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
-    return jsonError("Email is not configured yet.", 500);
+  if (!EMAILJS_TEMPLATE_ID) {
+    return jsonError(
+      "Email is missing its EmailJS template ID. Add EMAILJS_TEMPLATE_ID in .env.local.",
+      500,
+    );
   }
+
+  if (!EMAILJS_PUBLIC_KEY) {
+    return jsonError(
+      "Email is missing its EmailJS public key. Add EMAILJS_PUBLIC_KEY in .env.local.",
+      500,
+    );
+  }
+
+  const projectSummary = [
+    `Name: ${fullName}`,
+    `Email: ${email}`,
+    `Company: ${body.company || "Not provided"}`,
+    `Project type: ${body.projectType || "Not sure yet"}`,
+    `Primary goal: ${body.primaryGoal || "Not provided"}`,
+    `Audience: ${body.audience || "Not provided"}`,
+    `Challenge: ${body.challenge || "Not provided"}`,
+    `Must have: ${body.mustHave || "Not provided"}`,
+    `Budget: ${body.budget || "Not provided"}`,
+    `Timeline: ${body.timeline || "Not provided"}`,
+    `Message: ${body.message || "Not provided"}`,
+  ].join("\n");
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
@@ -168,6 +194,12 @@ export async function POST(request: Request) {
         template_id: EMAILJS_TEMPLATE_ID,
         user_id: EMAILJS_PUBLIC_KEY,
         template_params: {
+          to_email: PROJECT_INQUIRY_RECIPIENT,
+          to_name: "Web X",
+          reply_to: email,
+          from_email: email,
+          from_name: fullName,
+          subject: `New Web X project inquiry from ${fullName}`,
           budget: body.budget || "Not provided",
           challenge: body.challenge || "Not provided",
           company: body.company || "Not provided",
@@ -178,6 +210,8 @@ export async function POST(request: Request) {
           message: body.message || "Not provided",
           primary_goal: body.primaryGoal || "Not provided",
           project_type: body.projectType || "Not sure yet",
+          submitted_at: new Date().toISOString(),
+          summary: projectSummary,
           timeline: body.timeline || "Not provided",
         },
       }),
@@ -194,6 +228,25 @@ export async function POST(request: Request) {
   }
 
   if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+    const nonBrowserAccessDisabled = errorText
+      .toLowerCase()
+      .includes("non-browser");
+
+    console.error("EmailJS send failed", {
+      reason: nonBrowserAccessDisabled
+        ? "non-browser access disabled"
+        : "provider rejected request",
+      status: response.status,
+    });
+
+    if (nonBrowserAccessDisabled) {
+      return jsonError(
+        "EmailJS server-side sending is disabled. Enable non-browser API access in EmailJS account security.",
+        502,
+      );
+    }
+
     return jsonError("EmailJS could not send the project details.", 502);
   }
 

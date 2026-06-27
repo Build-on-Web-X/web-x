@@ -2,7 +2,10 @@ import { StoryReveal } from "@/components/story-motion";
 
 export function AboutSection() {
   return (
-    <section id="about" className="bg-[#07062C] px-4 py-24 sm:px-[1.5%] lg:px-[1%]">
+    <section
+      id="about"
+      className="webx-about bg-[#07062C] px-4 py-24 sm:px-[1.5%] lg:px-[1%]"
+    >
       <div className="mx-auto grid w-full max-w-[1480px] gap-10 lg:grid-cols-[0.15fr_0.85fr] lg:gap-16">
         <StoryReveal direction="right" className="lg:pt-2">
           <p className="inline-flex items-start gap-3 whitespace-nowrap text-xs font-normal uppercase tracking-tight text-[#F3F3F3]">

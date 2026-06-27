@@ -391,11 +391,42 @@ html.theme-light .webx-media-clean {
   background-color: transparent !important;
 }
 
+html[data-theme="light"] .webx-about,
+html.theme-light .webx-about {
+  background: #f3f3f3 !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-about .text-\[\#F3F3F3\],
+html.theme-light .webx-about .text-\[\#F3F3F3\] {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-about [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-about [class*="text-[#F3F3F3]/"] {
+  color: rgb(7 6 44 / 0.62) !important;
+}
+
 html[data-theme="light"] .carousel-image,
 html.theme-light .carousel-image {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
+}
+
+html[data-theme="light"] .webx-image-marquee,
+html.theme-light .webx-image-marquee {
+  background: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-image-marquee .image-marquee-eyebrow,
+html.theme-light .webx-image-marquee .image-marquee-eyebrow {
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-image-marquee .image-marquee-eyebrow span,
+html.theme-light .webx-image-marquee .image-marquee-eyebrow span {
+  color: rgb(7 6 44 / 0.58) !important;
 }
 
 html[data-theme="light"] .webx-media-clean .media-overlay,

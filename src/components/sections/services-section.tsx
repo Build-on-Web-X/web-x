@@ -59,26 +59,6 @@ const serviceIcons: Record<string, ReactNode> = {
     ),
 };
 
-function ArrowIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-8"
-      fill="none"
-      viewBox="0 0 32 32"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 16H25M18 9L25 16L18 23"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
-
 export function ServicesSection({ services }: { services: ServiceImage[] }) {
   return (
     <section
@@ -107,12 +87,9 @@ export function ServicesSection({ services }: { services: ServiceImage[] }) {
         <StoryStagger className="relative mt-16">
           {services.map((service) => (
             <StoryItem key={service.title}>
-              <article className="webx-service-row group border-t border-[#F3F3F3]/16 outline-none last:border-b">
-                <a
-                  className="grid gap-5 px-4 py-6 text-left outline-none sm:px-8 lg:min-h-32 lg:grid-cols-[0.12fr_0.68fr_280px_0.9fr_auto] lg:items-center lg:gap-8 xl:grid-cols-[0.14fr_0.78fr_320px_1fr_auto]"
-                  href="#contact"
-                >
-                <span className="grid size-12 place-items-center rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 text-[#F3F3F3]/68 transition group-hover:border-[#F3F3F3]/30 group-hover:text-[#F3F3F3] group-focus-within:border-[#F3F3F3]/30 group-focus-within:text-[#F3F3F3]">
+              <article className="webx-service-row border-t border-[#F3F3F3]/16 outline-none last:border-b">
+                <div className="grid gap-5 px-4 py-6 text-left sm:px-8 lg:min-h-32 lg:grid-cols-[0.12fr_0.8fr_1fr] lg:items-center lg:gap-8 xl:grid-cols-[0.14fr_0.92fr_1fr]">
+                <span className="grid size-12 place-items-center rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 text-[#F3F3F3]/68">
                   <svg
                     aria-hidden="true"
                     className="size-7"
@@ -124,34 +101,14 @@ export function ServicesSection({ services }: { services: ServiceImage[] }) {
                   </svg>
                 </span>
 
-                <h3 className="text-3xl font-normal tracking-tight text-[#F3F3F3]/68 transition-colors group-hover:text-[#F3F3F3] group-focus-within:text-[#F3F3F3] lg:text-4xl">
+                <h3 className="text-3xl font-normal tracking-tight text-[#F3F3F3] lg:text-4xl">
                   {service.title}
                 </h3>
 
-                <span
-                  aria-hidden="true"
-                  className="relative z-10 hidden h-full min-h-24 lg:block"
-                >
-                  <span
-                    className="sample-main-card webx-media-clean absolute left-1/2 top-1/2 block aspect-[1.32] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-[1.15rem] bg-cover bg-center opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 xl:w-[300px]"
-                    style={{ backgroundImage: `url(${service.image})` }}
-                  />
-                </span>
-
-                <p className="max-w-md text-lg leading-7 tracking-tight text-[#F3F3F3]/58 transition-colors group-hover:text-[#F3F3F3]/88 group-focus-within:text-[#F3F3F3]/88 lg:max-w-none">
+                <p className="max-w-md text-lg leading-7 tracking-tight text-[#F3F3F3]/72 lg:max-w-none">
                   {service.description}
                 </p>
-
-                <span className="text-[#F3F3F3]/50 transition group-hover:translate-x-2 group-hover:text-[#F3F3F3] group-focus-within:translate-x-2 group-focus-within:text-[#F3F3F3]">
-                  <ArrowIcon />
-                </span>
-
-                <span
-                  aria-hidden="true"
-                  className="sample-main-card webx-media-clean mt-2 block aspect-[1.35] w-full max-w-sm rounded-[1.15rem] bg-cover bg-center lg:hidden"
-                  style={{ backgroundImage: `url(${service.image})` }}
-                />
-                </a>
+                </div>
               </article>
             </StoryItem>
           ))}

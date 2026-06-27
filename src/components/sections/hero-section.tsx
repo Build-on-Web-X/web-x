@@ -3,7 +3,6 @@
 import { motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRightIcon, Navbar } from "@/components/navbar";
-import { SampleWorkPreview } from "@/components/sample-work-preview";
 import { Button } from "@/components/ui/button";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 
@@ -17,6 +16,35 @@ const heroReveal: Variants = {
     transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
+
+const heroTechnologies = [
+  {
+    name: "Vercel",
+    logo: "/technologies/vercel.svg",
+    className: "h-5 max-w-28",
+  },
+  {
+    name: "Supabase",
+    logo: "/technologies/supabase.svg",
+    className: "h-6 max-w-6",
+    wordmark: true,
+  },
+  {
+    name: "Anthropic",
+    logo: "/technologies/anthropic.svg",
+    className: "h-5 max-w-32",
+  },
+  {
+    name: "OpenAI",
+    logo: "/technologies/openai.svg",
+    className: "h-5 max-w-28",
+  },
+  {
+    name: "Figma",
+    logo: "/technologies/figma-wordmark.svg",
+    className: "h-7 max-w-32",
+  },
+];
 
 function useThemeMode() {
   const [theme, setTheme] = useState<ThemeMode>("dark");
@@ -107,7 +135,7 @@ export function HeroSection() {
       <div className="relative z-20 flex min-h-screen flex-col">
         <Navbar />
 
-        <main className="mx-auto flex w-full max-w-[1480px] flex-1 items-center px-4 pb-10 pt-24 sm:px-[1.5%] lg:px-[1%]">
+        <main className="mx-auto flex w-full max-w-[1480px] flex-1 items-center justify-center px-4 py-24 sm:px-[1.5%] lg:px-[1%]">
           <section className="mx-auto flex max-w-5xl flex-col items-center text-center">
             <motion.p
               animate="show"
@@ -183,11 +211,43 @@ export function HeroSection() {
             </motion.div>
 
             <motion.div
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="w-full"
-              initial={{ opacity: 0, scale: 0.96, y: 40 }}
-              transition={{ delay: 0.34, duration: 1.12, ease: [0.16, 1, 0.3, 1] }}
+              animate="show"
+              className="mt-12 flex w-full max-w-4xl flex-col items-center gap-5"
+              initial="hidden"
+              transition={{ delay: 0.34 }}
+              variants={heroReveal}
             >
+              <p
+                className={`text-xs font-normal uppercase tracking-tight ${
+                  isLight ? "text-[#07062C]/54" : "text-[#F3F3F3]/54"
+                }`}
+              >
+                Built with
+              </p>
+
+              <div className="hero-technology-strip flex w-full flex-wrap items-center justify-center gap-x-9 gap-y-5 sm:gap-x-12">
+                {heroTechnologies.map((technology) => (
+                  <span
+                    className="flex min-h-8 items-center justify-center gap-2.5"
+                    key={technology.name}
+                  >
+                    <img
+                      alt={technology.name}
+                      className={`${technology.className} technology-logo-muted object-contain brightness-0 invert opacity-78`}
+                      src={technology.logo}
+                    />
+                    {technology.wordmark ? (
+                      <span
+                        className={`text-xl font-normal tracking-tight ${
+                          isLight ? "text-[#07062C]/72" : "text-[#F3F3F3]/72"
+                        }`}
+                      >
+                        Supabase
+                      </span>
+                    ) : null}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           </section>
         </main>
