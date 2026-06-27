@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Navbar } from "@/components/navbar";
+import { ArrowUpRightIcon, Navbar } from "@/components/navbar";
 import { SampleWorkPreview } from "@/components/sample-work-preview";
 import { Button } from "@/components/ui/button";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
@@ -141,11 +141,7 @@ export function HeroSection() {
 
           <Button
             asChild
-            className={`webx-primary-button mt-10 h-12 gap-3 rounded-full px-6 text-sm font-normal tracking-tight shadow-[0_18px_60px_rgba(243,243,243,0.18)] focus-visible:outline-[#F3F3F3] ${
-              isLight
-                ? "bg-[#07062C] text-[#F3F3F3] hover:bg-[#15134d]"
-                : "bg-[#F3F3F3] text-[#07062C] hover:bg-white"
-            }`}
+            className="webx-primary-button mt-10 h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
           >
             <a href="/works">
               View Our Work
@@ -153,7 +149,7 @@ export function HeroSection() {
                 aria-hidden="true"
                 className="hero-cta-icon grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
               >
-                <span className="text-[17px] leading-none text-[#F3F3F3]">↗</span>
+                <ArrowUpRightIcon className="size-4" />
               </span>
             </a>
           </Button>

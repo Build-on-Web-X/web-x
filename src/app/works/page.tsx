@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Navbar } from "@/components/navbar";
 import { WorksGallery } from "@/components/works-gallery";
 
@@ -12,7 +13,9 @@ export default function WorksPage() {
   return (
     <>
       <Navbar />
-      <WorksGallery />
+      <Suspense fallback={null}>
+        <WorksGallery />
+      </Suspense>
     </>
   );
 }

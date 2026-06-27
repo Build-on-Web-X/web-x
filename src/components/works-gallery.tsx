@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const services = [
-  "All Works",
+  "All works",
   "Website Development",
   "Landing Pages",
   "E-Commerce Websites",
@@ -143,12 +144,36 @@ function ArrowIcon() {
   );
 }
 
+function getWorkSlug(title: string) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export function WorksGallery() {
-  const [activeService, setActiveService] = useState("All Works");
+  const searchParams = useSearchParams();
+  const [activeService, setActiveService] = useState("All works");
   const [activeTitle, setActiveTitle] = useState(works[0].title);
 
+  useEffect(() => {
+    const requestedWork = searchParams.get("work");
+
+    if (!requestedWork) {
+      return;
+    }
+
+    const matchingWork = works.find(
+      (work) => getWorkSlug(work.title) === requestedWork,
+    );
+
+    if (!matchingWork) {
+      return;
+    }
+
+    setActiveService("All works");
+    setActiveTitle(matchingWork.title);
+  }, [searchParams]);
+
   const filteredWorks = useMemo(() => {
-    if (activeService === "All Works") {
+    if (activeService === "All works") {
       return works;
     }
 
@@ -160,7 +185,7 @@ export function WorksGallery() {
 
   function selectService(service: string) {
     const nextWorks =
-      service === "All Works"
+      service === "All works"
         ? works
         : works.filter((work) => work.service === service);
 
@@ -170,76 +195,58 @@ export function WorksGallery() {
 
   return (
     <main className="h-screen overflow-hidden bg-[#07062C] pt-20 text-[#F3F3F3]">
-      <section className="mx-auto flex h-full w-full max-w-[1480px] flex-col overflow-hidden">
-        <div className="shrink-0 px-4 py-5 sm:px-8 lg:px-10">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <section className="mx-auto flex h-full w-full max-w-[1480px] flex-col overflow-hidden px-4 pb-5 sm:px-8 lg:px-10">
+        <div className="shrink-0 py-4">
+          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight text-[#F3F3F3]">
+              <p className="inline-flex items-center gap-3 text-xs font-normal tracking-tight text-[#F3F3F3]">
                 <span className="text-[#F3F3F3]/42">[</span>
                 <span>Works</span>
                 <span className="text-[#F3F3F3]/42">]</span>
               </p>
-              <h1 className="mt-3 text-4xl font-normal uppercase leading-none tracking-tighter sm:text-5xl lg:text-6xl">
-                Gallery
+              <h1 className="mt-2 max-w-3xl text-balance text-4xl font-normal leading-[1.04] tracking-tighter sm:text-5xl lg:text-6xl">
+                Project gallery
               </h1>
             </div>
 
-            <p className="max-w-md text-sm font-normal leading-6 tracking-tight text-[#F3F3F3]/58 lg:text-right">
-              Service-led case studies for brands that need credibility, better
-              UX, and clearer conversion paths.
-            </p>
-          </div>
-
-          <div
-            aria-label="Filter works by service"
-            className="mt-5 flex gap-2 overflow-x-auto pb-1"
-            role="tablist"
-          >
-            {services.map((service) => {
-              const isActive = activeService === service;
-              const count =
-                service === "All Works"
-                  ? works.length
-                  : works.filter((work) => work.service === service).length;
-
-              return (
-                <button
-                  aria-selected={isActive}
-                  className={`inline-flex h-11 shrink-0 items-center gap-3 rounded-full border px-4 text-sm font-normal tracking-tight transition ${
-                    isActive
-                      ? "border-[#8f86dc] bg-[#8f86dc] text-[#F3F3F3]"
-                      : "border-[#F3F3F3]/12 bg-[#F3F3F3]/5 text-[#F3F3F3]/64 hover:border-[#F3F3F3]/30 hover:text-[#F3F3F3]"
-                  }`}
-                  key={service}
-                  onClick={() => selectService(service)}
-                  role="tab"
-                  type="button"
+            <label className="grid gap-2 text-sm font-normal tracking-tight text-[#F3F3F3]/58 lg:w-[320px]">
+              <span>Filter by service</span>
+              <span className="relative">
+                <select
+                  aria-label="Filter works by service"
+                  className="h-11 w-full appearance-none rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 px-5 pr-11 text-sm font-normal tracking-tight text-[#F3F3F3] outline-none transition hover:border-[#F3F3F3]/28 focus:border-[#8f86dc]"
+                  onChange={(event) => selectService(event.target.value)}
+                  value={activeService}
                 >
-                  {service}
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      isActive
-                        ? "bg-[#F3F3F3] text-[#07062C]"
-                        : "bg-[#F3F3F3]/8 text-[#F3F3F3]/50"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
+                  {services.map((service) => (
+                    <option
+                      className="bg-[#07062C] text-[#F3F3F3]"
+                      key={service}
+                      value={service}
+                    >
+                      {service}
+                    </option>
+                  ))}
+                </select>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[#F3F3F3]/58"
+                >
+                  v
+                </span>
+              </span>
+            </label>
           </div>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-8 overflow-hidden px-4 pb-8 sm:px-8 lg:grid-cols-[0.35fr_0.65fr] lg:px-10">
+        <div className="grid min-h-0 flex-1 gap-6 overflow-hidden lg:grid-cols-[0.34fr_0.66fr]">
           <aside className="relative min-h-0 overflow-hidden">
             <div className="flex h-full min-h-0">
-              <div className="flex min-h-0 flex-1 flex-col py-4">
-                <p className="text-xs font-normal uppercase tracking-tight text-[#F3F3F3]/48">
-                  {activeService}
-                </p>
-
-                <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-2">
+              <div className="flex min-h-0 flex-1 flex-col">
+                <div
+                  className="min-h-0 flex-1 overflow-y-auto pr-2"
+                  data-lenis-prevent
+                >
                   {filteredWorks.map((work, index) => {
                     const isActive = activeWork.title === work.title;
 
@@ -257,11 +264,11 @@ export function WorksGallery() {
                         <span className="text-xs font-normal tabular-nums tracking-tight text-[#F3F3F3]/38">
                           {String(index + 1).padStart(2, "0")}
                         </span>
-                        <span className="flex-1 text-3xl font-normal leading-none tracking-tighter sm:text-4xl lg:text-[2.7rem]">
+                        <span className="flex-1 text-xl font-normal leading-tight tracking-tighter sm:text-2xl lg:text-3xl">
                           {work.title}
                         </span>
                         <span
-                          className={`grid size-9 shrink-0 place-items-center rounded-full border transition ${
+                          className={`grid size-8 shrink-0 place-items-center rounded-full border transition ${
                             isActive
                               ? "border-[#8f86dc] bg-[#8f86dc] text-[#F3F3F3]"
                               : "border-[#F3F3F3]/12 text-[#F3F3F3]/34 group-hover:border-[#F3F3F3]/28"
@@ -277,12 +284,12 @@ export function WorksGallery() {
             </div>
           </aside>
 
-          <section className="relative flex min-h-0 flex-col overflow-hidden py-4">
-            <article className="grid min-h-0 flex-1 content-center gap-8 lg:grid-cols-[0.52fr_0.48fr] lg:items-center">
-              <div className="webx-media-clean overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
+          <section className="relative flex min-h-0 flex-col overflow-hidden">
+            <article className="grid min-h-0 flex-1 gap-6 lg:grid-cols-[0.54fr_0.46fr] lg:items-center">
+              <div className="works-gallery-media webx-media-clean overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6">
                 <div
                   aria-label={activeWork.title}
-                  className="aspect-square bg-cover bg-center"
+                  className="aspect-[1.1] max-h-[560px] bg-cover bg-center"
                   style={{ backgroundImage: `url(${activeWork.image})` }}
                 />
               </div>
@@ -292,16 +299,16 @@ export function WorksGallery() {
                   <p className="liquid-glass inline-flex rounded-full px-4 py-2 text-xs font-normal tracking-tight">
                     {activeWork.service}
                   </p>
-                  <h2 className="mt-5 text-4xl font-normal leading-none tracking-tighter sm:text-5xl lg:text-6xl">
+                  <h2 className="mt-4 text-4xl font-normal leading-[1.04] tracking-tighter sm:text-5xl lg:text-[3.4rem]">
                     {activeWork.title}
                   </h2>
                 </div>
 
-                <div className="mt-7">
+                <div className="mt-5">
                   <p className="text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/70">
                     {activeWork.description}
                   </p>
-                  <p className="mt-4 text-sm font-normal uppercase tracking-tight text-[#8f86dc]">
+                  <p className="mt-4 text-sm font-normal tracking-tight text-[#8f86dc]">
                     {activeWork.outcome}
                   </p>
                 </div>

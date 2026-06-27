@@ -26,7 +26,7 @@ function ArrowUpRightIcon({ className = "" }: { className?: string }) {
 const navItems = [
   { label: "About", href: "/#about" },
   { label: "Services", href: "/#services" },
-  { label: "Works", href: "/works" },
+  { label: "Works", href: "/#work" },
   { label: "Process", href: "/#process" },
   { label: "Testimonials", href: "/#testimonials" },
 ];

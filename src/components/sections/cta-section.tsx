@@ -48,28 +48,28 @@ export function CtaSection() {
           </BookCallTrigger>
         </div>
 
-        <div className="liquid-glass rounded-lg p-5 lg:mb-16">
-          <p className="text-sm font-normal uppercase tracking-tight text-[#F3F3F3]/58">
+        <div className="cta-portal-card liquid-glass rounded-lg p-5 lg:mb-16">
+          <p className="cta-portal-eyebrow text-sm font-normal uppercase tracking-tight text-[#F3F3F3]/58">
             Client Portal Advantage
           </p>
 
           <div className="mt-6 space-y-3">
             {portalFeatures.map((feature, index) => (
               <div
-                className="flex items-center gap-4 rounded-md border border-[#F3F3F3]/14 bg-[#07062C]/42 px-4 py-4"
+                className="cta-portal-feature flex items-center gap-4 rounded-md border border-[#F3F3F3]/14 bg-[#07062C]/42 px-4 py-4"
                 key={feature}
               >
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#F3F3F3] text-sm font-normal tracking-tight text-[#07062C]">
+                <span className="cta-portal-index grid size-9 shrink-0 place-items-center rounded-full bg-[#F3F3F3] text-sm font-normal tracking-tight text-[#07062C]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-base font-normal tracking-tight text-[#F3F3F3]">
+                <span className="cta-portal-feature-text text-base font-normal tracking-tight text-[#F3F3F3]">
                   {feature}
                 </span>
               </div>
             ))}
           </div>
 
-          <p className="mt-6 text-pretty text-base leading-7 tracking-tight text-[#F3F3F3]/68">
+          <p className="cta-portal-copy mt-6 text-pretty text-base leading-7 tracking-tight text-[#F3F3F3]/68">
             No guessing where the project stands. No scattered assets. Just one
             clear place to follow the work and keep momentum moving.
           </p>

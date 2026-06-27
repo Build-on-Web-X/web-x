@@ -5,24 +5,28 @@ const featuredWorks = [
   {
     category: "Website Development",
     title: "Northline Studio",
+    slug: "northline-studio",
     image:
       "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1200&q=80",
   },
   {
     category: "Landing Page",
     title: "NovaLaunch Campaign",
+    slug: "novalaunch-campaign",
     image:
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
   },
   {
     category: "E-Commerce",
     title: "Luma Goods",
+    slug: "luma-goods",
     image:
       "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80",
   },
   {
     category: "Website Redesign",
     title: "Atlas Finance",
+    slug: "atlas-finance",
     image:
       "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1200&q=80",
   },
@@ -78,7 +82,7 @@ export function FeaturedWorksSection() {
           {featuredWorks.map((work, index) => (
             <a
               className="featured-work-card webx-media-clean group relative flex aspect-square overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/6 outline-none transition hover:border-[#F3F3F3]/34 focus-visible:border-[#F3F3F3]/50 focus-visible:ring-2 focus-visible:ring-[#F3F3F3]/70"
-              href="#contact"
+              href={`/works?work=${work.slug}`}
               key={work.title}
             >
               <span

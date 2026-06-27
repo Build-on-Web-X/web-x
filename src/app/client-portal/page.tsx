@@ -624,7 +624,10 @@ export default function ClientPortalPage() {
                 <h2 className="mt-3 text-4xl font-semibold tracking-tighter">
                   Project conversation
                 </h2>
-                <div className="mt-6 max-h-[540px] space-y-3 overflow-y-auto pr-2">
+                <div
+                  className="mt-6 max-h-[540px] space-y-3 overflow-y-auto pr-2"
+                  data-lenis-prevent
+                >
                   {messages.map((message) => (
                     <div
                       className={`rounded-3xl border p-4 ${

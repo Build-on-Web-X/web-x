@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
 import { BookCallModalProvider } from "@/components/book-call-modal";
+import { LenisProvider } from "@/components/lenis-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const readexPro = Readex_Pro({
@@ -43,10 +45,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <BookCallModalProvider>
-          {children}
-          <ThemeToggle />
-        </BookCallModalProvider>
+        <LenisProvider>
+          <BookCallModalProvider>
+            {children}
+            <ThemeToggle />
+          </BookCallModalProvider>
+        </LenisProvider>
       </body>
     </html>
   );
