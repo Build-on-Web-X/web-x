@@ -199,87 +199,90 @@ export function WorksGallery({ works }: { works: Work[] }) {
           </p>
         </div>
 
-        <div className="works-filter-panel relative z-[90] mb-7 flex flex-col gap-3 border-y border-[#F3F3F3]/10 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative" ref={filterRef}>
-              <button
-                aria-expanded={isFilterOpen}
-                aria-haspopup="listbox"
-                className="works-filter-trigger inline-flex h-11 min-w-[250px] items-center justify-between gap-5 rounded-full border px-4 text-sm font-normal tracking-tight outline-none transition hover:border-[#8f86dc]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
-                onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
-                style={{
-                  backgroundColor: isLightTheme ? "#07062c" : "#f3f3f314",
-                  borderColor: isLightTheme ? "#07062c" : "#f3f3f324",
-                  color: "#f3f3f3",
-                }}
-                type="button"
+        <div className="works-filter-panel relative z-[90] mb-7 flex flex-wrap items-center gap-3 border-y border-[#F3F3F3]/10 py-3">
+          <div className="relative" ref={filterRef}>
+            <button
+              aria-expanded={isFilterOpen}
+              aria-haspopup="listbox"
+              className="works-filter-trigger inline-flex h-11 min-w-[190px] items-center justify-between gap-4 rounded-full border px-4 text-sm font-normal tracking-tight outline-none transition hover:border-[#8f86dc]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
+              onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
+              style={{
+                backgroundColor: isLightTheme ? "#07062c" : "#f3f3f314",
+                borderColor: isLightTheme ? "#07062c" : "#f3f3f324",
+                color: "#f3f3f3",
+              }}
+              type="button"
+            >
+              <span className="flex min-w-0 items-center gap-2">
+                <span className="truncate">{activeService}</span>
+                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#8f86dc] px-2 text-xs text-[#07062C]">
+                  {activeServiceCount}
+                </span>
+              </span>
+
+              <span
+                className={`works-filter-chevron shrink-0 transition ${
+                  isFilterOpen ? "rotate-180" : ""
+                }`}
               >
-                <span className="flex min-w-0 items-center gap-2">
-                  <span className="truncate">{activeService}</span>
-                  <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#8f86dc] px-2 text-xs text-[#07062C]">
-                    {activeServiceCount}
-                  </span>
-                </span>
+                <ChevronDownIcon />
+              </span>
+            </button>
 
-                <span
-                  className={`works-filter-chevron shrink-0 transition ${
-                    isFilterOpen ? "rotate-180" : ""
-                  }`}
-                >
-                  <ChevronDownIcon />
-                </span>
-              </button>
+            {isFilterOpen ? (
+              <div
+                aria-label="Filter projects by service"
+                className="works-filter-menu absolute left-0 top-[calc(100%+0.5rem)] z-[120] w-[min(300px,calc(100vw-2rem))] overflow-hidden rounded-lg border border-[#F3F3F3]/12 bg-[#121037] p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
+                role="listbox"
+              >
+                {services.map((service) => {
+                  const isSelected = activeService === service;
+                  const serviceCount = serviceCounts[service] ?? 0;
 
-              {isFilterOpen ? (
-                <div
-                  aria-label="Filter projects by service"
-                  className="works-filter-menu absolute left-0 top-[calc(100%+0.5rem)] z-[120] w-[min(340px,calc(100vw-2rem))] overflow-hidden rounded-lg border border-[#F3F3F3]/12 bg-[#121037] p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
-                  role="listbox"
-                >
-                  {services.map((service) => {
-                    const isSelected = activeService === service;
-                    const serviceCount = serviceCounts[service] ?? 0;
-
-                    return (
-                      <button
-                        aria-selected={isSelected}
-                        className={`works-filter-option flex w-full items-center rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight transition ${
-                          isSelected
-                            ? "works-filter-option-active bg-[#8f86dc] text-[#07062C]"
-                            : "text-[#F3F3F3]/78 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
-                        }`}
-                        key={service}
-                        onClick={() => selectService(service)}
-                        role="option"
-                        type="button"
-                      >
-                        <span className="flex min-w-0 items-center gap-2">
-                          <span className="truncate">{service}</span>
-                          <span
-                            className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs ${
-                              isSelected
-                                ? "bg-[#07062C]/12 text-[#07062C]/70"
-                                : "bg-[#F3F3F3]/10 text-[#F3F3F3]/58"
-                            }`}
-                          >
-                            {serviceCount}
-                          </span>
+                  return (
+                    <button
+                      aria-selected={isSelected}
+                      className={`works-filter-option flex w-full items-center rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight transition ${
+                        isSelected
+                          ? "works-filter-option-active bg-[#8f86dc] text-[#07062C]"
+                          : "text-[#F3F3F3]/78 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
+                      }`}
+                      key={service}
+                      onClick={() => selectService(service)}
+                      role="option"
+                      type="button"
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <span className="truncate">{service}</span>
+                        <span
+                          className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs ${
+                            isSelected
+                              ? "bg-[#07062C]/12 text-[#07062C]/70"
+                              : "bg-[#F3F3F3]/10 text-[#F3F3F3]/58"
+                          }`}
+                        >
+                          {serviceCount}
                         </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : null}
-            </div>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
 
           <button
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[#F3F3F3]/12 px-4 text-sm font-normal tracking-tight text-[#F3F3F3]/78 transition hover:border-[#F3F3F3]/28 hover:text-[#F3F3F3] disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full border px-4 text-sm font-normal tracking-tight transition hover:border-[#8f86dc]/60 hover:text-[#F3F3F3] disabled:cursor-not-allowed disabled:opacity-45"
             disabled={activeService === allServicesLabel}
             onClick={() => selectService(allServicesLabel)}
+            style={{
+              backgroundColor: isLightTheme ? "#07062c" : "#f3f3f30d",
+              borderColor: isLightTheme ? "#07062c" : "#f3f3f324",
+              color: "#f3f3f3",
+            }}
             type="button"
           >
-            Reset filters
+            Reset
             <ResetIcon />
           </button>
         </div>
