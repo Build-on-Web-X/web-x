@@ -1,18 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import {
   createContext,
   type FormEvent,
   type ReactNode,
-  useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
-
-const CALENDLY_URL = "https://calendly.com/buildonwebx/30min";
-const CONTACT_EMAIL = "buildonwebx@gmail.com";
 
 const projectTypes = [
   "Business Website",
@@ -21,6 +15,27 @@ const projectTypes = [
   "Website Redesign",
   "Not Sure Yet",
 ];
+
+const budgetRanges = [
+  "Under PHP 25,000",
+  "PHP 25,000 - PHP 50,000",
+  "PHP 50,000 - PHP 100,000",
+  "PHP 100,000 - PHP 250,000",
+  "PHP 250,000+",
+  "Not sure yet",
+];
+
+const timelines = [
+  "As soon as possible",
+  "2-4 weeks",
+  "1-2 months",
+  "3+ months",
+  "Flexible",
+];
+
+const steps = ["About", "Project", "Budget", "Timeline"];
+const lastStep = steps.length - 1;
+type SelectName = "projectType" | "budget" | "timeline";
 
 type ModalContextValue = {
   openModal: () => void;
@@ -31,20 +46,17 @@ type LeadForm = {
   email: string;
   company: string;
   projectType: string;
+  budget: string;
+  timeline: string;
   message: string;
 };
 
+type FormErrors = Partial<Record<keyof LeadForm, string>>;
+type SubmitError = string | null;
+
 const BookCallModalContext = createContext<ModalContextValue | null>(null);
 
-function ArrowIcon({ className = "" }: { className?: string }) {
-  return (
-    <span aria-hidden="true" className={`text-[17px] leading-none ${className}`}>
-      ↗
-    </span>
-  );
-}
-
-function CloseIcon() {
+function ArrowIcon() {
   return (
     <svg
       aria-hidden="true"
@@ -54,10 +66,50 @@ function CloseIcon() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
+        d="M4 10H15M11 6L15 10L11 14"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="size-5"
+      fill="none"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
         d="M5 5L15 15M15 5L5 15"
         stroke="currentColor"
         strokeLinecap="round"
         strokeWidth="1.8"
+      />
+    </svg>
+  );
+}
+
+function AlertIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="size-4"
+      fill="none"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 6.5V10.8M10 13.6H10.01M17 15.5L10.9 4.8C10.5 4.1 9.5 4.1 9.1 4.8L3 15.5C2.6 16.2 3.1 17 3.9 17H16.1C16.9 17 17.4 16.2 17 15.5Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
       />
     </svg>
   );
@@ -83,7 +135,23 @@ function ChevronDownIcon() {
   );
 }
 
-function TextField({
+function FieldError({ message }: { message?: string }) {
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <span className="mt-1 flex items-start gap-2 rounded-lg border border-[#ffb86b]/24 bg-[#ff8a00]/12 px-3 py-2 text-xs leading-5 tracking-tight text-[#ffd7ad]">
+      <span className="mt-0.5 shrink-0 text-[#ff9a2f]">
+        <AlertIcon />
+      </span>
+      <span>{message}</span>
+    </span>
+  );
+}
+
+function Field({
+  error,
   label,
   name,
   onChange,
@@ -92,6 +160,7 @@ function TextField({
   type = "text",
   value,
 }: {
+  error?: string;
   label: string;
   name: keyof LeadForm;
   onChange: (name: keyof LeadForm, value: string) => void;
@@ -101,51 +170,123 @@ function TextField({
   value: string;
 }) {
   return (
-    <label className="block">
-      <span className="text-sm font-normal tracking-tight text-[#F3F3F3]">
+    <label className="grid gap-1.5">
+      <span className="text-xs font-normal tracking-tight text-[#F3F3F3]/58">
         {label}
+        {required ? <span className="text-[#8f86dc]"> *</span> : null}
       </span>
       <input
-        className="mt-2 h-12 w-full rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 text-sm font-normal tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/36 focus:border-[#F3F3F3]/42 focus:ring-4 focus:ring-[#8f86dc]/18"
+        aria-invalid={error ? true : undefined}
+        className={`h-11 rounded-lg border bg-[#F3F3F3]/8 px-4 text-sm font-normal tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/34 focus:bg-[#F3F3F3]/12 focus:ring-4 ${
+          error
+            ? "border-[#ff9a2f]/74 focus:border-[#ff9a2f] focus:ring-[#ff9a2f]/16"
+            : "border-[#F3F3F3]/14 focus:border-[#8f86dc] focus:ring-[#8f86dc]/18"
+        }`}
         name={name}
         onChange={(event) => onChange(name, event.target.value)}
         placeholder={placeholder}
-        required={required}
+        required={false}
         type={type}
         value={value}
       />
+      <FieldError message={error} />
     </label>
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  onChange,
+  onToggle,
+  openSelect,
+  options,
+  placeholder,
+  value,
+}: {
+  label: string;
+  name: SelectName;
+  onChange: (name: keyof LeadForm, value: string) => void;
+  onToggle: (name: SelectName) => void;
+  openSelect: SelectName | null;
+  options: string[];
+  placeholder: string;
+  value: string;
+}) {
+  const isOpen = openSelect === name;
+
+  return (
+    <div className="grid gap-1.5">
+      <span className="text-xs font-normal tracking-tight text-[#F3F3F3]/58">
+        {label}
+      </span>
+      <button
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        className={`flex h-11 w-full items-center justify-between rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 text-left text-sm font-normal tracking-tight outline-none focus:border-[#8f86dc] focus:bg-[#F3F3F3]/12 focus:ring-4 focus:ring-[#8f86dc]/18 ${
+          value ? "text-[#F3F3F3]" : "text-[#F3F3F3]/42"
+        }`}
+        onClick={() => onToggle(name)}
+        type="button"
+      >
+        <span>{value || placeholder}</span>
+        <span className={isOpen ? "rotate-180" : ""}>
+          <ChevronDownIcon />
+        </span>
+      </button>
+
+      {isOpen ? (
+        <div
+          className="grid gap-1 rounded-lg border border-[#F3F3F3]/14 bg-[#121037] p-1"
+          data-lenis-prevent
+          role="listbox"
+        >
+          {options.map((option) => {
+            const isSelected = value === option;
+
+            return (
+              <button
+                aria-selected={isSelected}
+                className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm font-normal tracking-tight ${
+                  isSelected
+                    ? "bg-[#8f86dc] text-[#07062C]"
+                    : "text-[#F3F3F3]/82 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
+                }`}
+                key={option}
+                onClick={() => {
+                  onChange(name, option);
+                  onToggle(name);
+                }}
+                role="option"
+                type="button"
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
 export function BookCallModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isProjectTypeOpen, setIsProjectTypeOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [openSelect, setOpenSelect] = useState<SelectName | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitError, setSubmitError] = useState<SubmitError>(null);
   const [form, setForm] = useState<LeadForm>({
     fullName: "",
     email: "",
     company: "",
     projectType: "",
+    budget: "",
+    timeline: "",
     message: "",
   });
-
-  const mailtoLink = useMemo(() => {
-    const subject = encodeURIComponent("New Web X project inquiry");
-    const body = encodeURIComponent(
-      [
-        `Full Name: ${form.fullName}`,
-        `Email: ${form.email}`,
-        `Company: ${form.company || "Not provided"}`,
-        `Project Type: ${form.projectType || "Not sure yet"}`,
-        "",
-        "Project Notes:",
-        form.message || "Not provided",
-      ].join("\n"),
-    );
-
-    return `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-  }, [form]);
 
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
@@ -155,33 +296,125 @@ export function BookCallModalProvider({ children }: { children: ReactNode }) {
     }
 
     document.body.style.overflow = isOpen ? "hidden" : "";
+    document.body.classList.toggle("project-modal-open", isOpen);
     window.addEventListener("keydown", handleEscape);
 
     return () => {
       document.body.style.overflow = "";
+      document.body.classList.remove("project-modal-open");
       window.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen]);
 
   function updateForm(name: keyof LeadForm, value: string) {
     setForm((current) => ({ ...current, [name]: value }));
+    setErrors((current) => {
+      if (!current[name]) {
+        return current;
+      }
+
+      const nextErrors = { ...current };
+      delete nextErrors[name];
+      return nextErrors;
+    });
+  }
+
+  function toggleSelect(name: SelectName) {
+    setOpenSelect((current) => (current === name ? null : name));
   }
 
   function openModal() {
     setIsSubmitted(false);
-    setIsProjectTypeOpen(false);
+    setIsSending(false);
+    setOpenSelect(null);
+    setErrors({});
+    setSubmitError(null);
+    setActiveStep(0);
     setIsOpen(true);
   }
 
   function closeModal() {
-    setIsProjectTypeOpen(false);
+    setOpenSelect(null);
+    document.body.style.overflow = "";
+    document.body.classList.remove("project-modal-open");
     setIsOpen(false);
   }
 
-  function submitForm(event: FormEvent<HTMLFormElement>) {
+  function goToPreviousStep() {
+    setOpenSelect(null);
+    setActiveStep((current) => Math.max(0, current - 1));
+  }
+
+  async function sendEmail() {
+    const response = await fetch("/api/project-inquiry", {
+      body: JSON.stringify({
+        budget: form.budget,
+        company: form.company,
+        email: form.email,
+        fullName: form.fullName,
+        message: form.message,
+        projectType: form.projectType,
+        timeline: form.timeline,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const result = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      throw new Error(
+        result?.error ?? "EmailJS could not send the project details.",
+      );
+    }
+  }
+
+  async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    window.location.href = mailtoLink;
-    setIsSubmitted(true);
+    setOpenSelect(null);
+    setSubmitError(null);
+
+    if (activeStep === 0) {
+      const nextErrors: FormErrors = {};
+
+      if (!form.fullName.trim()) {
+        nextErrors.fullName = "Please enter your name.";
+      }
+
+      if (!form.email.trim()) {
+        nextErrors.email = "Please enter your email address.";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+        nextErrors.email = "Use a valid email address, like hello@company.com.";
+      }
+
+      if (Object.keys(nextErrors).length > 0) {
+        setErrors(nextErrors);
+        return;
+      }
+    }
+
+    if (activeStep < lastStep) {
+      setActiveStep((current) => Math.min(lastStep, current + 1));
+      return;
+    }
+
+    try {
+      setIsSending(true);
+      await sendEmail();
+      setIsSubmitted(true);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while sending your project details.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (
@@ -189,225 +422,250 @@ export function BookCallModalProvider({ children }: { children: ReactNode }) {
       {children}
       <div
         aria-hidden={!isOpen}
-        className={`fixed inset-0 z-[100] transition ${
-          isOpen ? "pointer-events-auto" : "pointer-events-none"
+        className={`webx-project-modal fixed inset-0 z-[100] bg-[#07062C] text-[#F3F3F3] transition-opacity duration-75 ${
+          isOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
+        data-lenis-prevent
       >
-        <button
-          aria-label="Close project inquiry"
-          className={`webx-modal-backdrop absolute inset-0 transition-opacity duration-300 ${
-            isOpen ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={closeModal}
-          type="button"
-        />
-
-        <aside
+        <section
           aria-modal="true"
-          className={`absolute right-0 top-0 flex h-full w-full max-w-[520px] flex-col overflow-hidden border-l border-[#F3F3F3]/14 bg-[#07062C] text-[#F3F3F3] shadow-[0_0_80px_rgba(0,0,0,0.42)] transition-transform duration-500 ease-out ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className="grid h-dvh overflow-y-auto lg:grid-cols-[0.34fr_0.66fr] lg:overflow-hidden"
+          data-lenis-prevent
           role="dialog"
         >
-          <div className="flex items-center justify-between gap-5 border-b border-[#F3F3F3]/10 px-6 py-5">
-            <Link href="#" aria-label="Web X home" className="inline-flex">
+          <div className="project-modal-intro flex min-h-[300px] flex-col justify-between border-b border-[#F3F3F3]/10 bg-[#07062C] px-6 py-7 text-[#F3F3F3] sm:px-10 lg:h-dvh lg:min-h-0 lg:border-b-0 lg:border-r lg:px-12 lg:py-10">
+            <div>
               <img
                 alt="Web X"
-                className="h-9 w-auto object-contain"
+                className="h-9 w-auto brightness-0 invert"
                 src="/webx%20logo/webx.svg"
               />
-            </Link>
-            <button
-              aria-label="Close project inquiry"
-              className="grid size-10 place-items-center rounded-full border border-[#F3F3F3]/14 text-[#F3F3F3]/78 transition hover:border-[#F3F3F3]/38 hover:text-[#F3F3F3]"
-              onClick={closeModal}
-              type="button"
-            >
-              <CloseIcon />
-            </button>
+              <h2 className="mt-12 max-w-md text-4xl font-normal leading-[1.02] tracking-tighter sm:text-5xl lg:text-[3.4rem]">
+                Tell us what you want to build.
+              </h2>
+              <p className="mt-5 max-w-md text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/66">
+                Share the essentials. We will use them to shape the first
+                conversation around goals, scope, timing, and the clearest next
+                step.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-3 text-sm font-normal tracking-tight text-[#F3F3F3]/72">
+              {[
+                "A focused project fit review",
+                "A practical path from idea to launch",
+                "No spam, no pressure, just clarity",
+              ].map((item) => (
+                <div className="flex items-center gap-3" key={item}>
+                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#8f86dc] text-[#07062C]">
+                    <ArrowIcon />
+                  </span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div
-            className="min-h-0 flex-1 overflow-y-auto px-6 py-7"
-            data-lenis-prevent
-          >
-            {!isSubmitted ? (
-              <>
-                <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight text-[#F3F3F3]">
-                  <span className="text-[#F3F3F3]/42">[</span>
-                  <span>Start Your Project</span>
-                  <span className="text-[#F3F3F3]/42">]</span>
-                </p>
-                <h2 className="mt-5 text-4xl font-normal leading-[1.04] tracking-tighter">
-                  Tell us enough to start the right conversation.
-                </h2>
-                <p className="mt-4 text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/68">
-                  A few details help us understand your goals before we meet.
-                  We keep the form short because the real clarity happens on the
-                  discovery call.
-                </p>
-
-                <form className="mt-7 grid gap-4" onSubmit={submitForm}>
-                  <TextField
-                    label="Full Name"
-                    name="fullName"
-                    onChange={updateForm}
-                    placeholder="Your name"
-                    required
-                    value={form.fullName}
-                  />
-                  <TextField
-                    label="Email Address"
-                    name="email"
-                    onChange={updateForm}
-                    placeholder="you@company.com"
-                    required
-                    type="email"
-                    value={form.email}
-                  />
-                  <TextField
-                    label="Company / Business"
-                    name="company"
-                    onChange={updateForm}
-                    placeholder="Business name"
-                    value={form.company}
-                  />
-
-                  <div className="block">
-                    <span className="text-sm font-normal tracking-tight">
-                      What are you looking to build?
+          <div className="project-modal-form flex min-h-0 flex-col bg-[#07062C] px-5 py-5 sm:px-8 lg:h-dvh lg:px-12 lg:py-7">
+            <div className="flex shrink-0 items-center justify-between gap-4">
+              <div className="hidden items-center gap-3 text-sm font-normal tracking-tight text-[#F3F3F3]/54 sm:flex">
+                {steps.map((step, index) => (
+                  <div className="flex items-center gap-2" key={step}>
+                    <span
+                      className={`grid size-8 place-items-center rounded-full border text-xs ${
+                        index === activeStep
+                          ? "border-[#8f86dc] bg-[#8f86dc] text-[#07062C]"
+                          : index < activeStep
+                            ? "border-[#8f86dc]/70 bg-[#8f86dc]/24 text-[#F3F3F3]"
+                            : "border-[#F3F3F3]/16 bg-[#F3F3F3] text-[#07062C]/54"
+                      }`}
+                    >
+                      {index + 1}
                     </span>
-                    <div className="relative mt-2">
-                      <button
-                        aria-expanded={isProjectTypeOpen}
-                        aria-haspopup="listbox"
-                        className={`flex h-12 w-full items-center justify-between rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 text-left text-sm font-normal tracking-tight outline-none transition focus:border-[#F3F3F3]/42 focus:ring-4 focus:ring-[#8f86dc]/18 ${
-                          form.projectType ? "text-[#F3F3F3]" : "text-[#F3F3F3]/42"
-                        }`}
-                        onClick={() =>
-                          setIsProjectTypeOpen((current) => !current)
-                        }
-                        type="button"
-                      >
-                        <span>{form.projectType || "Choose a project type"}</span>
-                        <ChevronDownIcon />
-                      </button>
+                    <span className={index === activeStep ? "text-[#F3F3F3]" : ""}>
+                      {step}
+                    </span>
+                  </div>
+                ))}
+              </div>
 
-                      <div
-                        className={`absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-lg border border-[#F3F3F3]/14 bg-[#121037] shadow-[0_18px_50px_rgba(0,0,0,0.36)] transition ${
-                          isProjectTypeOpen
-                            ? "pointer-events-auto translate-y-0 opacity-100"
-                            : "pointer-events-none -translate-y-2 opacity-0"
-                        }`}
-                        role="listbox"
-                      >
-                        {projectTypes.map((type) => {
-                          const isSelected = form.projectType === type;
+              <button
+                aria-label="Close project inquiry"
+                className="ml-auto grid size-10 place-items-center rounded-full border border-[#F3F3F3]/12 bg-[#F3F3F3] text-[#07062C] hover:border-[#F3F3F3]/34"
+                onClick={closeModal}
+                type="button"
+              >
+                <CloseIcon />
+              </button>
+            </div>
 
-                          return (
-                            <button
-                              aria-selected={isSelected}
-                              className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm font-normal tracking-tight transition ${
-                                isSelected
-                                  ? "bg-[#8f86dc] text-[#F3F3F3]"
-                                  : "text-[#F3F3F3]/74 hover:bg-[#F3F3F3]/8 hover:text-[#F3F3F3]"
-                              }`}
-                              key={type}
-                              onClick={() => {
-                                updateForm("projectType", type);
-                                setIsProjectTypeOpen(false);
-                              }}
-                              role="option"
-                              type="button"
-                            >
-                              {type}
-                              {isSelected && (
-                                <span
-                                  aria-hidden="true"
-                                  className="size-1.5 rounded-full bg-[#F3F3F3]"
-                                />
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+            <div className="grid min-h-0 flex-1 items-center py-5 lg:py-4">
+              {!isSubmitted ? (
+                <form
+                  className="mx-auto grid w-full max-w-[720px] gap-4"
+                  noValidate
+                  onSubmit={handleFormSubmit}
+                >
+                  <div>
+                    <h2 className="text-4xl font-normal leading-[1.02] tracking-tighter text-[#F3F3F3] sm:text-5xl">
+                      {activeStep === 0 && "A few details first."}
+                      {activeStep === 1 && "What are we building?"}
+                      {activeStep === 2 && "Budget and scope."}
+                      {activeStep === 3 && "Timeline and final notes."}
+                    </h2>
+                    <p className="mt-2 text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/62">
+                      {activeStep === 0 &&
+                        "Start with your contact details so we know who to reply to."}
+                      {activeStep === 1 &&
+                        "Tell us the type of website and what it needs to achieve."}
+                      {activeStep === 2 &&
+                        "A rough range is enough. We only use this to guide the first recommendation."}
+                      {activeStep === 3 &&
+                        "Add timing and anything else we should know before we reply."}
+                    </p>
                   </div>
 
-                  <label className="block">
-                    <span className="text-sm font-normal tracking-tight">
-                      What should this website help you achieve?
-                    </span>
-                    <textarea
-                      className="mt-2 min-h-28 w-full resize-none rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 py-3 text-sm font-normal leading-6 tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/36 focus:border-[#F3F3F3]/42 focus:ring-4 focus:ring-[#8f86dc]/18"
-                      name="message"
-                      onChange={(event) =>
-                        updateForm("message", event.target.value)
-                      }
-                      placeholder="Example: build credibility, generate leads, sell products, or redesign an outdated site."
-                      value={form.message}
+                  {activeStep === 0 ? (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <Field
+                        error={errors.fullName}
+                        label="Full name"
+                        name="fullName"
+                        onChange={updateForm}
+                        placeholder="Your name"
+                        required
+                        value={form.fullName}
+                      />
+                      <Field
+                        error={errors.email}
+                        label="Email address"
+                        name="email"
+                        onChange={updateForm}
+                        placeholder="you@company.com"
+                        required
+                        type="email"
+                        value={form.email}
+                      />
+                      <Field
+                        label="Company"
+                        name="company"
+                        onChange={updateForm}
+                        placeholder="Business name"
+                        value={form.company}
+                      />
+                    </div>
+                  ) : null}
+
+                  {activeStep === 1 ? (
+                    <div className="grid gap-3">
+                      <SelectField
+                        label="Project type"
+                        name="projectType"
+                        onChange={updateForm}
+                        onToggle={toggleSelect}
+                        openSelect={openSelect}
+                        options={projectTypes}
+                        placeholder="Choose project type"
+                        value={form.projectType}
+                      />
+
+                      <label className="grid gap-1.5">
+                        <span className="text-xs font-normal tracking-tight text-[#F3F3F3]/58">
+                          What should the website help you do?
+                        </span>
+                        <textarea
+                          className="min-h-32 resize-none rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 px-4 py-3 text-sm font-normal leading-6 tracking-tight text-[#F3F3F3] outline-none transition placeholder:text-[#F3F3F3]/34 focus:border-[#8f86dc] focus:bg-[#F3F3F3]/12 focus:ring-4 focus:ring-[#8f86dc]/18"
+                          name="message"
+                          onChange={(event) =>
+                            updateForm("message", event.target.value)
+                          }
+                          placeholder="Example: generate leads, sell products, explain services, or refresh an outdated site."
+                          value={form.message}
+                        />
+                      </label>
+                    </div>
+                  ) : null}
+
+                  {activeStep === 2 ? (
+                    <SelectField
+                      label="Budget range"
+                      name="budget"
+                      onChange={updateForm}
+                      onToggle={toggleSelect}
+                      openSelect={openSelect}
+                      options={budgetRanges}
+                      placeholder="Choose budget range"
+                      value={form.budget}
                     />
-                  </label>
+                  ) : null}
 
-                  <button
-                    className="mt-2 inline-flex h-12 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F3F3F3]"
-                    type="submit"
-                  >
-                    Send Project Details
-                    <span className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]">
-                      <ArrowIcon className="text-[#F3F3F3]" />
-                    </span>
-                  </button>
+                  {activeStep === 3 ? (
+                    <div className="grid gap-3">
+                      <SelectField
+                        label="Timeline"
+                        name="timeline"
+                        onChange={updateForm}
+                        onToggle={toggleSelect}
+                        openSelect={openSelect}
+                        options={timelines}
+                        placeholder="Choose timeline"
+                        value={form.timeline}
+                      />
+                      <div className="rounded-lg border border-[#F3F3F3]/12 bg-[#F3F3F3]/7 p-4 text-sm leading-6 tracking-tight text-[#F3F3F3]/70">
+                        We will send these details to Web X and reply with the
+                        best next step for your project.
+                      </div>
+                      <FieldError message={submitError ?? undefined} />
+                    </div>
+                  ) : null}
+
+                  <div className="mt-1 flex gap-3">
+                    {activeStep > 0 ? (
+                      <button
+                        className="inline-flex h-12 w-32 items-center justify-center rounded-full border border-[#F3F3F3]/16 px-6 text-sm font-normal tracking-tight text-[#F3F3F3] transition hover:border-[#F3F3F3]/36"
+                        onClick={goToPreviousStep}
+                        type="button"
+                      >
+                        Back
+                      </button>
+                    ) : null}
+                    <button
+                      disabled={isSending}
+                      className="inline-flex h-12 flex-1 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc] disabled:cursor-not-allowed disabled:opacity-65"
+                      type="submit"
+                    >
+                      {activeStep === lastStep
+                        ? isSending
+                          ? "Sending..."
+                          : "Send Project Details"
+                        : "Next"}
+                      <ArrowIcon />
+                    </button>
+                  </div>
                 </form>
-              </>
-            ) : (
-              <div className="flex min-h-full flex-col justify-center">
-                <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight text-[#F3F3F3]">
-                  <span className="text-[#F3F3F3]/42">[</span>
-                  <span>Form Submitted</span>
-                  <span className="text-[#F3F3F3]/42">]</span>
-                </p>
-                <h2 className="mt-5 text-4xl font-normal leading-[1.04] tracking-tighter">
-                  Your details are ready for us.
-                </h2>
-                <p className="mt-4 text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/68">
-                  Recommended next step: book a 30-minute discovery call so we
-                  can talk through the best path for your website.
-                </p>
-
-                <div className="mt-8 rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/8 p-4">
-                  <p className="text-sm font-normal uppercase tracking-tight text-[#F3F3F3]/52">
-                    Discovery call
+              ) : (
+                <div className="mx-auto w-full max-w-[680px]">
+                  <h2 className="text-4xl font-normal leading-[1.02] tracking-tighter text-[#F3F3F3] sm:text-5xl">
+                    Your project details were sent.
+                  </h2>
+                  <p className="mt-3 text-base font-normal leading-7 tracking-tight text-[#F3F3F3]/62">
+                    We will review the details and reply with the best next
+                    step for your project.
                   </p>
-                  <p className="mt-2 text-lg font-normal tracking-tight">
-                    Quick fit check, goals, timeline, and next steps.
-                  </p>
-                </div>
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <a
-                    className="inline-flex h-12 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white"
-                    href={CALENDLY_URL}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    Book Discovery Call
-                    <span className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]">
-                      <ArrowIcon className="text-[#F3F3F3]" />
-                    </span>
-                  </a>
                   <button
-                    className="inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/16 px-6 text-sm font-normal tracking-tight text-[#F3F3F3] transition hover:border-[#F3F3F3]/38"
+                    className="mt-7 inline-flex h-12 items-center justify-center rounded-full border border-[#F3F3F3]/14 bg-[#F3F3F3] px-6 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white"
                     onClick={closeModal}
                     type="button"
                   >
-                    Maybe Later
+                    Back to site
                   </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </aside>
+        </section>
       </div>
     </BookCallModalContext.Provider>
   );
@@ -420,15 +678,9 @@ export function BookCallTrigger({
   children: ReactNode;
   className?: string;
 }) {
-  const context = useContext(BookCallModalContext);
-
-  if (!context) {
-    throw new Error("BookCallTrigger must be used inside BookCallModalProvider");
-  }
-
   return (
-    <button className={className} onClick={context.openModal} type="button">
+    <a className={className} href="/start-a-project">
       {children}
-    </button>
+    </a>
   );
 }

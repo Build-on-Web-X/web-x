@@ -46,6 +46,20 @@ gradientStops length: ${gradientStops.length}`,
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const gradientStopsString = gradientStops
+      .map((stop, index) => `${gradientColors[index]} ${stop}%`)
+      .join(", ");
+
+    if (!Breathing) {
+      if (containerRef.current) {
+        containerRef.current.style.background = `radial-gradient(${startingGap}% ${
+          startingGap + topOffset
+        }% at 50% 20%, ${gradientStopsString})`;
+      }
+
+      return;
+    }
+
     let animationFrame: number;
     let width = startingGap;
     let directionWidth = 1;
@@ -53,13 +67,8 @@ gradientStops length: ${gradientStops.length}`,
     const animateGradient = () => {
       if (width >= startingGap + breathingRange) directionWidth = -1;
       if (width <= startingGap - breathingRange) directionWidth = 1;
-      if (!Breathing) directionWidth = 0;
 
       width += directionWidth * animationSpeed;
-
-      const gradientStopsString = gradientStops
-        .map((stop, index) => `${gradientColors[index]} ${stop}%`)
-        .join(", ");
 
       const gradient = `radial-gradient(${width}% ${
         width + topOffset

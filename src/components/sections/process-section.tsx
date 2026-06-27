@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { type PointerEvent, useRef } from "react";
+import { StoryItem, StoryReveal, StoryStagger } from "@/components/story-motion";
 
 const processSteps = [
   {
@@ -84,36 +85,42 @@ const processSteps = [
 ];
 
 export function ProcessSection() {
-  useEffect(() => {
-    const syncPointer = (event: PointerEvent) => {
-      document.documentElement.style.setProperty(
-        "--process-glow-x",
-        event.clientX.toFixed(2),
-      );
-      document.documentElement.style.setProperty(
-        "--process-glow-y",
-        event.clientY.toFixed(2),
-      );
-      document.documentElement.style.setProperty(
-        "--process-glow-xp",
-        (event.clientX / window.innerWidth).toFixed(2),
-      );
+  const frameRef = useRef<number | null>(null);
+  const pointerRef = useRef({ x: 0, y: 0, xp: 0 });
+
+  function syncPointer(event: PointerEvent<HTMLElement>) {
+    pointerRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      xp: event.clientX / window.innerWidth,
     };
 
-    document.addEventListener("pointermove", syncPointer);
+    if (frameRef.current !== null) {
+      return;
+    }
 
-    return () => {
-      document.removeEventListener("pointermove", syncPointer);
-    };
-  }, []);
+    frameRef.current = window.requestAnimationFrame(() => {
+      const { x, xp, y } = pointerRef.current;
+
+      document.documentElement.style.setProperty("--process-glow-x", x.toFixed(2));
+      document.documentElement.style.setProperty("--process-glow-y", y.toFixed(2));
+      document.documentElement.style.setProperty("--process-glow-xp", xp.toFixed(2));
+      frameRef.current = null;
+    });
+  }
 
   return (
     <section
       id="process"
-      className="bg-[#07062C] px-4 py-20 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
+      className="webx-process bg-[#07062C] px-4 py-20 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
+      onPointerMove={syncPointer}
     >
       <div className="mx-auto max-w-[1480px]">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <StoryReveal
+          className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+          initial={false}
+          whileInView={undefined}
+        >
           <div>
             <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight">
               <span className="text-[#F3F3F3]/50">[</span>
@@ -130,62 +137,67 @@ export function ProcessSection() {
             Every project moves through a focused process built to reduce guesswork,
             keep momentum high, and turn your vision into a polished website.
           </p>
-        </div>
+        </StoryReveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+        <StoryStagger
+          className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-6"
+          initial={false}
+          whileInView={undefined}
+        >
           {processSteps.map((step, index) => (
-            <article
-              className={`process-glow-card group rounded-lg ${
-                index === 0
-                  ? "process-glow-card-active shadow-[0_24px_80px_rgba(143,134,220,0.22)]"
-                  : "process-glow-card-muted"
-              }`}
-              key={step.title}
-            >
-              <div
-                className={`process-card-inner flex min-h-[276px] flex-col p-6 ${
+            <StoryItem key={step.title}>
+              <article
+                className={`process-glow-card group rounded-lg ${
                   index === 0
-                    ? "bg-[var(--accent-violet)] text-[#F3F3F3]"
-                    : "bg-[#121037] text-[#F3F3F3]"
+                    ? "process-glow-card-active"
+                    : "process-glow-card-muted"
                 }`}
               >
-                <span
-                  className={`inline-flex w-fit rounded-full border px-4 py-2 text-sm font-normal tracking-tight ${
+                <div
+                  className={`process-card-inner flex min-h-[276px] flex-col p-6 ${
                     index === 0
-                      ? "border-[#F3F3F3]/70 bg-[#F3F3F3] text-[#07062C]"
-                      : "border-[#F3F3F3]/22 bg-[#07062C]/70 text-[#F3F3F3]"
+                      ? "bg-[var(--accent-violet)] text-[#F3F3F3]"
+                      : "bg-[#121037] text-[#F3F3F3]"
                   }`}
                 >
-                  Step {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <span className="mt-10 flex flex-1 flex-col">
-                  <svg
-                    aria-hidden="true"
-                    className="mb-5 size-9 shrink-0"
-                    fill="none"
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {step.icon}
-                  </svg>
-
-                  <h3 className="text-2xl font-normal tracking-tight">
-                    {step.title}
-                  </h3>
-
-                  <p
-                    className={`mt-4 min-h-[72px] text-sm leading-6 tracking-tight ${
-                      index === 0 ? "text-[#F3F3F3]/76" : "text-[#F3F3F3]/58"
+                  <span
+                    className={`process-step-pill inline-flex w-fit rounded-full border px-4 py-2 text-sm font-normal tracking-tight ${
+                      index === 0
+                        ? "border-[#F3F3F3]/70 bg-[#F3F3F3] text-[#07062C]"
+                        : "border-[#F3F3F3]/22 bg-[#07062C]/70 text-[#F3F3F3]"
                     }`}
                   >
-                    {step.description}
-                  </p>
-                </span>
-              </div>
-            </article>
+                    Step {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="mt-10 flex flex-1 flex-col">
+                    <svg
+                      aria-hidden="true"
+                      className="mb-5 size-9 shrink-0"
+                      fill="none"
+                      viewBox="0 0 32 32"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {step.icon}
+                    </svg>
+
+                    <h3 className="text-2xl font-normal tracking-tight">
+                      {step.title}
+                    </h3>
+
+                    <p
+                      className={`mt-4 min-h-[72px] text-sm leading-6 tracking-tight ${
+                        index === 0 ? "text-[#F3F3F3]/76" : "text-[#F3F3F3]/58"
+                      }`}
+                    >
+                      {step.description}
+                    </p>
+                  </span>
+                </div>
+              </article>
+            </StoryItem>
           ))}
-        </div>
+        </StoryStagger>
       </div>
     </section>
   );

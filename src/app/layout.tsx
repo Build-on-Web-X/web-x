@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
 import { BookCallModalProvider } from "@/components/book-call-modal";
 import { LenisProvider } from "@/components/lenis-provider";
+import { SiteLoader } from "@/components/site-loader";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -13,7 +14,10 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Web X | Modern Website Development Agency",
+  title: {
+    default: "Web X | Home",
+    template: "Web X | %s",
+  },
   description:
     "Web X creates modern digital experiences that help businesses build credibility, attract customers, and grow online.",
 };
@@ -45,6 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <SiteLoader />
         <LenisProvider>
           <BookCallModalProvider>
             {children}

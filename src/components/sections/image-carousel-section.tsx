@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { StoryReveal } from "@/components/story-motion";
+
 const carouselImages = [
   {
     alt: "Modern office workspace with warm light",
@@ -32,22 +37,85 @@ const carouselImages = [
 ];
 
 export function ImageCarouselSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const scrollTimeoutRef = useRef<number | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [isScrollingInView, setIsScrollingInView] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+
+        if (!entry.isIntersecting) {
+          setIsScrollingInView(false);
+        }
+      },
+      { threshold: 0.22 },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    function handleScroll() {
+      if (!isInView) {
+        return;
+      }
+
+      setIsScrollingInView(true);
+
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        setIsScrollingInView(false);
+      }, 220);
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [isInView]);
+
   return (
     <section
       aria-label="Web X creative work imagery"
       className="overflow-hidden bg-[#07062C] py-4"
+      ref={sectionRef}
     >
-      <div className="carousel-track flex w-max items-end gap-5">
-        {[...carouselImages, ...carouselImages].map((item, index) => (
-          <div
-            aria-label={item.alt}
-            className={`carousel-image ${item.size} shrink-0 overflow-hidden border border-[#F3F3F3]/14 bg-cover bg-center shadow-[0_28px_80px_rgba(0,0,0,0.3)]`}
-            key={`${item.alt}-${index}`}
-            role="img"
-            style={{ backgroundImage: `url(${item.image})` }}
-          />
-        ))}
-      </div>
+      <StoryReveal direction="left">
+        <div
+          className={`carousel-track flex w-max items-end gap-5 ${
+            isScrollingInView ? "carousel-track-fast" : ""
+          }`}
+        >
+          {[...carouselImages, ...carouselImages].map((item, index) => (
+            <div
+              aria-label={item.alt}
+              className={`carousel-image ${item.size} shrink-0 overflow-hidden border border-[#F3F3F3]/14 bg-cover bg-center shadow-[0_28px_80px_rgba(0,0,0,0.3)]`}
+              key={`${item.alt}-${index}`}
+              role="img"
+              style={{ backgroundImage: `url(${item.image})` }}
+            />
+          ))}
+        </div>
+      </StoryReveal>
     </section>
   );
 }

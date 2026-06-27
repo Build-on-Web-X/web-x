@@ -17,6 +17,10 @@ html {
   scroll-behavior: smooth;
 }
 
+.testimonial-card {
+  box-shadow: none !important;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -30,6 +34,64 @@ body {
   font-family: var(--font-readex-pro), Arial, Helvetica, sans-serif;
   scrollbar-color: #8f86dc #07062c;
   scrollbar-width: thin;
+}
+
+body.project-modal-open .fixed.bottom-5.left-5 {
+  display: none !important;
+}
+
+.webx-navbar {
+  transform: translateY(0);
+}
+
+.webx-navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.webx-project-modal,
+.webx-project-modal .project-modal-intro,
+.webx-project-modal .project-modal-form {
+  background: #07062c !important;
+  color: #f3f3f3 !important;
+  scroll-behavior: auto !important;
+}
+
+.webx-project-modal input,
+.webx-project-modal textarea,
+.webx-project-modal button[aria-haspopup="listbox"] {
+  color: #f3f3f3 !important;
+}
+
+.webx-project-modal [role="listbox"] button {
+  color: rgb(243 243 243 / 0.82) !important;
+}
+
+.webx-project-modal [role="listbox"] button[aria-selected="true"] {
+  color: #07062c !important;
+}
+
+.webx-start-project {
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+.webx-start-project input,
+.webx-start-project textarea,
+.webx-start-project button[aria-haspopup="listbox"] {
+  color: #f3f3f3 !important;
+}
+
+.webx-start-project [role="listbox"] button {
+  color: rgb(243 243 243 / 0.82) !important;
+}
+
+.webx-start-project [role="listbox"] button[aria-selected="true"] {
+  color: #07062c !important;
+}
+
+.webx-start-project img[src*="webx%20logo"],
+.webx-start-project img[src*="webx logo"] {
+  filter: brightness(0) invert(1) !important;
 }
 
 *::-webkit-scrollbar {
@@ -185,18 +247,6 @@ html.theme-light .fixed.bottom-5.left-5 {
   border-color: rgb(7 6 44 / 0.14);
   background: rgb(243 243 243 / 0.88);
   color: #07062c;
-}
-
-html[data-theme="light"] .webx-modal-backdrop,
-html.theme-light .webx-modal-backdrop {
-  background: rgb(7 6 44 / 0.06) !important;
-  backdrop-filter: none !important;
-}
-
-html[data-theme="dark"] .webx-modal-backdrop,
-html.theme-dark .webx-modal-backdrop {
-  background: rgb(7 6 44 / 0.64) !important;
-  backdrop-filter: blur(4px);
 }
 
 html[data-theme="light"] .webx-hero-shell,
@@ -358,6 +408,53 @@ html.theme-light .works-gallery-media {
     0 14px 34px rgb(7 6 44 / 0.1);
 }
 
+html[data-theme="light"] .works-filter,
+html.theme-light .works-filter {
+  color: rgb(7 6 44 / 0.62) !important;
+}
+
+html[data-theme="light"] .works-filter-trigger,
+html.theme-light .works-filter-trigger {
+  background: rgb(255 255 255 / 0.78) !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .works-filter-trigger:hover,
+html.theme-light .works-filter-trigger:hover {
+  border-color: rgb(7 6 44 / 0.28) !important;
+}
+
+html[data-theme="light"] .works-filter-chevron,
+html.theme-light .works-filter-chevron {
+  color: rgb(7 6 44 / 0.58) !important;
+}
+
+html[data-theme="light"] .works-filter-menu,
+html.theme-light .works-filter-menu {
+  background: rgb(255 255 255 / 0.96) !important;
+  border-color: rgb(7 6 44 / 0.14) !important;
+  box-shadow: 0 18px 54px rgb(7 6 44 / 0.14) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .works-filter-option,
+html.theme-light .works-filter-option {
+  color: rgb(7 6 44 / 0.72) !important;
+}
+
+html[data-theme="light"] .works-filter-option:hover,
+html.theme-light .works-filter-option:hover {
+  background: rgb(7 6 44 / 0.06) !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .works-filter-option-active,
+html.theme-light .works-filter-option-active {
+  background: #8f86dc !important;
+  color: #07062c !important;
+}
+
 html[data-theme="light"] .featured-work-card .featured-work-copy,
 html.theme-light .featured-work-card .featured-work-copy {
   color: #f3f3f3 !important;
@@ -404,10 +501,25 @@ html.theme-light .process-card-inner .bg-\[\#F3F3F3\] {
   color: #07062c !important;
 }
 
+html[data-theme="light"] .process-card-inner .process-step-pill,
+html.theme-light .process-card-inner .process-step-pill {
+  background-color: rgb(7 6 44 / 0.82) !important;
+  border-color: rgb(243 243 243 / 0.24) !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .process-card-inner .process-step-pill.bg-\[\#F3F3F3\],
+html.theme-light .process-card-inner .process-step-pill.bg-\[\#F3F3F3\] {
+  background-color: #f3f3f3 !important;
+  border-color: rgb(243 243 243 / 0.7) !important;
+  color: #07062c !important;
+}
+
 html[data-theme="light"] .testimonial-card,
 html.theme-light .testimonial-card {
-  background: rgb(255 255 255 / 0.62) !important;
-  border-color: rgb(7 6 44 / 0.14) !important;
+  background: rgb(255 255 255 / 0.78) !important;
+  border-color: rgb(7 6 44 / 0.12) !important;
+  box-shadow: none !important;
 }
 
 html[data-theme="light"] .testimonial-card blockquote,
@@ -458,12 +570,10 @@ html.theme-light .webx-cta [class*="text-[#F3F3F3]/"] {
 html[data-theme="light"] .webx-cta .cta-portal-card,
 html.theme-light .webx-cta .cta-portal-card {
   border-color: rgb(7 6 44 / 0.12);
-  background:
-    linear-gradient(135deg, rgb(255 255 255 / 0.92), rgb(143 134 220 / 0.08)),
-    rgb(243 243 243 / 0.96);
+  background: rgb(255 255 255 / 0.78);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.84),
-    0 22px 70px rgb(7 6 44 / 0.12);
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 18px 54px rgb(7 6 44 / 0.1);
 }
 
 html[data-theme="light"] .webx-cta .cta-portal-eyebrow,
@@ -473,20 +583,20 @@ html.theme-light .webx-cta .cta-portal-eyebrow {
 
 html[data-theme="light"] .webx-cta .cta-portal-feature,
 html.theme-light .webx-cta .cta-portal-feature {
-  border-color: rgb(7 6 44 / 0.1) !important;
-  background: #07062c !important;
-  box-shadow: 0 14px 34px rgb(7 6 44 / 0.12);
+  border-color: rgb(7 6 44 / 0.12) !important;
+  background: rgb(255 255 255 / 0.72) !important;
+  box-shadow: none !important;
 }
 
 html[data-theme="light"] .webx-cta .cta-portal-index,
 html.theme-light .webx-cta .cta-portal-index {
-  background: #f3f3f3 !important;
-  color: #07062c !important;
+  background: #07062c !important;
+  color: #f3f3f3 !important;
 }
 
 html[data-theme="light"] .webx-cta .cta-portal-feature-text,
 html.theme-light .webx-cta .cta-portal-feature-text {
-  color: #f3f3f3 !important;
+  color: #07062c !important;
 }
 
 html[data-theme="light"] .webx-cta .cta-portal-copy,
@@ -577,7 +687,7 @@ html.theme-light .sample-side-card-inner {
     inset 0 1px 0 rgb(255 255 255 / 0.22),
     inset 0 -18px 34px rgb(3 3 22 / 0.28),
     0 18px 48px rgb(0 0 0 / 0.28);
-  backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(130%);
 }
 
 .process-glow-card {
@@ -603,7 +713,6 @@ html.theme-light .sample-side-card-inner {
       rgb(243 243 243 / 0.11) 45%,
       rgb(243 243 243 / 0.1) 100%
     );
-  background-attachment: fixed;
   box-shadow: 0 1rem 2rem -1rem rgb(0 0 0 / 0.72);
 }
 
@@ -617,7 +726,6 @@ html.theme-light .sample-side-card-inner {
       rgb(243 243 243 / 0.34) 48%,
       rgb(143 134 220 / 0.34) 100%
     );
-  background-attachment: fixed;
 }
 
 .process-glow-card-muted {
@@ -656,7 +764,12 @@ html.theme-light .process-glow-card-active {
 }
 
 .carousel-track {
-  animation: carousel-scroll 38s linear infinite;
+  animation: carousel-scroll var(--carousel-duration, 64s) linear infinite;
+  will-change: transform;
+}
+
+.carousel-track-fast {
+  --carousel-duration: 20s;
 }
 
 @keyframes carousel-scroll {
@@ -679,6 +792,143 @@ html.theme-light .process-glow-card-active {
 @media (max-width: 640px) {
   .sample-preview {
     transform: scale(1.02);
+  }
+}
+
+.webx-site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: grid;
+  place-items: center;
+  background: #07062c;
+  opacity: 1;
+  transition:
+    opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.webx-site-loader-logo {
+  width: clamp(118px, 16vw, 210px);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  animation: webx-loader-mark 980ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.webx-site-loader-leave {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.webx-site-loader-leave .webx-site-loader-logo {
+  transform: translateY(-4px) scale(0.98);
+}
+
+@keyframes webx-loader-mark {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.webx-process {
+  background: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+.webx-process .process-glow-card {
+  background: rgb(243 243 243 / 0.12);
+  box-shadow: none;
+}
+
+.webx-process .process-glow-card-active {
+  background: rgb(243 243 243 / 0.34);
+}
+
+.webx-process .process-card-inner {
+  background: #121037 !important;
+  color: #f3f3f3 !important;
+}
+
+.webx-process .process-glow-card-active .process-card-inner {
+  background: #8f86dc !important;
+}
+
+.webx-process .process-step-pill {
+  border-color: rgb(243 243 243 / 0.22) !important;
+  background: rgb(7 6 44 / 0.7) !important;
+  color: #f3f3f3 !important;
+}
+
+.webx-process .process-glow-card-active .process-step-pill {
+  border-color: rgb(243 243 243 / 0.74) !important;
+  background: #f3f3f3 !important;
+  color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-process,
+html.theme-light .webx-process {
+  background: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-process .text-\[\#F3F3F3\],
+html.theme-light .webx-process .text-\[\#F3F3F3\],
+html[data-theme="light"] .webx-process h2,
+html[data-theme="light"] .webx-process h3,
+html[data-theme="light"] .webx-process svg,
+html.theme-light .webx-process h2,
+html.theme-light .webx-process h3,
+html.theme-light .webx-process svg {
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-process [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-process [class*="text-[#F3F3F3]/"],
+html[data-theme="light"] .webx-process p,
+html.theme-light .webx-process p {
+  color: rgb(243 243 243 / 0.66) !important;
+}
+
+html[data-theme="light"] .webx-process .process-glow-card,
+html.theme-light .webx-process .process-glow-card {
+  background: rgb(243 243 243 / 0.12) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] .webx-process .process-glow-card-active,
+html.theme-light .webx-process .process-glow-card-active {
+  background: rgb(243 243 243 / 0.34) !important;
+}
+
+html[data-theme="light"] .webx-process .process-card-inner,
+html.theme-light .webx-process .process-card-inner {
+  background: #121037 !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-process .process-glow-card-active .process-card-inner,
+html.theme-light .webx-process .process-glow-card-active .process-card-inner {
+  background: #8f86dc !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .webx-site-loader,
+  .webx-site-loader-logo {
+    animation: none;
+    transition: none;
+  }
+
+  .webx-site-loader-logo {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -760,4 +1010,51 @@ html.theme-light .webx-portal .bg-\[\#F3F3F3\].text-\[\#07062C\] {
 html[data-theme="light"] .webx-portal .webx-portal-logo,
 html.theme-light .webx-portal .webx-portal-logo {
   filter: none !important;
+}
+
+html[data-theme="light"] .webx-start-project,
+html.theme-light .webx-start-project,
+html[data-theme="light"] .webx-start-project .bg-\[\#07062C\],
+html.theme-light .webx-start-project .bg-\[\#07062C\] {
+  background-color: #07062c !important;
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-start-project .text-\[\#F3F3F3\],
+html.theme-light .webx-start-project .text-\[\#F3F3F3\],
+html[data-theme="light"] .webx-start-project h1,
+html[data-theme="light"] .webx-start-project h2,
+html.theme-light .webx-start-project h1,
+html.theme-light .webx-start-project h2 {
+  color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-start-project [class*="text-[#F3F3F3]/"],
+html.theme-light .webx-start-project [class*="text-[#F3F3F3]/"] {
+  color: rgb(243 243 243 / 0.68) !important;
+}
+
+html[data-theme="light"] .webx-start-project [class*="bg-[#F3F3F3]/"],
+html.theme-light .webx-start-project [class*="bg-[#F3F3F3]/"] {
+  background-color: rgb(243 243 243 / 0.08) !important;
+}
+
+html[data-theme="light"] .webx-start-project .bg-\[\#F3F3F3\],
+html.theme-light .webx-start-project .bg-\[\#F3F3F3\] {
+  background-color: #f3f3f3 !important;
+}
+
+html[data-theme="light"] .webx-start-project input,
+html[data-theme="light"] .webx-start-project textarea,
+html.theme-light .webx-start-project input,
+html.theme-light .webx-start-project textarea {
+  color: #f3f3f3 !important;
+  caret-color: #f3f3f3;
+}
+
+html[data-theme="light"] .webx-start-project img[src*="webx%20logo"],
+html[data-theme="light"] .webx-start-project img[src*="webx logo"],
+html.theme-light .webx-start-project img[src*="webx%20logo"],
+html.theme-light .webx-start-project img[src*="webx logo"] {
+  filter: brightness(0) invert(1) !important;
 }

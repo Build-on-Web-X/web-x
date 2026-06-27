@@ -1,3 +1,5 @@
+import { StoryItem, StoryReveal, StoryStagger } from "@/components/story-motion";
+
 const technologies = [
   {
     name: "Vercel",
@@ -31,13 +33,15 @@ export function TechnologiesSection() {
   return (
     <section id="technologies" className="bg-[#07062C] px-4 py-16 sm:px-[1.5%] lg:px-[1%]">
       <div className="mx-auto flex max-w-[1480px] flex-col items-center gap-10 text-center">
-        <h2 className="text-balance text-xl font-normal tracking-tight text-[#F3F3F3] sm:text-3xl">
-          Built with industry-leading technologies
-        </h2>
+        <StoryReveal>
+          <h2 className="text-balance text-xl font-normal tracking-tight text-[#F3F3F3] sm:text-3xl">
+            Built with industry-leading technologies
+          </h2>
+        </StoryReveal>
 
-        <div className="grid w-full grid-cols-2 items-center gap-x-28 gap-y-10 text-[#F3F3F3]/76 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-20 xl:gap-x-24">
+        <StoryStagger className="grid w-full grid-cols-2 items-center gap-x-28 gap-y-10 text-[#F3F3F3]/76 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-20 xl:gap-x-24">
           {technologies.map((technology) => (
-            <div
+            <StoryItem
               className="flex items-center justify-center gap-3"
               key={technology.name}
             >
@@ -51,9 +55,9 @@ export function TechnologiesSection() {
                   Supabase
                 </span>
               ) : null}
-            </div>
+            </StoryItem>
           ))}
-        </div>
+        </StoryStagger>
       </div>
     </section>
   );

@@ -2,57 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-
-const testimonials = [
-  {
-    name: "Liam Rivera",
-    role: "Startup Founder",
-    quote:
-      "Web X turned a scattered idea into a website that finally feels credible, clear, and ready for customers.",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Sophia Hart",
-    role: "Product Lead",
-    quote:
-      "The process was thoughtful from strategy to launch. The site looks premium and performs exactly how we needed.",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Marcus Chen",
-    role: "Operations Director",
-    quote:
-      "They helped us simplify a complex offer and turn it into a polished digital experience our team is proud to share.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Elena Brooks",
-    role: "Marketing Manager",
-    quote:
-      "Our new landing page gave campaigns a stronger first impression and made our message much easier to understand.",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Noah Patel",
-    role: "Agency Partner",
-    quote:
-      "Fast communication, sharp design instincts, and a launch that felt smooth from start to finish.",
-    image:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Ava Morrison",
-    role: "Brand Strategist",
-    quote:
-      "They understood the brand quickly and translated it into a website that feels modern without losing clarity.",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80",
-  },
-];
+import { StoryReveal } from "@/components/story-motion";
+import type { Testimonial } from "@/lib/site-data";
 
 const testimonialPageVariants = {
   enter: (direction: number) => ({
@@ -89,7 +40,11 @@ function ArrowIcon({ direction }: { direction: "left" | "right" }) {
   );
 }
 
-export function TestimonialsSection() {
+export function TestimonialsSection({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
   const pageSize = 2;
   const pageCount = Math.ceil(testimonials.length / pageSize);
   const [page, setPage] = useState(0);
@@ -130,7 +85,7 @@ export function TestimonialsSection() {
       className="bg-[#07062C] px-4 py-20 text-[#F3F3F3] sm:px-[1.5%] lg:px-[1%]"
     >
       <div className="mx-auto max-w-[1480px]">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <StoryReveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight">
               <span className="text-[#F3F3F3]/50">[</span>
@@ -147,9 +102,9 @@ export function TestimonialsSection() {
             Real feedback from teams that trusted Web X to shape their ideas
             into stronger digital experiences.
           </p>
-        </div>
+        </StoryReveal>
 
-        <div className="mt-14 overflow-hidden">
+        <StoryReveal className="mt-14 overflow-hidden" delay={0.08}>
           <AnimatePresence custom={direction} initial={false} mode="wait">
             <motion.div
               animate="center"
@@ -158,12 +113,12 @@ export function TestimonialsSection() {
               exit="exit"
               initial="enter"
               key={page}
-              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.62, ease: [0.16, 1, 0.3, 1] }}
               variants={testimonialPageVariants}
             >
               {visibleTestimonials.map((testimonial) => (
                 <article
-                  className="testimonial-card grid gap-6 rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 p-3 shadow-[0_20px_70px_rgba(0,0,0,0.24)] sm:grid-cols-[0.88fr_1fr]"
+                  className="testimonial-card grid gap-6 rounded-lg border border-[#F3F3F3]/14 bg-[#F3F3F3]/7 p-3 shadow-none sm:grid-cols-[0.88fr_1fr]"
                   key={testimonial.name}
                 >
                   <div
@@ -191,7 +146,7 @@ export function TestimonialsSection() {
               ))}
             </motion.div>
           </AnimatePresence>
-        </div>
+        </StoryReveal>
 
         <div className="mt-10 flex items-center justify-between gap-6">
           <div className="flex items-center gap-2">

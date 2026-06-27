@@ -28,15 +28,22 @@ const navItems = [
   { label: "Services", href: "/#services" },
   { label: "Works", href: "/#work" },
   { label: "Process", href: "/#process" },
-  { label: "Testimonials", href: "/#testimonials" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export function Navbar() {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const updateNavbarSurface = () => {
-      setHasScrolled(window.scrollY > 12);
+      const currentScrollY = window.scrollY;
+
+      setHasScrolled(currentScrollY > 12);
+      setIsHidden(currentScrollY > lastScrollY && currentScrollY > 96);
+      lastScrollY = currentScrollY;
     };
 
     updateNavbarSurface();
@@ -49,7 +56,9 @@ export function Navbar() {
 
   return (
     <header
-      className={`webx-navbar fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      className={`webx-navbar fixed inset-x-0 top-0 z-50 transition duration-300 ${
+        isHidden ? "webx-navbar-hidden" : ""
+      } ${
         hasScrolled
           ? "webx-navbar-scrolled bg-[#07062C] shadow-[0_12px_40px_rgba(0,0,0,0.26)]"
           : "webx-navbar-top bg-transparent"
@@ -81,7 +90,7 @@ export function Navbar() {
         </nav>
 
         <BookCallTrigger className="webx-primary-button inline-flex h-11 items-center justify-center gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]">
-          Book a Call
+          Start a Project
           <span
             aria-hidden="true"
             className="grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"

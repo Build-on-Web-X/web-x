@@ -9,7 +9,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       root
       options={{
         anchors: true,
-        duration: 1.1,
+        duration: 0.72,
         easing: (time) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
         prevent: (node) =>
           node.hasAttribute("data-lenis-prevent") ||

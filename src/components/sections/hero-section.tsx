@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRightIcon, Navbar } from "@/components/navbar";
 import { SampleWorkPreview } from "@/components/sample-work-preview";
@@ -7,6 +8,15 @@ import { Button } from "@/components/ui/button";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 
 type ThemeMode = "dark" | "light";
+
+const heroReveal: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
 
 function useThemeMode() {
   const [theme, setTheme] = useState<ThemeMode>("dark");
@@ -99,10 +109,13 @@ export function HeroSection() {
 
         <main className="mx-auto flex w-full max-w-[1480px] flex-1 items-center px-4 pb-10 pt-24 sm:px-[1.5%] lg:px-[1%]">
           <section className="mx-auto flex max-w-5xl flex-col items-center text-center">
-            <p
+            <motion.p
+              animate="show"
               className={`mb-6 inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight ${
                 isLight ? "text-[#07062C]" : "text-[#F3F3F3]"
               }`}
+              initial="hidden"
+              variants={heroReveal}
             >
               <span
                 className={
@@ -111,7 +124,7 @@ export function HeroSection() {
               >
                 [
               </span>
-              <span>Website Development Agency</span>
+              <span>Modern Website Experiences</span>
               <span
                 className={
                   isLight ? "text-[#07062C]/45" : "text-[#F3F3F3]/50"
@@ -119,42 +132,64 @@ export function HeroSection() {
               >
                 ]
               </span>
-            </p>
+            </motion.p>
 
-            <h1
+            <motion.h1
+              animate="show"
               className={`max-w-5xl text-balance text-4xl font-medium leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl ${
                 isLight ? "text-[#07062C]" : "text-[#F3F3F3]"
               }`}
+              initial="hidden"
+              transition={{ delay: 0.08 }}
+              variants={heroReveal}
             >
               Where Ideas Become Experiences
-            </h1>
+            </motion.h1>
 
-            <p
+            <motion.p
+              animate="show"
               className={`mt-7 max-w-3xl text-pretty text-base leading-8 tracking-tight sm:text-lg ${
                 isLight ? "text-[#07062C]/68" : "text-[#F3F3F3]/72"
               }`}
+              initial="hidden"
+              transition={{ delay: 0.16 }}
+              variants={heroReveal}
             >
               We transform ideas into modern digital experiences that help
               businesses connect with their audience, build credibility, and
               create lasting impact online.
-            </p>
+            </motion.p>
 
-          <Button
-            asChild
-            className="webx-primary-button mt-10 h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
-          >
-            <a href="/works">
-              View Our Work
-              <span
-                aria-hidden="true"
-                className="hero-cta-icon grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+            <motion.div
+              animate="show"
+              initial="hidden"
+              transition={{ delay: 0.24 }}
+              variants={heroReveal}
+            >
+              <Button
+                asChild
+                className="webx-primary-button mt-10 h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
               >
-                <ArrowUpRightIcon className="size-4" />
-              </span>
-            </a>
-          </Button>
+                <a href="/works">
+                  View Our Work
+                  <span
+                    aria-hidden="true"
+                    className="hero-cta-icon grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+                  >
+                    <ArrowUpRightIcon className="size-4" />
+                  </span>
+                </a>
+              </Button>
+            </motion.div>
 
-            <SampleWorkPreview />
+            <motion.div
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="w-full"
+              initial={{ opacity: 0, scale: 0.96, y: 40 }}
+              transition={{ delay: 0.34, duration: 1.12, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SampleWorkPreview />
+            </motion.div>
           </section>
         </main>
       </div>
