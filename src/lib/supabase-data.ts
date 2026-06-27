@@ -17,6 +17,7 @@ type WorkRow = {
   description: string;
   outcome: string;
   sort_order: number;
+  project_url: string | null;
 };
 
 type FeaturedWorkRow = {
@@ -106,6 +107,7 @@ export async function getWorks(): Promise<Work[]> {
     description: row.description,
     outcome: row.outcome,
     sortOrder: row.sort_order,
+    projectUrl: row.project_url,
   }));
 }
 

@@ -6,6 +6,7 @@ export type Work = {
   description: string;
   outcome: string;
   sortOrder: number;
+  projectUrl?: string | null;
 };
 
 export type FeaturedWork = {
