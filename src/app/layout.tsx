@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
+import Script from "next/script";
 import { BookCallModalProvider } from "@/components/book-call-modal";
 import { LenisProvider } from "@/components/lenis-provider";
 import { ScrollToTopButton } from "@/components/scroll-to-top-button";
@@ -36,6 +37,16 @@ export default function RootLayout({
       document.documentElement.classList.toggle("theme-dark", theme !== "light");
     } catch (_) {}
   `;
+  const loaderPreflightScript = `
+    try {
+      var forceLoader = ${JSON.stringify(process.env.NEXT_PUBLIC_FORCE_LOADER === "true")};
+      if (forceLoader || !sessionStorage.getItem("webx-loader-seen")) {
+        document.documentElement.classList.add("webx-intro-pending");
+      }
+    } catch (_) {
+      document.documentElement.classList.add("webx-intro-pending");
+    }
+  `;
 
   return (
     <html
@@ -44,10 +55,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-          suppressHydrationWarning
-        />
+        <Script id="webx-theme-preflight" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
+        <Script id="webx-loader-preflight" strategy="beforeInteractive">
+          {loaderPreflightScript}
+        </Script>
       </head>
       <body className="min-h-full flex flex-col">
         <SiteLoader />
