@@ -41,10 +41,13 @@ export default function RootLayout({
     try {
       var forceLoader = ${JSON.stringify(process.env.NEXT_PUBLIC_FORCE_LOADER === "true")};
       if (forceLoader || !sessionStorage.getItem("webx-loader-seen")) {
-        document.documentElement.classList.add("webx-intro-pending");
+        document.documentElement.classList.remove("webx-loader-done");
+        document.documentElement.classList.add("webx-intro-pending", "webx-loader-active");
+      } else {
+        document.documentElement.classList.add("webx-loader-done");
       }
     } catch (_) {
-      document.documentElement.classList.add("webx-intro-pending");
+      document.documentElement.classList.add("webx-intro-pending", "webx-loader-active");
     }
   `;
 

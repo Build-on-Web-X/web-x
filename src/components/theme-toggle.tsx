@@ -95,7 +95,7 @@ export function ThemeToggle() {
     <button
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       aria-pressed={theme === "light"}
-      className="fixed bottom-5 left-5 z-[2147483647] grid size-12 place-items-center rounded-full border border-[#F3F3F3]/16 bg-[#07062C]/86 text-[#F3F3F3] shadow-[0_16px_44px_rgba(0,0,0,0.32)] backdrop-blur-md transition hover:border-[#F3F3F3]/34"
+      className="webx-theme-toggle fixed bottom-5 left-5 z-[2147483647] grid size-12 place-items-center rounded-full border border-[#F3F3F3]/16 bg-[#07062C]/86 text-[#F3F3F3] shadow-[0_16px_44px_rgba(0,0,0,0.32)] backdrop-blur-md transition hover:border-[#F3F3F3]/34"
       onClick={toggleTheme}
       type="button"
     >

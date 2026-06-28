@@ -25,10 +25,27 @@ export function SiteLoader() {
   useEffect(() => {
     const body = document.body;
     const root = document.documentElement;
+    const pageShell = document.querySelector<HTMLElement>(".webx-page-shell");
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     let shouldPlay = FORCE_LOADER;
+
+    const markPageLoading = () => {
+      root.classList.remove("webx-loader-done");
+      root.classList.add("webx-intro-pending", "webx-loader-active");
+      body.classList.remove("webx-page-revealed");
+      body.classList.add("webx-page-loading");
+      pageShell?.setAttribute("inert", "");
+    };
+
+    const markPageReady = () => {
+      root.classList.remove("webx-intro-pending", "webx-loader-active");
+      root.classList.add("webx-loader-done");
+      body.classList.remove("webx-page-loading");
+      body.classList.add("webx-page-revealed");
+      pageShell?.removeAttribute("inert");
+    };
 
     try {
       shouldPlay ||= !window.sessionStorage.getItem(LOADER_SESSION_KEY);
@@ -42,9 +59,7 @@ export function SiteLoader() {
     }
 
     if (!shouldPlay) {
-      root.classList.remove("webx-intro-pending");
-      body.classList.remove("webx-page-loading");
-      body.classList.add("webx-page-revealed");
+      markPageReady();
       setPhase("done");
       return;
     }
@@ -55,9 +70,7 @@ export function SiteLoader() {
     const timers: number[] = [];
     let startFrame = 0;
 
-    root.classList.add("webx-intro-pending");
-    body.classList.remove("webx-page-revealed");
-    body.classList.add("webx-page-loading");
+    markPageLoading();
     setPhase("prepare");
 
     startFrame = window.requestAnimationFrame(() => {
@@ -66,11 +79,9 @@ export function SiteLoader() {
         window.setTimeout(() => setPhase("hold"), timings.hold),
         window.setTimeout(() => {
           setPhase("reveal");
-          body.classList.remove("webx-page-loading");
-          body.classList.add("webx-page-revealed");
         }, timings.reveal),
         window.setTimeout(() => {
-          root.classList.remove("webx-intro-pending");
+          markPageReady();
           setPhase("done");
         }, timings.done),
       );
@@ -79,9 +90,7 @@ export function SiteLoader() {
     return () => {
       window.cancelAnimationFrame(startFrame);
       timers.forEach((timer) => window.clearTimeout(timer));
-      root.classList.remove("webx-intro-pending");
-      body.classList.remove("webx-page-loading");
-      body.classList.add("webx-page-revealed");
+      markPageReady();
     };
   }, []);
 

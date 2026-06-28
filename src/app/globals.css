@@ -1262,9 +1262,13 @@ html.theme-light .process-glow-card-active {
   min-height: 100%;
   flex: 1 1 auto;
   flex-direction: column;
+  filter: blur(0);
+  opacity: 1;
+  pointer-events: auto;
   transform-origin: center top;
   transition:
     opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 760ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 960ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1272,14 +1276,43 @@ body.webx-page-loading {
   overflow: hidden;
 }
 
-html.webx-intro-pending body:not(.webx-page-revealed) .webx-page-shell {
-  opacity: 0.72;
-  transform: translateY(18px) scale(0.992);
+html.webx-loader-active,
+html.webx-loader-active body {
+  overflow: hidden;
 }
 
+html.webx-loader-active .webx-page-shell {
+  filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition: none;
+  user-select: none;
+}
+
+html.webx-loader-done .webx-page-shell,
 body.webx-page-revealed .webx-page-shell {
+  filter: blur(0);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.webx-theme-toggle {
   opacity: 1;
   transform: translateY(0) scale(1);
+  transition:
+    opacity 320ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 240ms ease;
+}
+
+html.webx-loader-active .webx-theme-toggle,
+html.webx-loader-active .webx-scroll-top-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10px) scale(0.94);
+  transition: none !important;
 }
 
 .webx-hero-title-handoff,
@@ -1291,9 +1324,9 @@ body.webx-page-revealed .webx-page-shell {
     transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html.webx-intro-pending body:not(.webx-page-revealed) .webx-hero-title-handoff,
-html.webx-intro-pending body:not(.webx-page-revealed) .webx-hero-copy-handoff,
-html.webx-intro-pending body:not(.webx-page-revealed) .webx-hero-cta-handoff {
+html.webx-loader-active .webx-hero-title-handoff,
+html.webx-loader-active .webx-hero-copy-handoff,
+html.webx-loader-active .webx-hero-cta-handoff {
   opacity: 0;
   transform: translateY(16px);
 }
@@ -1310,7 +1343,7 @@ body.webx-page-revealed .webx-hero-cta-handoff {
   transition-delay: 220ms;
 }
 
-html.webx-intro-pending body:not(.webx-page-revealed) .webx-hero-light-wash {
+html.webx-loader-active .webx-hero-light-wash {
   opacity: 0.72;
   transform: scale(1.04);
 }
@@ -1441,10 +1474,6 @@ html.webx-intro-pending .webx-loader {
 
 .webx-loader--hold .webx-loader-logo-halo {
   animation: webx-loader-halo-breathe 1600ms ease-in-out infinite alternate;
-}
-
-.webx-loader--reveal {
-  pointer-events: none !important;
 }
 
 .webx-loader--reveal .webx-loader-curtain-primary {
@@ -1597,8 +1626,14 @@ html.theme-light .webx-process .process-glow-card-active .process-card-inner {
     transition: opacity 180ms ease !important;
   }
 
-  html.webx-intro-pending body:not(.webx-page-revealed) .webx-page-shell {
-    opacity: 0.9;
+  .webx-theme-toggle {
+    transform: none !important;
+    transition: opacity 180ms ease !important;
+  }
+
+  html.webx-loader-active .webx-page-shell {
+    filter: none;
+    opacity: 0;
   }
 
   .webx-hero-title-handoff,
