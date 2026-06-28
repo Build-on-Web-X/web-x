@@ -1265,11 +1265,12 @@ html.theme-light .process-glow-card-active {
   filter: blur(0);
   opacity: 1;
   pointer-events: auto;
+  transform: translateY(0);
   transform-origin: center top;
   transition:
-    opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 760ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 960ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 860ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 860ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 980ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body.webx-page-loading {
@@ -1277,7 +1278,9 @@ body.webx-page-loading {
 }
 
 html.webx-loader-active,
-html.webx-loader-active body {
+html.webx-loader-active body,
+html.webx-loader-revealing,
+html.webx-loader-revealing body {
   overflow: hidden;
 }
 
@@ -1287,6 +1290,14 @@ html.webx-loader-active .webx-page-shell {
   pointer-events: none;
   transform: translateY(18px);
   transition: none;
+  user-select: none;
+}
+
+html.webx-loader-revealing .webx-page-shell {
+  filter: blur(0);
+  opacity: 1;
+  pointer-events: none;
+  transform: translateY(0);
   user-select: none;
 }
 
@@ -1308,7 +1319,9 @@ body.webx-page-revealed .webx-page-shell {
 }
 
 html.webx-loader-active .webx-theme-toggle,
-html.webx-loader-active .webx-scroll-top-button {
+html.webx-loader-active .webx-scroll-top-button,
+html.webx-loader-revealing .webx-theme-toggle,
+html.webx-loader-revealing .webx-scroll-top-button {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translateY(10px) scale(0.94);
@@ -1538,6 +1551,71 @@ html.webx-intro-pending .webx-loader {
     transform: scale(1.04);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .webx-page-shell {
+    transform: none !important;
+    transition: opacity 180ms ease !important;
+  }
+
+  .webx-theme-toggle {
+    transform: none !important;
+    transition: opacity 180ms ease !important;
+  }
+
+  html.webx-loader-active .webx-page-shell {
+    filter: none;
+    opacity: 0;
+  }
+
+  html.webx-loader-revealing .webx-page-shell {
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .webx-hero-title-handoff,
+  .webx-hero-copy-handoff,
+  .webx-hero-cta-handoff,
+  .webx-hero-light-wash {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .webx-loader {
+    transition: opacity 180ms ease;
+  }
+
+  .webx-loader-logo-stage {
+    animation: none !important;
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .webx-loader-logo {
+    opacity: 1;
+  }
+
+  .webx-loader-logo-halo,
+  .webx-loader-logo-shine,
+  .webx-loader-glow {
+    display: none;
+  }
+
+  .webx-loader-curtain {
+    border-radius: 0;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .webx-loader--reveal {
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+}
+
 
 .webx-process {
   background: #07062c !important;

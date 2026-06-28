@@ -29,21 +29,37 @@ export function SiteLoader() {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+
     let shouldPlay = FORCE_LOADER;
 
     const markPageLoading = () => {
-      root.classList.remove("webx-loader-done");
+      root.classList.remove("webx-loader-done", "webx-loader-revealing");
       root.classList.add("webx-intro-pending", "webx-loader-active");
+
       body.classList.remove("webx-page-revealed");
       body.classList.add("webx-page-loading");
+
       pageShell?.setAttribute("inert", "");
     };
 
+    const revealPageBehindCurtain = () => {
+      root.classList.remove("webx-loader-active");
+      root.classList.add("webx-loader-revealing");
+
+      body.classList.add("webx-page-revealed");
+    };
+
     const markPageReady = () => {
-      root.classList.remove("webx-intro-pending", "webx-loader-active");
+      root.classList.remove(
+        "webx-intro-pending",
+        "webx-loader-active",
+        "webx-loader-revealing",
+      );
       root.classList.add("webx-loader-done");
+
       body.classList.remove("webx-page-loading");
       body.classList.add("webx-page-revealed");
+
       pageShell?.removeAttribute("inert");
     };
 
@@ -54,7 +70,6 @@ export function SiteLoader() {
         window.sessionStorage.setItem(LOADER_SESSION_KEY, "true");
       }
     } catch {
-      // Keep the intro available when session storage is blocked.
       shouldPlay = true;
     }
 
@@ -67,6 +82,7 @@ export function SiteLoader() {
     const timings = reducedMotion
       ? REDUCED_MOTION_TIMINGS
       : STANDARD_TIMINGS;
+
     const timers: number[] = [];
     let startFrame = 0;
 
@@ -75,11 +91,17 @@ export function SiteLoader() {
 
     startFrame = window.requestAnimationFrame(() => {
       setPhase("enter");
+
       timers.push(
-        window.setTimeout(() => setPhase("hold"), timings.hold),
         window.setTimeout(() => {
+          setPhase("hold");
+        }, timings.hold),
+
+        window.setTimeout(() => {
+          revealPageBehindCurtain();
           setPhase("reveal");
         }, timings.reveal),
+
         window.setTimeout(() => {
           markPageReady();
           setPhase("done");
@@ -105,12 +127,14 @@ export function SiteLoader() {
       data-phase={phase}
     >
       <div className="webx-loader-curtain webx-loader-curtain-secondary" />
+
       <div className="webx-loader-curtain webx-loader-curtain-primary">
         <div className="webx-loader-bg" />
         <div className="webx-loader-glow" />
 
         <div className="webx-loader-logo-stage">
           <span className="webx-loader-logo-halo" />
+
           <div className="webx-loader-logo-frame">
             <div className="webx-loader-logo-art">
               <img
@@ -118,6 +142,7 @@ export function SiteLoader() {
                 className="webx-loader-logo"
                 src="/webx%20logo/webx.svg"
               />
+
               <img
                 alt=""
                 className="webx-loader-logo-shine"
