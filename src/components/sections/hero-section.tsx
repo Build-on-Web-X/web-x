@@ -1,38 +1,79 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { ArrowUpRightIcon, Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 
 type ThemeMode = "dark" | "light";
 
-const heroTechnologies = [
+type TechnologyLogoStyle = CSSProperties & {
+  "--technology-brand": string;
+  "--technology-brand-light"?: string;
+  "--technology-glow": string;
+  "--technology-glow-light"?: string;
+  "--technology-logo": string;
+  "--technology-name-color"?: string;
+};
+
+type HeroTechnology = {
+  className: string;
+  name: string;
+  style: TechnologyLogoStyle;
+  wordmark?: boolean;
+};
+
+const heroTechnologies: HeroTechnology[] = [
   {
     name: "Vercel",
-    logo: "/technologies/vercel.svg",
-    className: "h-5 max-w-28",
+    className: "h-5 w-28",
+    style: {
+      "--technology-brand": "#ffffff",
+      "--technology-brand-light": "#07062c",
+      "--technology-glow": "rgb(255 255 255 / 0.42)",
+      "--technology-glow-light": "rgb(7 6 44 / 0.24)",
+      "--technology-logo": 'url("/technologies/vercel.svg")',
+    },
   },
   {
     name: "Supabase",
-    logo: "/technologies/supabase.svg",
-    className: "h-6 max-w-6",
+    className: "h-6 w-6",
+    style: {
+      "--technology-brand": "linear-gradient(135deg, #249361, #3ecf8e)",
+      "--technology-glow": "rgb(62 207 142 / 0.44)",
+      "--technology-logo": 'url("/technologies/supabase.svg")',
+      "--technology-name-color": "#3ecf8e",
+    },
     wordmark: true,
   },
   {
     name: "Anthropic",
-    logo: "/technologies/anthropic.svg",
-    className: "h-5 max-w-32",
+    className: "h-5 w-32",
+    style: {
+      "--technology-brand": "#d97757",
+      "--technology-glow": "rgb(217 119 87 / 0.42)",
+      "--technology-logo": 'url("/technologies/anthropic.svg")',
+    },
   },
   {
     name: "OpenAI",
-    logo: "/technologies/openai.svg",
-    className: "h-5 max-w-28",
+    className: "h-5 w-28",
+    style: {
+      "--technology-brand": "#10a37f",
+      "--technology-glow": "rgb(16 163 127 / 0.44)",
+      "--technology-logo": 'url("/technologies/openai.svg")',
+    },
   },
   {
     name: "Figma",
-    logo: "/technologies/figma-wordmark.svg",
-    className: "h-7 max-w-32",
+    className: "h-7 w-32",
+    style: {
+      "--technology-brand":
+        "linear-gradient(90deg, #f24e1e 0 18%, #ff7262 24% 38%, #a259ff 44% 58%, #1abcfe 64% 78%, #0acf83 84% 100%)",
+      "--technology-glow": "rgb(162 89 255 / 0.42)",
+      "--technology-logo": 'url("/technologies/figma-wordmark.svg")',
+    },
   },
 ];
 
@@ -188,17 +229,23 @@ export function HeroSection() {
               <div className="hero-technology-strip flex w-full flex-wrap items-center justify-center gap-x-9 gap-y-5 sm:gap-x-12">
                 {heroTechnologies.map((technology) => (
                   <span
-                    className="flex min-h-8 items-center justify-center gap-2.5"
+                    aria-label={`${technology.name} technology`}
+                    className="technology-logo-card flex min-h-8 items-center justify-center gap-2.5"
                     key={technology.name}
+                    role="img"
+                    style={technology.style}
+                    tabIndex={0}
                   >
-                    <img
-                      alt={technology.name}
-                      className={`${technology.className} technology-logo-muted object-contain brightness-0 invert opacity-78`}
-                      src={technology.logo}
-                    />
+                    <span
+                      aria-hidden="true"
+                      className={`${technology.className} technology-logo-mark`}
+                    >
+                      <span className="technology-logo-shine" />
+                    </span>
                     {technology.wordmark ? (
                       <span
-                        className={`text-xl font-normal tracking-tight ${
+                        aria-hidden="true"
+                        className={`technology-logo-name text-xl font-normal tracking-tight ${
                           isLight ? "text-[#07062C]/72" : "text-[#F3F3F3]/72"
                         }`}
                       >

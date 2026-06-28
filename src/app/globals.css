@@ -342,6 +342,21 @@ main[id] {
     transition: none !important;
   }
 
+  .technology-logo-card {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .technology-logo-mark::after,
+  .technology-logo-name {
+    transition: none !important;
+  }
+
+  .technology-logo-shine {
+    display: none !important;
+    animation: none !important;
+  }
+
   .webx-project-modal,
   .webx-project-modal-content,
   .webx-scroll-top-button,
@@ -538,6 +553,106 @@ html.theme-light .webx-primary-button-icon svg {
   stroke: currentColor;
 }
 
+.technology-logo-card {
+  --technology-active-brand: var(--technology-brand);
+  --technology-active-glow: var(--technology-glow);
+  position: relative;
+  border-radius: 0.25rem;
+  opacity: 0.7;
+  outline: none;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 260ms ease,
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.technology-logo-mark {
+  position: relative;
+  display: block;
+  flex: none;
+}
+
+.technology-logo-mark::before,
+.technology-logo-mark::after,
+.technology-logo-shine {
+  position: absolute;
+  inset: 0;
+  content: "";
+  -webkit-mask: var(--technology-logo) center / contain no-repeat;
+  mask: var(--technology-logo) center / contain no-repeat;
+}
+
+.technology-logo-mark::before {
+  background: rgb(243 243 243 / 0.72);
+}
+
+.technology-logo-mark::after {
+  background: var(--technology-active-brand);
+  filter: drop-shadow(0 0 0 transparent);
+  opacity: 0;
+  transition:
+    filter 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 280ms ease;
+}
+
+.technology-logo-name {
+  transition: color 280ms ease;
+}
+
+.technology-logo-shine {
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    transparent 28%,
+    rgb(255 255 255 / 0.72) 48%,
+    transparent 68%
+  );
+  background-position: 140% 50%;
+  background-size: 240% 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.technology-logo-card:is(:hover, :focus-visible) {
+  opacity: 1;
+  transform: translateY(-3px) scale(1.05);
+}
+
+.technology-logo-card:focus-visible {
+  outline: 2px solid rgb(143 134 220 / 0.82);
+  outline-offset: 6px;
+}
+
+.technology-logo-card:is(:hover, :focus-visible) .technology-logo-mark::after {
+  filter: drop-shadow(0 0 10px var(--technology-active-glow));
+  opacity: 1;
+}
+
+.technology-logo-card:is(:hover, :focus-visible) .technology-logo-name {
+  color: var(--technology-name-color, var(--technology-active-brand));
+}
+
+.technology-logo-card:is(:hover, :focus-visible) .technology-logo-shine {
+  animation: technology-logo-sweep 620ms cubic-bezier(0.16, 1, 0.3, 1) 70ms both;
+}
+
+@keyframes technology-logo-sweep {
+  0% {
+    background-position: 140% 50%;
+    opacity: 0;
+  }
+
+  24%,
+  70% {
+    opacity: 0.58;
+  }
+
+  100% {
+    background-position: -40% 50%;
+    opacity: 0;
+  }
+}
+
 .hero-cta-icon {
   background: #07062c !important;
   color: #f3f3f3 !important;
@@ -601,6 +716,23 @@ html[data-theme="light"] .technology-logo,
 html.theme-light .technology-logo {
   filter: none !important;
   opacity: 0.82;
+}
+
+html[data-theme="light"] .technology-logo-card,
+html.theme-light .technology-logo-card {
+  --technology-active-brand: var(
+    --technology-brand-light,
+    var(--technology-brand)
+  );
+  --technology-active-glow: var(
+    --technology-glow-light,
+    var(--technology-glow)
+  );
+}
+
+html[data-theme="light"] .technology-logo-mark::before,
+html.theme-light .technology-logo-mark::before {
+  background: rgb(7 6 44 / 0.64);
 }
 
 html[data-theme="light"] .technology-logo-muted,
