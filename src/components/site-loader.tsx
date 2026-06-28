@@ -46,6 +46,7 @@ export function SiteLoader() {
       root.classList.remove("webx-loader-active");
       root.classList.add("webx-loader-revealing");
 
+      body.classList.remove("webx-page-loading");
       body.classList.add("webx-page-revealed");
     };
 
@@ -124,6 +125,7 @@ export function SiteLoader() {
     <div
       aria-hidden="true"
       className={`webx-loader webx-loader--${phase}`}
+      data-lenis-prevent={phase === "reveal" ? undefined : ""}
       data-phase={phase}
     >
       <div className="webx-loader-curtain webx-loader-curtain-secondary" />

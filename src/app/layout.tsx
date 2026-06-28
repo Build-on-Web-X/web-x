@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
-import Script from "next/script";
 import { BookCallModalProvider } from "@/components/book-call-modal";
 import { LenisProvider } from "@/components/lenis-provider";
 import { ScrollToTopButton } from "@/components/scroll-to-top-button";
@@ -58,12 +57,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <Script id="webx-theme-preflight" strategy="beforeInteractive">
-          {themeScript}
-        </Script>
-        <Script id="webx-loader-preflight" strategy="beforeInteractive">
-          {loaderPreflightScript}
-        </Script>
+        <script
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+          id="webx-theme-preflight"
+          suppressHydrationWarning
+        />
+        <script
+          dangerouslySetInnerHTML={{ __html: loaderPreflightScript }}
+          id="webx-loader-preflight"
+          suppressHydrationWarning
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <SiteLoader />

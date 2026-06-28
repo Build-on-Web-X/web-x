@@ -1278,10 +1278,9 @@ body.webx-page-loading {
 }
 
 html.webx-loader-active,
-html.webx-loader-active body,
-html.webx-loader-revealing,
-html.webx-loader-revealing body {
+html.webx-loader-active body {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 html.webx-loader-active .webx-page-shell {
@@ -1370,6 +1369,11 @@ html.webx-loader-active .webx-hero-light-wash {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
+}
+
+html.webx-loader-active .webx-loader {
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 html.webx-intro-pending .webx-loader {
