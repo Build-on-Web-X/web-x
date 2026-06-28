@@ -4,6 +4,7 @@ import {
   createContext,
   type FormEvent,
   type ReactNode,
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -422,7 +423,7 @@ export function BookCallModalProvider({ children }: { children: ReactNode }) {
       {children}
       <div
         aria-hidden={!isOpen}
-        className={`webx-project-modal fixed inset-0 z-[100] bg-[#07062C] text-[#F3F3F3] transition-opacity duration-75 ${
+        className={`webx-project-modal fixed inset-0 z-[100] bg-[#07062C] text-[#F3F3F3] transition-opacity duration-300 ease-out ${
           isOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
@@ -431,7 +432,11 @@ export function BookCallModalProvider({ children }: { children: ReactNode }) {
       >
         <section
           aria-modal="true"
-          className="grid h-dvh overflow-y-auto lg:grid-cols-[0.34fr_0.66fr] lg:overflow-hidden"
+          className={`webx-project-modal-content grid h-dvh overflow-y-auto transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:grid-cols-[0.34fr_0.66fr] lg:overflow-hidden ${
+            isOpen
+              ? "translate-y-0 scale-100 opacity-100"
+              : "translate-y-3 scale-[0.99] opacity-0"
+          }`}
           data-lenis-prevent
           role="dialog"
         >
@@ -678,9 +683,17 @@ export function BookCallTrigger({
   children: ReactNode;
   className?: string;
 }) {
+  const context = useContext(BookCallModalContext);
+
+  if (!context) {
+    throw new Error(
+      "BookCallTrigger must be used within a BookCallModalProvider.",
+    );
+  }
+
   return (
-    <a className={className} href="/start-a-project">
+    <button className={className} onClick={context.openModal} type="button">
       {children}
-    </a>
+    </button>
   );
 }

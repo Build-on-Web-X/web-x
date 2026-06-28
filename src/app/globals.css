@@ -48,6 +48,53 @@ body.project-modal-open .fixed.bottom-5.left-5 {
   transform: translateY(-100%);
 }
 
+.webx-navbar-brand .webx-logo {
+  transform-origin: left center;
+  transition:
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 240ms ease;
+}
+
+.webx-navbar-brand:hover .webx-logo,
+.webx-navbar-brand:focus-visible .webx-logo {
+  opacity: 0.86;
+  transform: scale(1.035);
+}
+
+.webx-navbar-link {
+  position: relative;
+  padding-block: 0.4rem;
+  transition:
+    color 240ms ease,
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.webx-navbar-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  opacity: 0.72;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.webx-navbar-link:hover,
+.webx-navbar-link:focus-visible {
+  color: rgb(243 243 243 / 0.78);
+  transform: translateY(-1px);
+}
+
+.webx-navbar-link:hover::after,
+.webx-navbar-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
 .webx-faq summary::-webkit-details-marker {
   display: none;
 }
@@ -158,9 +205,121 @@ main[id] {
   scroll-margin-top: 96px;
 }
 
+.webx-primary-button,
+.featured-work-card,
+.works-project-card,
+.webx-service-row a,
+.cta-portal-feature,
+.process-card-inner,
+.carousel-image,
+.works-filter-trigger {
+  transition:
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 320ms ease,
+    border-color 320ms ease;
+}
+
+.webx-primary-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.webx-primary-button::before {
+  position: absolute;
+  inset: 0 auto 0 -45%;
+  z-index: 0;
+  width: 32%;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.38), transparent);
+  pointer-events: none;
+  transform: skewX(-18deg);
+  transition: left 560ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.webx-primary-button:hover {
+  transform: translateY(-2px);
+}
+
+.webx-primary-button:hover::before {
+  left: 115%;
+}
+
+.webx-primary-button:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.webx-primary-button svg {
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.webx-primary-button:hover svg {
+  transform: translate(2px, -2px) rotate(5deg);
+}
+
+.featured-work-card:hover,
+.featured-work-card:focus-visible,
+.works-project-card:hover,
+.works-project-card:focus-within,
+.cta-portal-feature:hover,
+.process-card-inner:hover,
+.carousel-image:hover,
+.works-filter-trigger:hover {
+  transform: translateY(-4px);
+}
+
+.featured-work-card:hover,
+.featured-work-card:focus-visible {
+  box-shadow: 0 22px 52px rgb(0 0 0 / 0.22);
+}
+
+.works-project-thumb {
+  transition:
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.works-project-card:hover .works-project-thumb,
+.works-project-card:focus-within .works-project-thumb {
+  transform: scale(1.012);
+  box-shadow: 0 24px 56px rgb(0 0 0 / 0.28);
+}
+
+.webx-service-row a:hover,
+.webx-service-row a:focus-visible {
+  transform: translateX(4px);
+}
+
+.carousel-image:hover {
+  filter: saturate(1.08);
+  transform: translateY(-4px) scale(1.015);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .webx-project-modal,
+  .webx-project-modal-content,
+  .webx-navbar-brand .webx-logo,
+  .webx-navbar-link,
+  .webx-navbar-link::after,
+  .webx-primary-button,
+  .webx-primary-button::before,
+  .webx-primary-button svg,
+  .featured-work-card,
+  .works-project-card,
+  .works-project-thumb,
+  .webx-service-row a,
+  .cta-portal-feature,
+  .process-card-inner,
+  .carousel-image,
+  .works-filter-trigger {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
   }
 }
 
@@ -360,6 +519,13 @@ html.theme-light .webx-navbar-top nav {
 html[data-theme="light"] .webx-navbar-scrolled nav,
 html.theme-light .webx-navbar-scrolled nav {
   color: #07062c !important;
+}
+
+html[data-theme="light"] .webx-navbar-link:hover,
+html[data-theme="light"] .webx-navbar-link:focus-visible,
+html.theme-light .webx-navbar-link:hover,
+html.theme-light .webx-navbar-link:focus-visible {
+  color: rgb(7 6 44 / 0.72);
 }
 
 html[data-theme="light"] .webx-navbar-scrolled .webx-primary-button,

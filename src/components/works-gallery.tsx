@@ -299,6 +299,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
                 aria-label={`View ${work.title}`}
                 className="block"
                 href={work.projectUrl || `/works?work=${work.slug}`}
+                rel={work.projectUrl ? "noreferrer" : undefined}
                 target={work.projectUrl ? "_blank" : undefined}
               >
                 <div className="works-project-thumb relative overflow-hidden rounded-[4px] bg-[#121037]">

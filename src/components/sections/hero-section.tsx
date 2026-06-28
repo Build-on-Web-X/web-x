@@ -145,21 +145,6 @@ export function HeroSection() {
               initial="hidden"
               variants={heroReveal}
             >
-              <span
-                className={
-                  isLight ? "text-[#07062C]/45" : "text-[#F3F3F3]/50"
-                }
-              >
-                [
-              </span>
-              <span>Modern Website Experiences</span>
-              <span
-                className={
-                  isLight ? "text-[#07062C]/45" : "text-[#F3F3F3]/50"
-                }
-              >
-                ]
-              </span>
             </motion.p>
 
             <motion.h1
