@@ -2,31 +2,55 @@
 
 import { useEffect, useState } from "react";
 
+const loaderSessionKey = "webx-loader-seen";
+const leaveDelay = 1120;
+const hideDelay = 1920;
+
 export function SiteLoader() {
   const [isVisible, setIsVisible] = useState(true);
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
-    const hasSeenLoader = window.sessionStorage.getItem("webx-loader-seen");
+    const body = document.body;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-    if (hasSeenLoader) {
-      setIsVisible(false);
-      return;
+    try {
+      if (window.sessionStorage.getItem(loaderSessionKey)) {
+        body.classList.add("webx-loaded");
+        setIsVisible(false);
+        return;
+      }
+
+      window.sessionStorage.setItem(loaderSessionKey, "true");
+    } catch {
+      // The intro can still run when storage is unavailable.
     }
 
-    window.sessionStorage.setItem("webx-loader-seen", "true");
+    body.classList.remove("webx-loaded");
+    body.classList.add("webx-loading");
 
-    const leaveTimer = window.setTimeout(() => {
+    const startExit = () => {
       setIsLeaving(true);
-    }, 2100);
+      body.classList.remove("webx-loading");
+      body.classList.add("webx-loaded");
+    };
 
-    const hideTimer = window.setTimeout(() => {
-      setIsVisible(false);
-    }, 2700);
+    const leaveTimer = window.setTimeout(
+      startExit,
+      prefersReducedMotion ? 80 : leaveDelay,
+    );
+    const hideTimer = window.setTimeout(
+      () => setIsVisible(false),
+      prefersReducedMotion ? 220 : hideDelay,
+    );
 
     return () => {
       window.clearTimeout(leaveTimer);
       window.clearTimeout(hideTimer);
+      body.classList.remove("webx-loading");
+      body.classList.add("webx-loaded");
     };
   }, []);
 
@@ -36,16 +60,18 @@ export function SiteLoader() {
 
   return (
     <div
-      aria-label="Loading Web X"
-      aria-live="polite"
+      aria-hidden="true"
       className={`webx-site-loader ${isLeaving ? "webx-site-loader-leave" : ""}`}
-      role="status"
     >
-      <img
-        alt="Web X"
-        className="webx-site-loader-logo"
-        src="/webx%20logo/webx.svg"
-      />
+      <div className="webx-site-loader-glow" />
+      <div className="webx-site-loader-mark">
+        <img
+          alt=""
+          className="webx-site-loader-logo"
+          src="/webx%20logo/webx.svg"
+        />
+        <span className="webx-site-loader-shine" />
+      </div>
     </div>
   );
 }

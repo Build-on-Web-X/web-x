@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
 import { BookCallModalProvider } from "@/components/book-call-modal";
 import { LenisProvider } from "@/components/lenis-provider";
+import { ScrollToTopButton } from "@/components/scroll-to-top-button";
 import { SiteLoader } from "@/components/site-loader";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "lenis/dist/lenis.css";
@@ -52,8 +53,9 @@ export default function RootLayout({
         <SiteLoader />
         <LenisProvider>
           <BookCallModalProvider>
-            {children}
+            <div className="webx-page-shell">{children}</div>
             <ThemeToggle />
+            <ScrollToTopButton />
           </BookCallModalProvider>
         </LenisProvider>
       </body>
