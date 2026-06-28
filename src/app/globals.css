@@ -1267,34 +1267,38 @@ html.webx-intro-pending .webx-loader {
   padding: 1.25rem 1.5rem;
 }
 
+.webx-loader-logo-art {
+  position: relative;
+  width: clamp(136px, 16vw, 220px);
+}
+
 .webx-loader-logo {
   display: block;
-  width: clamp(136px, 16vw, 220px);
+  width: 100%;
   height: auto;
   filter: brightness(0) invert(1);
+  opacity: 0.82;
 }
 
 .webx-loader-logo-shine {
   position: absolute;
-  inset: 0 auto 0 -42%;
-  width: 30%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(255 255 255 / 0.44),
-    transparent
-  );
-  filter: blur(5px);
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  clip-path: polygon(-26% 0, -6% 0, -16% 100%, -36% 100%);
+  filter: brightness(0) invert(1);
   opacity: 0;
-  transform: skewX(-16deg);
+  pointer-events: none;
 }
 
 .webx-loader--enter .webx-loader-logo-stage {
   animation: webx-loader-logo-enter 700ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
 }
 
-.webx-loader--enter .webx-loader-logo-shine {
-  animation: webx-loader-logo-shine 680ms cubic-bezier(0.16, 1, 0.3, 1) 480ms forwards;
+.webx-loader--enter .webx-loader-logo-shine,
+.webx-loader--hold .webx-loader-logo-shine {
+  animation: webx-loader-logo-shine 760ms cubic-bezier(0.16, 1, 0.3, 1) 900ms forwards;
 }
 
 .webx-loader--hold .webx-loader-logo-stage {
@@ -1313,12 +1317,12 @@ html.webx-intro-pending .webx-loader {
 
 .webx-loader--reveal .webx-loader-curtain-primary {
   transform: translate3d(0, -112%, 0);
-  transition: transform 1050ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .webx-loader--reveal .webx-loader-curtain-secondary {
   transform: translate3d(0, -112%, 0);
-  transition: transform 980ms cubic-bezier(0.16, 1, 0.3, 1) 90ms;
+  transition: transform 1750ms cubic-bezier(0.16, 1, 0.3, 1) 140ms;
 }
 
 .webx-loader--reveal .webx-loader-logo-stage {
@@ -1347,16 +1351,17 @@ html.webx-intro-pending .webx-loader {
 
 @keyframes webx-loader-logo-shine {
   0% {
-    left: -42%;
+    clip-path: polygon(-26% 0, -6% 0, -16% 100%, -36% 100%);
     opacity: 0;
   }
 
-  28% {
-    opacity: 0.62;
+  18%,
+  82% {
+    opacity: 1;
   }
 
   100% {
-    left: 116%;
+    clip-path: polygon(136% 0, 156% 0, 146% 100%, 126% 100%);
     opacity: 0;
   }
 }
@@ -1482,6 +1487,10 @@ html.theme-light .webx-process .process-glow-card-active .process-card-inner {
     filter: none;
     opacity: 1;
     transform: none;
+  }
+
+  .webx-loader-logo {
+    opacity: 1;
   }
 
   .webx-loader-logo-halo,

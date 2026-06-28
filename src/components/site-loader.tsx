@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type LoaderPhase = "enter" | "hold" | "reveal" | "done";
+type LoaderPhase = "prepare" | "enter" | "hold" | "reveal" | "done";
 
 const FORCE_LOADER = process.env.NEXT_PUBLIC_FORCE_LOADER === "true";
 const LOADER_SESSION_KEY = "webx-loader-seen";
@@ -10,7 +10,7 @@ const LOADER_SESSION_KEY = "webx-loader-seen";
 const STANDARD_TIMINGS = {
   hold: 720,
   reveal: 1800,
-  done: 2950,
+  done: 3900,
 };
 
 const REDUCED_MOTION_TIMINGS = {
@@ -20,7 +20,7 @@ const REDUCED_MOTION_TIMINGS = {
 };
 
 export function SiteLoader() {
-  const [phase, setPhase] = useState<LoaderPhase>("enter");
+  const [phase, setPhase] = useState<LoaderPhase>("prepare");
 
   useEffect(() => {
     const body = document.body;
@@ -53,26 +53,31 @@ export function SiteLoader() {
       ? REDUCED_MOTION_TIMINGS
       : STANDARD_TIMINGS;
     const timers: number[] = [];
+    let startFrame = 0;
 
     root.classList.add("webx-intro-pending");
     body.classList.remove("webx-page-revealed");
     body.classList.add("webx-page-loading");
-    setPhase("enter");
+    setPhase("prepare");
 
-    timers.push(
-      window.setTimeout(() => setPhase("hold"), timings.hold),
-      window.setTimeout(() => {
-        setPhase("reveal");
-        body.classList.remove("webx-page-loading");
-        body.classList.add("webx-page-revealed");
-      }, timings.reveal),
-      window.setTimeout(() => {
-        root.classList.remove("webx-intro-pending");
-        setPhase("done");
-      }, timings.done),
-    );
+    startFrame = window.requestAnimationFrame(() => {
+      setPhase("enter");
+      timers.push(
+        window.setTimeout(() => setPhase("hold"), timings.hold),
+        window.setTimeout(() => {
+          setPhase("reveal");
+          body.classList.remove("webx-page-loading");
+          body.classList.add("webx-page-revealed");
+        }, timings.reveal),
+        window.setTimeout(() => {
+          root.classList.remove("webx-intro-pending");
+          setPhase("done");
+        }, timings.done),
+      );
+    });
 
     return () => {
+      window.cancelAnimationFrame(startFrame);
       timers.forEach((timer) => window.clearTimeout(timer));
       root.classList.remove("webx-intro-pending");
       body.classList.remove("webx-page-loading");
@@ -98,12 +103,18 @@ export function SiteLoader() {
         <div className="webx-loader-logo-stage">
           <span className="webx-loader-logo-halo" />
           <div className="webx-loader-logo-frame">
-            <img
-              alt=""
-              className="webx-loader-logo"
-              src="/webx%20logo/webx.svg"
-            />
-            <span className="webx-loader-logo-shine" />
+            <div className="webx-loader-logo-art">
+              <img
+                alt=""
+                className="webx-loader-logo"
+                src="/webx%20logo/webx.svg"
+              />
+              <img
+                alt=""
+                className="webx-loader-logo-shine"
+                src="/webx%20logo/webx.svg"
+              />
+            </div>
           </div>
         </div>
       </div>
