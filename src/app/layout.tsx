@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Readex_Pro } from "next/font/google";
 import { BookCallModalProvider } from "@/components/book-call-modal";
 import { LenisProvider } from "@/components/lenis-provider";
+import { ScrollToTopButton } from "@/components/scroll-to-top-button";
 import { SiteLoader } from "@/components/site-loader";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "lenis/dist/lenis.css";
@@ -35,6 +36,19 @@ export default function RootLayout({
       document.documentElement.classList.toggle("theme-dark", theme !== "light");
     } catch (_) {}
   `;
+  const loaderPreflightScript = `
+    try {
+      var forceLoader = ${JSON.stringify(process.env.NEXT_PUBLIC_FORCE_LOADER === "true")};
+      if (forceLoader || !sessionStorage.getItem("webx-loader-seen")) {
+        document.documentElement.classList.remove("webx-loader-done");
+        document.documentElement.classList.add("webx-intro-pending", "webx-loader-active");
+      } else {
+        document.documentElement.classList.add("webx-loader-done");
+      }
+    } catch (_) {
+      document.documentElement.classList.add("webx-intro-pending", "webx-loader-active");
+    }
+  `;
 
   return (
     <html
@@ -45,6 +59,12 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}
+          id="webx-theme-preflight"
+          suppressHydrationWarning
+        />
+        <script
+          dangerouslySetInnerHTML={{ __html: loaderPreflightScript }}
+          id="webx-loader-preflight"
           suppressHydrationWarning
         />
       </head>
@@ -52,8 +72,9 @@ export default function RootLayout({
         <SiteLoader />
         <LenisProvider>
           <BookCallModalProvider>
-            {children}
+            <div className="webx-page-shell">{children}</div>
             <ThemeToggle />
+            <ScrollToTopButton />
           </BookCallModalProvider>
         </LenisProvider>
       </body>

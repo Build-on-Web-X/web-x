@@ -2,50 +2,158 @@
 
 import { useEffect, useState } from "react";
 
+type LoaderPhase = "prepare" | "enter" | "hold" | "reveal" | "done";
+
+const FORCE_LOADER = process.env.NEXT_PUBLIC_FORCE_LOADER === "true";
+const LOADER_SESSION_KEY = "webx-loader-seen";
+
+const STANDARD_TIMINGS = {
+  hold: 720,
+  reveal: 1800,
+  done: 3900,
+};
+
+const REDUCED_MOTION_TIMINGS = {
+  hold: 60,
+  reveal: 140,
+  done: 360,
+};
+
 export function SiteLoader() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isLeaving, setIsLeaving] = useState(false);
+  const [phase, setPhase] = useState<LoaderPhase>("prepare");
 
   useEffect(() => {
-    const hasSeenLoader = window.sessionStorage.getItem("webx-loader-seen");
+    const body = document.body;
+    const root = document.documentElement;
+    const pageShell = document.querySelector<HTMLElement>(".webx-page-shell");
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-    if (hasSeenLoader) {
-      setIsVisible(false);
+    let shouldPlay = FORCE_LOADER;
+
+    const markPageLoading = () => {
+      root.classList.remove("webx-loader-done", "webx-loader-revealing");
+      root.classList.add("webx-intro-pending", "webx-loader-active");
+
+      body.classList.remove("webx-page-revealed");
+      body.classList.add("webx-page-loading");
+
+      pageShell?.setAttribute("inert", "");
+    };
+
+    const revealPageBehindCurtain = () => {
+      root.classList.remove("webx-loader-active");
+      root.classList.add("webx-loader-revealing");
+
+      body.classList.remove("webx-page-loading");
+      body.classList.add("webx-page-revealed");
+    };
+
+    const markPageReady = () => {
+      root.classList.remove(
+        "webx-intro-pending",
+        "webx-loader-active",
+        "webx-loader-revealing",
+      );
+      root.classList.add("webx-loader-done");
+
+      body.classList.remove("webx-page-loading");
+      body.classList.add("webx-page-revealed");
+
+      pageShell?.removeAttribute("inert");
+    };
+
+    try {
+      shouldPlay ||= !window.sessionStorage.getItem(LOADER_SESSION_KEY);
+
+      if (shouldPlay && !FORCE_LOADER) {
+        window.sessionStorage.setItem(LOADER_SESSION_KEY, "true");
+      }
+    } catch {
+      shouldPlay = true;
+    }
+
+    if (!shouldPlay) {
+      markPageReady();
+      setPhase("done");
       return;
     }
 
-    window.sessionStorage.setItem("webx-loader-seen", "true");
+    const timings = reducedMotion
+      ? REDUCED_MOTION_TIMINGS
+      : STANDARD_TIMINGS;
 
-    const leaveTimer = window.setTimeout(() => {
-      setIsLeaving(true);
-    }, 2100);
+    const timers: number[] = [];
+    let startFrame = 0;
 
-    const hideTimer = window.setTimeout(() => {
-      setIsVisible(false);
-    }, 2700);
+    markPageLoading();
+    setPhase("prepare");
+
+    startFrame = window.requestAnimationFrame(() => {
+      setPhase("enter");
+
+      timers.push(
+        window.setTimeout(() => {
+          setPhase("hold");
+        }, timings.hold),
+
+        window.setTimeout(() => {
+          revealPageBehindCurtain();
+          setPhase("reveal");
+        }, timings.reveal),
+
+        window.setTimeout(() => {
+          markPageReady();
+          setPhase("done");
+        }, timings.done),
+      );
+    });
 
     return () => {
-      window.clearTimeout(leaveTimer);
-      window.clearTimeout(hideTimer);
+      window.cancelAnimationFrame(startFrame);
+      timers.forEach((timer) => window.clearTimeout(timer));
+      markPageReady();
     };
   }, []);
 
-  if (!isVisible) {
+  if (phase === "done") {
     return null;
   }
 
   return (
     <div
-      aria-label="Loading Web X"
-      aria-live="polite"
-      className={`webx-site-loader ${isLeaving ? "webx-site-loader-leave" : ""}`}
-      role="status"
+      aria-hidden="true"
+      className={`webx-loader webx-loader--${phase}`}
+      data-lenis-prevent={phase === "reveal" ? undefined : ""}
+      data-phase={phase}
     >
-      <img
-        alt="Web X"
-        className="webx-site-loader-logo"
-        src="/webx%20logo/webx.svg"
-      />
+      <div className="webx-loader-curtain webx-loader-curtain-secondary" />
+
+      <div className="webx-loader-curtain webx-loader-curtain-primary">
+        <div className="webx-loader-bg" />
+        <div className="webx-loader-glow" />
+
+        <div className="webx-loader-logo-stage">
+          <span className="webx-loader-logo-halo" />
+
+          <div className="webx-loader-logo-frame">
+            <div className="webx-loader-logo-art">
+              <img
+                alt=""
+                className="webx-loader-logo"
+                src="/webx%20logo/webx.svg"
+              />
+
+              <img
+                alt=""
+                className="webx-loader-logo-shine"
+                src="/webx%20logo/webx.svg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  type HTMLMotionProps,
-} from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 type RevealDirection = "up" | "down" | "left" | "right" | "none";
 
@@ -30,24 +27,15 @@ export function StoryReveal({
   delay = 0,
   ...props
 }: StoryRevealProps) {
-  const reduceMotion = useReducedMotion();
   const offset = directionOffset[direction];
 
   return (
     <motion.div
-      className={className}
-      initial={
-        reduceMotion
-          ? false
-          : { opacity: 0, x: offset.x, y: offset.y }
-      }
+      className={cn("webx-story-motion", className)}
+      initial={{ opacity: 0, x: offset.x, y: offset.y }}
       transition={{ delay, duration: 1.14, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ amount: 0.28, once: true }}
-      whileInView={
-        reduceMotion
-          ? undefined
-          : { opacity: 1, x: 0, y: 0 }
-      }
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
       {...props}
     >
       {children}
@@ -61,12 +49,10 @@ export function StoryStagger({
   delay = 0,
   ...props
 }: StoryRevealProps) {
-  const reduceMotion = useReducedMotion();
-
   return (
     <motion.div
-      className={className}
-      initial={reduceMotion ? false : "hidden"}
+      className={cn("webx-story-motion", className)}
+      initial="hidden"
       variants={{
         hidden: {},
         show: {
@@ -77,7 +63,7 @@ export function StoryStagger({
         },
       }}
       viewport={{ amount: 0.24, once: true }}
-      whileInView={reduceMotion ? undefined : "show"}
+      whileInView="show"
       {...props}
     >
       {children}
@@ -90,13 +76,11 @@ export function StoryItem({
   className,
   ...props
 }: HTMLMotionProps<"div"> & { children: ReactNode }) {
-  const reduceMotion = useReducedMotion();
-
   return (
     <motion.div
-      className={className}
+      className={cn("webx-story-motion", className)}
       variants={{
-        hidden: { opacity: 0, y: reduceMotion ? 0 : 28 },
+        hidden: { opacity: 0, y: 28 },
         show: {
           opacity: 1,
           transition: { duration: 0.94, ease: [0.16, 1, 0.3, 1] },

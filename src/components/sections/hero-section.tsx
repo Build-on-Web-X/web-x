@@ -1,48 +1,79 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { ArrowUpRightIcon, Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 
 type ThemeMode = "dark" | "light";
 
-const heroReveal: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] as const },
-  },
+type TechnologyLogoStyle = CSSProperties & {
+  "--technology-brand": string;
+  "--technology-brand-light"?: string;
+  "--technology-glow": string;
+  "--technology-glow-light"?: string;
+  "--technology-logo": string;
+  "--technology-name-color"?: string;
 };
 
-const heroTechnologies = [
+type HeroTechnology = {
+  className: string;
+  name: string;
+  style: TechnologyLogoStyle;
+  wordmark?: boolean;
+};
+
+const heroTechnologies: HeroTechnology[] = [
   {
     name: "Vercel",
-    logo: "/technologies/vercel.svg",
-    className: "h-5 max-w-28",
+    className: "h-5 w-28",
+    style: {
+      "--technology-brand": "#ffffff",
+      "--technology-brand-light": "#07062c",
+      "--technology-glow": "rgb(255 255 255 / 0.42)",
+      "--technology-glow-light": "rgb(7 6 44 / 0.24)",
+      "--technology-logo": 'url("/technologies/vercel.svg")',
+    },
   },
   {
     name: "Supabase",
-    logo: "/technologies/supabase.svg",
-    className: "h-6 max-w-6",
+    className: "h-6 w-6",
+    style: {
+      "--technology-brand": "linear-gradient(135deg, #249361, #3ecf8e)",
+      "--technology-glow": "rgb(62 207 142 / 0.44)",
+      "--technology-logo": 'url("/technologies/supabase.svg")',
+      "--technology-name-color": "#3ecf8e",
+    },
     wordmark: true,
   },
   {
     name: "Anthropic",
-    logo: "/technologies/anthropic.svg",
-    className: "h-5 max-w-32",
+    className: "h-5 w-32",
+    style: {
+      "--technology-brand": "#d97757",
+      "--technology-glow": "rgb(217 119 87 / 0.42)",
+      "--technology-logo": 'url("/technologies/anthropic.svg")',
+    },
   },
   {
     name: "OpenAI",
-    logo: "/technologies/openai.svg",
-    className: "h-5 max-w-28",
+    className: "h-5 w-28",
+    style: {
+      "--technology-brand": "#10a37f",
+      "--technology-glow": "rgb(16 163 127 / 0.44)",
+      "--technology-logo": 'url("/technologies/openai.svg")',
+    },
   },
   {
     name: "Figma",
-    logo: "/technologies/figma-wordmark.svg",
-    className: "h-7 max-w-32",
+    className: "h-7 w-32",
+    style: {
+      "--technology-brand":
+        "linear-gradient(90deg, #f24e1e 0 18%, #ff7262 24% 38%, #a259ff 44% 58%, #1abcfe 64% 78%, #0acf83 84% 100%)",
+      "--technology-glow": "rgb(162 89 255 / 0.42)",
+      "--technology-logo": 'url("/technologies/figma-wordmark.svg")',
+    },
   },
 ];
 
@@ -137,85 +168,55 @@ export function HeroSection() {
 
         <main className="mx-auto flex w-full max-w-[1480px] flex-1 items-center justify-center px-4 py-24 sm:px-[1.5%] lg:px-[1%]">
           <section className="mx-auto flex max-w-5xl flex-col items-center text-center">
-            <motion.p
-              animate="show"
+            <p
               className={`mb-6 inline-flex items-center gap-3 text-xs font-normal uppercase tracking-tight ${
                 isLight ? "text-[#07062C]" : "text-[#F3F3F3]"
               }`}
-              initial="hidden"
-              variants={heroReveal}
-            >
-              <span
-                className={
-                  isLight ? "text-[#07062C]/45" : "text-[#F3F3F3]/50"
-                }
+            />
+
+            <div className="webx-hero-title-handoff">
+              <h1
+                className={`max-w-5xl text-balance text-4xl font-medium leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl ${
+                  isLight ? "text-[#07062C]" : "text-[#F3F3F3]"
+                }`}
               >
-                [
-              </span>
-              <span>Modern Website Experiences</span>
-              <span
-                className={
-                  isLight ? "text-[#07062C]/45" : "text-[#F3F3F3]/50"
-                }
+                Where Ideas Become Experiences
+              </h1>
+            </div>
+
+            <div className="webx-hero-copy-handoff flex justify-center">
+              <p
+                className={`mt-7 max-w-3xl text-pretty text-base leading-8 tracking-tight sm:text-lg ${
+                  isLight ? "text-[#07062C]/68" : "text-[#F3F3F3]/72"
+                }`}
               >
-                ]
-              </span>
-            </motion.p>
+                We transform ideas into modern digital experiences that help
+                businesses connect with their audience, build credibility, and
+                create lasting impact online.
+              </p>
+            </div>
 
-            <motion.h1
-              animate="show"
-              className={`max-w-5xl text-balance text-4xl font-medium leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl ${
-                isLight ? "text-[#07062C]" : "text-[#F3F3F3]"
-              }`}
-              initial="hidden"
-              transition={{ delay: 0.08 }}
-              variants={heroReveal}
-            >
-              Where Ideas Become Experiences
-            </motion.h1>
+            <div className="webx-hero-cta-handoff">
+              <div>
+                <Button
+                  asChild
+                  className="webx-primary-button mt-10 h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
+                >
+                  <a href="/works">
+                    View Our Work
+                    <span
+                      aria-hidden="true"
+                      className="hero-cta-icon grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
+                    >
+                      <ArrowUpRightIcon className="size-4" />
+                    </span>
+                  </a>
+                </Button>
+              </div>
+            </div>
 
-            <motion.p
-              animate="show"
-              className={`mt-7 max-w-3xl text-pretty text-base leading-8 tracking-tight sm:text-lg ${
-                isLight ? "text-[#07062C]/68" : "text-[#F3F3F3]/72"
-              }`}
-              initial="hidden"
-              transition={{ delay: 0.16 }}
-              variants={heroReveal}
-            >
-              We transform ideas into modern digital experiences that help
-              businesses connect with their audience, build credibility, and
-              create lasting impact online.
-            </motion.p>
-
-            <motion.div
-              animate="show"
-              initial="hidden"
-              transition={{ delay: 0.24 }}
-              variants={heroReveal}
-            >
-              <Button
-                asChild
-                className="webx-primary-button mt-10 h-11 gap-3 rounded-full bg-[#F3F3F3] px-5 text-sm font-normal tracking-tight text-[#07062C] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#8f86dc]"
-              >
-                <a href="/works">
-                  View Our Work
-                  <span
-                    aria-hidden="true"
-                    className="hero-cta-icon grid size-7 place-items-center rounded-full bg-[#07062C] text-[#F3F3F3]"
-                  >
-                    <ArrowUpRightIcon className="size-4" />
-                  </span>
-                </a>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              animate="show"
+            <div
               className="mt-12 flex w-full max-w-4xl flex-col items-center gap-5"
-              initial="hidden"
-              transition={{ delay: 0.34 }}
-              variants={heroReveal}
             >
               <p
                 className={`text-xs font-normal uppercase tracking-tight ${
@@ -228,17 +229,23 @@ export function HeroSection() {
               <div className="hero-technology-strip flex w-full flex-wrap items-center justify-center gap-x-9 gap-y-5 sm:gap-x-12">
                 {heroTechnologies.map((technology) => (
                   <span
-                    className="flex min-h-8 items-center justify-center gap-2.5"
+                    aria-label={`${technology.name} technology`}
+                    className="technology-logo-card flex min-h-8 items-center justify-center gap-2.5"
                     key={technology.name}
+                    role="img"
+                    style={technology.style}
+                    tabIndex={0}
                   >
-                    <img
-                      alt={technology.name}
-                      className={`${technology.className} technology-logo-muted object-contain brightness-0 invert opacity-78`}
-                      src={technology.logo}
-                    />
+                    <span
+                      aria-hidden="true"
+                      className={`${technology.className} technology-logo-mark`}
+                    >
+                      <span className="technology-logo-shine" />
+                    </span>
                     {technology.wordmark ? (
                       <span
-                        className={`text-xl font-normal tracking-tight ${
+                        aria-hidden="true"
+                        className={`technology-logo-name text-xl font-normal tracking-tight ${
                           isLight ? "text-[#07062C]/72" : "text-[#F3F3F3]/72"
                         }`}
                       >
@@ -248,7 +255,7 @@ export function HeroSection() {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </section>
         </main>
       </div>
