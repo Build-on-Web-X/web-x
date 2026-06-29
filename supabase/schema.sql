@@ -148,3 +148,105 @@ on conflict (name) do update set
   sort_order = excluded.sort_order,
   is_active = excluded.is_active,
   updated_at = now();
+
+create table if not exists public.client_portal_projects (
+  id uuid primary key default gen_random_uuid(),
+  client_id text not null unique,
+  project_name text not null,
+  client_name text not null,
+  signed_in_label text,
+  phase text not null,
+  progress integer not null default 0 check (progress >= 0 and progress <= 100),
+  status_summary text not null,
+  process_steps jsonb not null default '[]'::jsonb,
+  documents jsonb not null default '[]'::jsonb,
+  messages jsonb not null default '[]'::jsonb,
+  notes jsonb not null default '[]'::jsonb,
+  links jsonb not null default '[]'::jsonb,
+  next_actions jsonb not null default '[]'::jsonb,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.client_portal_projects enable row level security;
+
+drop policy if exists "Public can read active client portal projects" on public.client_portal_projects;
+create policy "Public can read active client portal projects"
+  on public.client_portal_projects for select
+  using (is_active = true);
+
+insert into public.client_portal_projects
+  (
+    client_id,
+    project_name,
+    client_name,
+    signed_in_label,
+    phase,
+    progress,
+    status_summary,
+    process_steps,
+    documents,
+    messages,
+    notes,
+    links,
+    next_actions,
+    is_active
+  )
+values
+  (
+    'WEBX-DEMO',
+    'Northline Studio Website',
+    'Northline Studio',
+    'WEBX-DEMO',
+    'Design',
+    58,
+    'Design is active. The next handoff moves approved screens into responsive development.',
+    '[
+      {"name":"Discover","description":"Goals, audience, and project vision clarified."},
+      {"name":"Plan","description":"Website structure, sitemap, and roadmap aligned."},
+      {"name":"Design","description":"Core screens and visual direction in progress."},
+      {"name":"Develop","description":"Approved designs move into responsive build."},
+      {"name":"Launch","description":"Testing, hosting, domain, and deployment."},
+      {"name":"Support","description":"Updates, monitoring, and technical care."}
+    ]'::jsonb,
+    '[
+      {"id":"brand-summary","name":"Brand discovery summary.pdf","owner":"Web X","detail":"Added Jun 18","status":"Shared"},
+      {"id":"homepage-copy","name":"Homepage content draft.docx","owner":"Client","detail":"Uploaded Jun 17","status":"Needs review"},
+      {"id":"visual-direction","name":"Visual direction board.fig","owner":"Web X","detail":"Added Jun 16","status":"Current"}
+    ]'::jsonb,
+    '[
+      {"id":"design-pass","author":"Web X","message":"The first design pass is moving well. We are refining the hero and services flow today.","time":"9:12 AM"},
+      {"id":"content-uploaded","author":"Client","message":"Great. We uploaded the updated service descriptions in the documents area.","time":"9:28 AM"}
+    ]'::jsonb,
+    '[
+      {"id":"positioning","title":"Positioning","body":"Lead with credibility, clarity, and a fast path to consultation.","createdBy":"Web X","createdAt":"2026-06-18T09:00:00.000Z"},
+      {"id":"content-needed","title":"Content needed","body":"Final testimonials and preferred launch date.","createdBy":"Web X","createdAt":"2026-06-18T10:30:00.000Z"}
+    ]'::jsonb,
+    '[
+      {"label":"Staging Website","href":"https://preview.webx.example","detail":"Current private preview"},
+      {"label":"Figma Workspace","href":"https://figma.com","detail":"Design review file"},
+      {"label":"Calendly Discovery Call","href":"https://calendly.com/buildonwebx/30min","detail":"Schedule a working session"}
+    ]'::jsonb,
+    '[
+      "Review design direction notes",
+      "Upload final service copy",
+      "Confirm preferred launch window"
+    ]'::jsonb,
+    true
+  )
+on conflict (client_id) do update set
+  project_name = excluded.project_name,
+  client_name = excluded.client_name,
+  signed_in_label = excluded.signed_in_label,
+  phase = excluded.phase,
+  progress = excluded.progress,
+  status_summary = excluded.status_summary,
+  process_steps = excluded.process_steps,
+  documents = excluded.documents,
+  messages = excluded.messages,
+  notes = excluded.notes,
+  links = excluded.links,
+  next_actions = excluded.next_actions,
+  is_active = excluded.is_active,
+  updated_at = now();
