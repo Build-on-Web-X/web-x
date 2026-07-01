@@ -51,6 +51,7 @@ export function ThemeToggle() {
   useEffect(() => {
     setIsPortalRoute(
       window.location.pathname.startsWith("/client-portal") ||
+        window.location.pathname.startsWith("/webx-dev") ||
         window.location.pathname.startsWith("/webx-admin"),
     );
 

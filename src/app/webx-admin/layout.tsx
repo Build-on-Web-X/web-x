@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin",
-  description:
-    "Web X admin workspace for reviewing clients, project pipeline, tasks, and messages.",
+  title: "Admin CMS",
+  description: "Web X website content management workspace.",
 };
 
 export default function WebXAdminLayout({

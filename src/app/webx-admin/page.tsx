@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { AdminCms } from "@/components/admin-cms/admin-cms";
 
 type AdminView = "overview" | "clients" | "pipeline" | "tasks" | "messages";
 
@@ -118,7 +120,7 @@ function ArrowIcon() {
   );
 }
 
-export default function WebXAdminPage() {
+export function WebXDevConsole() {
   const [teamId, setTeamId] = useState("");
   const [loginError, setLoginError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -479,4 +481,10 @@ export default function WebXAdminPage() {
       </div>
     </main>
   );
+}
+
+export default function WebXAdminRoute() {
+  const pathname = usePathname();
+
+  return pathname.startsWith("/webx-dev") ? <WebXDevConsole /> : <AdminCms />;
 }
